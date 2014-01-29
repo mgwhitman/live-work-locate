@@ -3,10 +3,6 @@ live-work-locate
 
 The Live, Work, Locate application is a configurable JavaScript application that allows interested parties to determine whether or not they want to live, work or locate a business within a community.
 
-# live-work-locate
-
-The Live, Work, Locate application is a configurable JavaScript application
-that allows the public to locate parks, recreational opportunities boat ramps etc. in their community.
 
 ![Image of Live Work Locate application](live-work-locate.png "Live, Work,Locate application")
 
