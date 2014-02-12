@@ -47,7 +47,7 @@ define([
      "esri/map",
      "esri/tasks/query",
      "esri/tasks/QueryTask"
-  ],
+],
 function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom, domClass, domGeom, string, html, aspect, template, simpleMarkerSymbol, simpleFillSymbol, SimpleRenderer, Color, topic, Deferred, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, esriRequest, esriMap, Query, QueryTask) {
 
     //========================================================================================================================//
@@ -80,7 +80,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                             for (var index = 0; index < rendererObject.length; index++) {
                                 rendererObject[index].layerUrl = layer;
                                 this._rendererArray.push(rendererObject[index]);
-                                queryResult = this._fireQueryOnExtentChange(evt.extent);
+                                queryResult = this._executeQueryOnExtentChange(evt.extent);
 
                                 if (layerObject.rendererType == "uniqueValue") {
                                     if (rendererObject[index].values) {
@@ -95,13 +95,13 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                                 }
                                 this._executeQueryTask(layer, defQueryArray, queryResult);
                             }
-                        } 
+                        }
                     }
                     if (defQueryArray.length > 0) {
                         domConstruct.empty(this.divlegendContainer);
                         domConstruct.create("span", { innerHTML: "Loading...", marginTop: "5px" }, this.divlegendContainer);
                         var queryDefList = new dojo.DeferredList(defQueryArray);
-                        queryDefList.then(lang.hitch(this, function(result) {
+                        queryDefList.then(lang.hitch(this, function (result) {
                             domConstruct.empty(this.divlegendContainer);
                             for (var i = 0; i < result.length; i++) {
                                 if (result[i][0] && result[i][1] > 0) {
@@ -109,86 +109,86 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                                 }
                             }
                         }));
-                    } 
+                    }
                 }));
             }
         },
 
-        _resetLegendContainer: function() {
+        _resetLegendContainer: function () {
             this.newLeft = 0;
             domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
             this._resetSlideControls();
         },
 
-        _createLegendContainerUI: function() {
-          this.esriCTLegendContainer = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
-          this.esriCTLegendContainer.appendChild(this.esriCTdivLegendbox);
-          var divlegendContainer = domConstruct.create("div", { "class": "divlegendContainer" }, this.divlegendList);
-          this.divlegendContainer = domConstruct.create("div", { "class": "divlegendContent" }, divlegendContainer);
-          var divLeftArrow = domConstruct.create("div", { "class": "divLeftArrow" }, this.legendbox);
-          var esriCTLeftArrow = domConstruct.create("img", { "class": "esriCTArrow" }, divLeftArrow);
-          domAttr.set(esriCTLeftArrow, "src", "themes/images/left.png");
-          domStyle.set(divLeftArrow, "display", "none");
-          on(divLeftArrow, "click", lang.hitch(this, function () {
-              this._slideLeft();
-          }));
-          var divRightArrow = domConstruct.create("div", { "class": "divRightArrow" }, this.legendbox);
-          var esriCTRightArrow = domConstruct.create("img", { "class": "esriCTArrow" }, divRightArrow);
-          domStyle.set(divRightArrow, "display", "block");
-          on(esriCTRightArrow, "click", lang.hitch(this, function () {
-              this._slideRight();
-          }));
-          domAttr.set(esriCTRightArrow, "src", "themes/images/right.png");
+        _createLegendContainerUI: function () {
+            this.esriCTLegendContainer = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
+            this.esriCTLegendContainer.appendChild(this.esriCTdivLegendbox);
+            var divlegendContainer = domConstruct.create("div", { "class": "divlegendContainer" }, this.divlegendList);
+            this.divlegendContainer = domConstruct.create("div", { "class": "divlegendContent" }, divlegendContainer);
+            var divLeftArrow = domConstruct.create("div", { "class": "divLeftArrow" }, this.legendbox);
+            var esriLeftArrow = domConstruct.create("div", { "class": "esriCTArrow" }, divLeftArrow);
+            domClass.add(esriLeftArrow, "esriCTLeftArrow");
+            domStyle.set(divLeftArrow, "display", "none");
+            on(divLeftArrow, "click", lang.hitch(this, function () {
+                this._slideLeft();
+            }));
+            var divRightArrow = domConstruct.create("div", { "class": "divRightArrow" }, this.legendbox);
+            var esriRightArrow = domConstruct.create("div", { "class": "esriCTArrow" }, divRightArrow);
+            domStyle.set(divRightArrow, "display", "block");
+            on(esriRightArrow, "click", lang.hitch(this, function () {
+                this._slideRight();
+            }));
+            domClass.add(esriRightArrow, "esriCTRightArrow"); 
 
-      },
+        },
 
-      _slideRight: function () {
-          var difference = query(".divlegendContainer")[0].offsetWidth - query(".divlegendContent")[0].offsetWidth;
-          if (this.newLeft > difference) {
-              domStyle.set(query(".divLeftArrow")[0], "display", "block");
-              domStyle.set(query(".divLeftArrow")[0], "cursor", "pointer");
-              this.newLeft = this.newLeft - (200 + 9);
-              domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
-              this._resetSlideControls();
-          }
-      },
+        _slideRight: function () {
+            var difference = query(".divlegendContainer")[0].offsetWidth - query(".divlegendContent")[0].offsetWidth;
+            if (this.newLeft > difference) {
+                domStyle.set(query(".divLeftArrow")[0], "display", "block");
+                domStyle.set(query(".divLeftArrow")[0], "cursor", "pointer");
+                this.newLeft = this.newLeft - (200 + 9);
+                domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
+                this._resetSlideControls();
+            }
+        },
 
-      _slideLeft: function () {
-          if (this.newLeft < 0) {
-              if (this.newLeft > -(200 + 9)) {
-                  this.newLeft = 0;
-              } else {
-                  this.newLeft = this.newLeft + (200 + 9);
-              }
-              if (this.newLeft >= -10) {
-                  this.newLeft = 0;
-              }
-              domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
-              this._resetSlideControls();
-          }
-      },
+        _slideLeft: function () {
+            if (this.newLeft < 0) {
+                if (this.newLeft > -(200 + 9)) {
+                    this.newLeft = 0;
+                } else {
+                    this.newLeft = this.newLeft + (200 + 9);
+                }
+                if (this.newLeft >= -10) {
+                    this.newLeft = 0;
+                }
+                domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
+                this._resetSlideControls();
+            }
+        },
 
-      _resetSlideControls: function () {
-          if (this.newLeft > query(".divlegendContainer")[0].offsetWidth - query(".divlegendContent")[0].offsetWidth) {
-              domStyle.set(query(".divRightArrow")[0], "display", "block");
-              domStyle.set(query(".divRightArrow")[0], "cursor", "pointer");
-          } else {
-              domStyle.set(query(".divRightArrow")[0], "display", "none");
-              domStyle.set(query(".divRightArrow")[0], "cursor", "default");
-          }
-          if (this.newLeft == 0) {
-              domStyle.set(query(".divLeftArrow")[0], "display", "none");
-              domStyle.set(query(".divLeftArrow")[0], "cursor", "default");
-          } else {
-              domStyle.set(query(".divLeftArrow")[0], "display", "block");
-              domStyle.set(query(".divLeftArrow")[0], "cursor", "pointer");
-          }
-      },
+        _resetSlideControls: function () {
+            if (this.newLeft > query(".divlegendContainer")[0].offsetWidth - query(".divlegendContent")[0].offsetWidth) {
+                domStyle.set(query(".divRightArrow")[0], "display", "block");
+                domStyle.set(query(".divRightArrow")[0], "cursor", "pointer");
+            } else {
+                domStyle.set(query(".divRightArrow")[0], "display", "none");
+                domStyle.set(query(".divRightArrow")[0], "cursor", "default");
+            }
+            if (this.newLeft == 0) {
+                domStyle.set(query(".divLeftArrow")[0], "display", "none");
+                domStyle.set(query(".divLeftArrow")[0], "cursor", "default");
+            } else {
+                domStyle.set(query(".divLeftArrow")[0], "display", "block");
+                domStyle.set(query(".divLeftArrow")[0], "cursor", "pointer");
+            }
+        },
 
         /*
-        * fires query for the renderer present in the current extent 
+        * fires query for the renderer present in the current extent
         */
-        _fireQueryOnExtentChange: function(currentExtent) {
+        _executeQueryOnExtentChange: function (currentExtent) {
             var queryParams = new Query();
             queryParams.outFields = ["*"];
             queryParams.geometry = currentExtent;
@@ -200,13 +200,13 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         /*
         * performs query task for the no of features present in the current extent
         */
-        _executeQueryTask: function(layer, defQueryArray, queryParams) {
+        _executeQueryTask: function (layer, defQueryArray, queryParams) {
             var queryTask = new QueryTask(layer);
-            defQueryArray.push(queryTask.executeForCount(queryParams, function(count) {
+            defQueryArray.push(queryTask.executeForCount(queryParams, function (count) {
                 var queryDeferred = new dojo.Deferred();
                 queryDeferred.resolve(count);
                 return queryDeferred.promise;
-            }, function(error) {
+            }, function (error) {
                 console.log(error);
             }));
         },
@@ -214,8 +214,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         /*
         * initiates the creation of legend
         */
-        startup: function(layerArray) {
-
+        startup: function (layerArray) {
             var mapServerArray = [];
             for (var index = 0; index < layerArray.length; index++) {
                 var mapServerURL = layerArray[index].split("/");
@@ -236,25 +235,24 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                 };
                 var layersRequest = esriRequest(params);
                 defArray.push(layersRequest.then(lang.hitch(this,
-                        function(response) {
+                        function (response) {
                             var deferred = new dojo.Deferred();
                             deferred.resolve(response);
                             return deferred.promise;
                         }
                     ),
-                    function(error) {
+                    function (error) {
                         console.log("Error: ", error.message);
                     }));
             }
             var deferredList = new dojo.DeferredList(defArray);
-            deferredList.then(lang.hitch(this, function(result) {
+            deferredList.then(lang.hitch(this, function (result) {
                 domConstruct.empty(this.divlegendContainer);
                 for (var i = 0; i < result.length; i++) {
                     this._createLegendList(result[i][1], mapServerArray[i]);
                 }
             }));
         },
-
 
         _addFieldValue: function () {
             var defArray = [];
@@ -270,13 +268,13 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                     };
                     var layersRequest = esriRequest(params);
                     defArray.push(layersRequest.then(lang.hitch(this,
-                            function(response) {
+                            function (response) {
                                 var deferred = new dojo.Deferred();
                                 deferred.resolve(response);
                                 return deferred.promise;
                             }
                         ),
-                        function(error) {
+                        function (error) {
                             console.log("Error: ", error.message);
                         }));
                 }
@@ -290,7 +288,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                             this._layerCollection[layerTempArray[i]].rendererType = "uniqueValue";
                             this._layerCollection[layerTempArray[i]].fieldName = layerObject.drawingInfo.renderer.field1 || layerObject.drawingInfo.renderer.field2 || layerObject.drawingInfo.renderer.field3;
 
-                     } else if (layerObject.drawingInfo && layerObject.drawingInfo.renderer && layerObject.drawingInfo.renderer.type == "classBreaks") {
+                        } else if (layerObject.drawingInfo && layerObject.drawingInfo.renderer && layerObject.drawingInfo.renderer.type == "classBreaks") {
                             this._layerCollection[layerTempArray[i]].rendererType = "classBreaks";
                             this._layerCollection[layerTempArray[i]].fieldName = layerObject.drawingInfo.renderer.field;
                         }
@@ -299,10 +297,10 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
             }));
         },
 
-        _removeDuplicate: function(mapServerArray) {
+        _removeDuplicate: function (mapServerArray) {
             var filterArray = [];
 
-            array.filter(mapServerArray, function(item, index) {
+            array.filter(mapServerArray, function (item, index) {
                 if (array.indexOf(filterArray, item) == -1) {
                     filterArray.push(item);
                 }
@@ -310,10 +308,10 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
             return filterArray;
         },
 
-        _createLegendList: function(layerList, mapServerUrl) {
+        _createLegendList: function (layerList, mapServerUrl) {
             for (var i = 0; i < layerList.layers.length; i++) {
                 this._layerCollection[mapServerUrl + '/' + layerList.layers[i].layerId] = layerList.layers[i];
-                
+
                 for (var j = 0; j < layerList.layers[i].legend.length; j++) {
                     this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
                 }

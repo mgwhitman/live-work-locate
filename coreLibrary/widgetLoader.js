@@ -30,10 +30,11 @@ define([
       "dojo/dom-class",
        "dojo/query",
     "dojo/topic",
+     "dojo/dom-style",
     "dojo/i18n!nls/localizedStrings",
     "dojo/domReady!"
 ],
-function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Deferred, all,domClass,query, topic, nls) {
+function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Deferred, all, domClass, query, topic, domStyle, nls) {
 
     //========================================================================================================================//
 
@@ -54,20 +55,14 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                 var splashScreen = new SplashScreen();
                 if (location.hash.split("#")[1] != undefined) {
                     var workflow = location.hash.split("#")[1].split("?app=")[1];
-                    // domClass.remove(query("." + dojo.configData.Workflows)[0], "esriCTApplicationHeaderTextSelected");
-                   // domClass.add(query("." + workflow)[0], "esriCTApplicationHeaderTextSelected");
-
-                    
                     splashScreen._hideSplashScreenDialog();
-                    splashScreen._loadSlectedWorkflow(workflow, map);
-                    splashScreen._addLayer(workflow);
+                    splashScreen._loadSelectedWorkflow(workflow, map)
                 }
                 else {
                     splashScreen.showSplashScreenDialog(map);
                 }
                 topic.subscribe("showSplashScreen", function () {
                     splashScreen.showSplashScreenDialog(map);
-                    // map.removeLayer(featureLayer);
                 });
             }
             var mapInstance = this._initializeMap(map);
@@ -77,6 +72,7 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
             * @param {array} dojo.configData.AppHeaderWidgets Widgets specified in configuration file
             */
             array.forEach(dojo.configData.AppHeaderWidgets, function (widgetConfig, index) {
+                // if (index > 4) {
                 var deferred = new Deferred();
                 widgets[widgetConfig.WidgetPath] = null;
                 require([widgetConfig.WidgetPath], function (widget) {
@@ -86,6 +82,7 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                     deferred.resolve(widgetConfig.WidgetPath);
                 });
                 deferredArray.push(deferred.promise);
+                //  }
             });
 
             all(deferredArray).then(lang.hitch(this, function () {
@@ -110,7 +107,6 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
             // var map = new Map(),
             var mapInstance = map.getMapInstance();
             return mapInstance;
-
         },
 
         /**
@@ -121,7 +117,7 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
         _createApplicationHeader: function (widgets) {
             var applicationHeader = new appHeader();
             applicationHeader.loadHeaderWidgets(widgets);
-        }
 
-    });
+        }
+   });
 });

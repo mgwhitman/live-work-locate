@@ -25,6 +25,7 @@ define([
     "dojo/dom-attr",
     "dojo/dom",
     "dojo/dom-class",
+    "dojo/dom-style",
      "dojo/topic",
      "dojo/query",
     "dojo/text!./templates/appHeaderTemplate.html",
@@ -33,7 +34,7 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!nls/localizedStrings"
 ],
-     function (declare, domConstruct, lang, array, domAttr, dom, domClass, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls) {
+     function (declare, domConstruct, lang, array, domAttr, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls) {
 
          //========================================================================================================================//
 
@@ -78,8 +79,8 @@ define([
                  */
                  document["title"] = dojo.configData.ApplicationName;
                  //  domAttr.set(this.applicationHeaderName, "innerHTML", dojo.configData.ApplicationName);
-                 for (var i in dojo.configData.Workflows) {
-                     domConstruct.create("span", { innerHTML: i, class: "esriCTApplicationHeaderTextTD " + i }, this.applicationHeaderName);
+                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
+                     domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
                  }
              },
 
@@ -104,6 +105,9 @@ define([
                  if (location.hash) {
                      var workflow = location.hash.split("#")[1].split("?app=")[1];
                      domClass.add(query("." + workflow)[0], "esriCTApplicationHeaderTextSelected");
+                     if (query(".esriCTExitImg")[0]) {
+                         domStyle.set(query(".esriCTExitImg")[0], "display", "none");
+                     }
                  }
              },
              /**
@@ -111,11 +115,15 @@ define([
                          * @memberOf widgets/appHeader/appHeader
                          */
              _loadApplicationHeaderIcon: function () {
+                 if (dojo.configData.ApplicationFavicon && lang.trim(dojo.configData.ApplicationFavicon).length != 0) {
+                     this._loadIcons("shortcut icon", dojo.configData.ApplicationFavicon);
+                 }
                  if (dojo.configData.ApplicationIcon && lang.trim(dojo.configData.ApplicationIcon).length != 0) {
                      this._loadIcons("apple-touch-icon-precomposed", dojo.configData.ApplicationIcon);
                      this._loadIcons("apple-touch-icon", dojo.configData.ApplicationIcon);
-                     domConstruct.create("img", { "class": "esriCTApplicationHeaderIcon", "src": dojoConfig.baseURL + dojo.configData.ApplicationIcon }, this.applicationHeaderParentContainer);
+                     this.applicationHeaderIcon.src = dojoConfig.baseURL + dojo.configData.ApplicationIcon;
                  }
+
              },
              _loadIcons: function (rel, iconPath) {
                  var icon = domConstruct.create("link");

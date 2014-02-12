@@ -43,28 +43,29 @@ define([
              nls: nls,
              currentIndex: null,
              splashScreenScrollbar: null,
+             currentWorkflow: null,
              postCreate: function () {
                  var _self = this;
                  this.showSplashScreenDialog();
                  this.domNode = domConstruct.create("div", { "class": "esriGovtLoadingIndicator" }, dojo.body());
                  this.domNode.appendChild(this.splashScreenScrollBarOuterContainer);
                  var holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
-                 for (var i in dojo.configData.Workflows) {
-                     var workflowContainer = domConstruct.create("div", { "class": "workflowContainer", "key": dojo.configData.Workflows[i].key }, holder);
+                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
+                     var workflowContainer = domConstruct.create("div", { "class": "workflowContainer", "key": dojo.configData.Workflows[i].Name, "index": i }, holder);
 
-                     var innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + i, innerHTML: i }, workflowContainer);
+                     var innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + dojo.configData.Workflows[i].Name, innerHTML: dojo.configData.Workflows[i].Name }, workflowContainer);
                      var imgcontainerdiv = domConstruct.create("div", { "class": "workflowContainerImg" }, innercontainer);
-                     var imgcontainer = domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].ImageSrc }, imgcontainerdiv);
+                     var imgcontainer = domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].SplashscreenImage }, imgcontainerdiv);
                      this.own(on(workflowContainer, "click", function (evt) {
                          topic.publish("loadingIndicatorHandler");
                          var key = domAttr.get(this, "key");
+                         var currentWorkflow = domAttr.get(this, "index");
                          dojo.layerKey = key;
-                         dojo.seletedWorkflow = key
-                         _self._selectWorkflow(key)
-                         _self.mapObject._addOperationalLayerToMap
-                         for (var i = 0 in dojo.configData.Workflows[key].OperationalLayers) {
-                             _self.mapObject._addOperationalLayerToMap(i, dojo.configData.Workflows[key].OperationalLayers[i]);
-                         }
+                         dojo.workFlowIndex = currentWorkflow;
+                         dojo.seletedWorkflow = key;
+
+                         _self._selectWorkflow(key);
+                         _self.mapObject._generateLayerURL();
                          _self._hideSplashScreenDialog();
                      }));
                  }
@@ -89,25 +90,44 @@ define([
                  this.mapObject = map;
                  domStyle.set(this.domNode, "display", "block");
 
-                 this.splashScreenLableDiv.innerHTML = "Please select an app to continue"
+                 this.splashScreenLableDiv.innerHTML = nls.splashScreenContent;
              },
+
              _selectWorkflow: function (Workflows) {
                  var url = "?app=" + Workflows;
                  location.hash = url;
-                 for (var j in dojo.configData.Workflows) {
-
-                     domClass.remove(query("." + j)[0], "esriCTApplicationHeaderTextSelected");
+                 this._applicationThemeLoader();
+                 for (var j = 0; j < dojo.configData.Workflows.length; j++) {
+                     domClass.remove(query("." + dojo.configData.Workflows[j].Name)[0], "esriCTApplicationHeaderTextSelected");
                      domClass.add(query("." + dojo.seletedWorkflow)[0], "esriCTApplicationHeaderTextSelected");
                  }
              },
-             _loadSlectedWorkflow: function (Workflows, map) {
+
+             _applicationThemeLoader: function () {
+                 if (dojo.configData.Workflows[dojo.workFlowIndex].ThemeColor) {
+                     if (dom.byId("theme")) {
+                         domAttr.set(dom.byId("theme"), "href", dojo.configData.Workflows[dojo.workFlowIndex].ThemeColor);
+                     } else {
+                         themeObj.href = dojo.configData.Workflows[dojo.workFlowIndex].ThemeColor;
+                     }
+                 }
+             },
+
+             _loadSelectedWorkflow: function (Workflows, map) {
                  this.mapObject = map;
                  dojo.layerKey = Workflows;
                  dojo.seletedWorkflow = Workflows;
+                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
+                     if (dojo.configData.Workflows[i].Name == Workflows) {
+                         dojo.workFlowIndex = i;
+                         break;
+                     }
+                 }
+                 this._applicationThemeLoader();
              },
              _addLayer: function (key) {
-                 for (var i = 0 in dojo.configData.Workflows[key].OperationalLayers) {
-                     this.mapObject._addOperationalLayerToMap(i, dojo.configData.Workflows[key].OperationalLayers[i]);
+                 for (var i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
+                     this.mapObject._addOperationalLayerToMap(i, dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i]);
                  }
              },
              _hideSplashScreenDialog: function () {

@@ -35,9 +35,10 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!nls/localizedStrings",
-    "dojo/topic"
-  ],
-function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, topic) {
+    "dojo/topic",
+    "dijit/form/Textarea"
+],
+function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, topic, Textarea) {
 
     //========================================================================================================================//
 
@@ -67,7 +68,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                     * @memberOf widgets/share/share
                     */
                     if (html.coords(this.divAppContainer).h > 0) {
-                        domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTRouteImg-select");
+                        domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
                         domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                         domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
                     }
@@ -77,10 +78,14 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
 
                 /**
+                * minimize other open header panel widgets and show locator widget
+                */
+
+                /**
                 * minimize other open header panel widgets and show share panel
                 */
                 topic.publish("toggleWidget", "share");
-            
+                this._shreLink();
             })));
         },
 
@@ -88,7 +93,82 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
         * display sharing panel
         * @param {array} dojo.configData.MapSharingOptions Sharing option settings specified in configuration file
         * @memberOf widgets/share/share
-      
+        */
+        _shreLink: function () {
+
+            /**
+            * get current map extent to be shared
+            */
+            domAttr.set(this.esriCTDivshareCodeContainer, "innerHTML", nls.webpageDispalyText);
+            if (dojo.configData.WebMapId == "") {
+                var mapExtent = this._getMapExtent();
+            }
+
+            url = esri.urlToObject(window.location.toString());
+            var splitUrl = url.path.split("#")[0];
+            urlStr = encodeURI(splitUrl) + "?extent=" + mapExtent;
+            try {
+
+                /**
+                * call tinyurl service to generate share URL
+                */
+                url = string.substitute(dojo.configData.MapSharingOptions.TinyURLServiceURL, [urlStr]);
+                dojo.io.script.get({
+                    url: url,
+                    callbackParamName: "callback",
+                    load: lang.hitch(this, function (data) {
+                        var tinyUrl = data;
+                        var attr = dojo.configData.MapSharingOptions.TinyURLResponseAttribute.split(".");
+                        for (var x = 0; x < attr.length; x++) {
+                            tinyUrl = tinyUrl[attr[x]];
+                        }
+                        var applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
+                        applicationHeaderDiv.appendChild(this.divAppContainer);
+                        if (html.coords(this.divAppContainer).h > 0) {
+
+                            /**
+                            * when user clicks on share icon in header panel, close the sharing panel if it is open
+                            */
+                            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
+                            domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+                            domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
+                        }
+                        else {
+
+                            /**
+                            * when user clicks on share icon in header panel, open the sharing panel if it is closed
+                            */
+                            domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
+                            domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
+                            domClass.replace(this.divAppContainer, "esriCTFullHeight", "esriCTZeroHeight");
+                        }
+
+                        /**
+                        * remove event handlers from sharing options
+                        */
+                        if (this.facebookHandle) {
+                            this.facebookHandle.remove();
+                            this.twitterHandle.remove();
+                            this.emailHandle.remove();
+                        }
+
+                        /**
+                        * add event handlers to sharing options
+                        */
+                        this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
+                        this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
+                        this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
+                    }),
+                    error: function (error) {
+                        domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
+                        alert(nls.errorMessages.shareLoadingFailed);
+                    }
+                });
+            }
+            catch (err) {
+                alert(nls.errorMessages.shareLoadingFailed);
+            }
+        },
 
         /**
         * return current map extent
@@ -145,6 +225,6 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                 case "email":
                     parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
             }
-        }
+        },
     });
 });

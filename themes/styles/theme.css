@@ -24,6 +24,7 @@ html, body {
     font-size: 11px !important;
     font-family: Verdana !important;
     visibility: visible !important;
+    background-color: white;
 }
 
 .esriCTFullHeightWidth {
@@ -56,8 +57,8 @@ html, body {
     position: absolute;
     z-index: 1005;
     overflow: hidden;
-    border-bottom: 1px solid #007ac2;
     background: #fff;
+    border-bottom: 1px solid #c1c1c1;
 }
 
 .esriCTApplicationHeaderIconTD {
@@ -85,7 +86,7 @@ html, body {
 }
 
 .esriCTTdHeaderSearch {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/locate.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -98,7 +99,7 @@ html, body {
 }
 
 .esriCTHelpImg {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/Help.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -107,11 +108,11 @@ html, body {
     width: 24px;
     float: left;
     cursor: pointer;
-    background-size: 26px auto;
+    background-size: 24px auto;
 }
 
 .esriCTTdHeaderSearch-select {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/locate-select.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -124,7 +125,7 @@ html, body {
 }
 
 .esriCTTdGeolocation {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/imgGeolocation.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -137,7 +138,7 @@ html, body {
 }
 
 .esriCTImgSocialMedia-select {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/imgSocialMedia-select.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -150,7 +151,7 @@ html, body {
 }
 
 .esriCTImgSocialMedia {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/imgSocialMedia.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -176,7 +177,7 @@ html, body {
 }
 
 .esriCTRouteImg-select {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/get-route-select.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -189,26 +190,23 @@ html, body {
 }
 
 .esriCTApplicationHeaderIcon {
-    height: 48px;
-    width: 64px;
-    padding: 2px 0 2px 5px;
+    height: 32px;
+    width: 32px;
+    padding: 8px 0 2px 15px;
     float: left;
+    display: block;
 }
 /* End of Application Header */
-
 /* Address container Styles */
 
 .esriCTAddressContent {
     min-height: 146px;
-    border-right: 1px solid #007ac2;
-    border-left: 1px solid #007ac2;
-    border-bottom: 1px solid #007ac2;
     background-color: #fff;
     cursor: default !important;
 }
 
 .esriCTAddressContainerHeight {
-    height: 300px !important;
+    height: 350px !important;
 }
 
 .esriCTAddressScrollContent {
@@ -228,7 +226,7 @@ html, body {
 }
 
 .esriCTAddressContentHeight {
-    height: 312px !important;
+    height: 352px !important;
 }
 
 .esriCTAddressPlaceHolder {
@@ -433,6 +431,7 @@ html, body {
 /* End of Address container Styles */
 
 /* Share Container Styles */
+
 .esriCTDivAppContainer {
     position: absolute;
     z-index: 1000;
@@ -443,29 +442,20 @@ html, body {
 
 .esriCTDivAppHolder {
     background-color: #fff;
-    border-right: 1px solid #007ac2;
-    border-left: 1px solid #007ac2;
-    border-bottom: 1px solid #007ac2;
     float: left;
-    width: 285px;
+    width: 287px;
 }
 
 .esriCTDivshareContainer {
     background-color: #fff;
-    border-right: 1px solid #007ac2;
-    border-left: 1px solid #007ac2;
-    border-bottom: 1px solid #007ac2;
     float: left;
-    width: 99.2%;
+    width: 100%;
+    color: #808080;
 }
 
 .esriCTTxtShare {
-    border-top: 1px solid #007AC2;
     outline: medium none;
     vertical-align: middle !important;
-    border-bottom: 1px solid #007AC2;
-    border-left: 1px solid #007AC2;
-    border-right: 1px solid #007AC2;
     cursor: default !important;
     border-style: dotted;
     border-color: #808080;
@@ -535,15 +525,16 @@ html, body {
     cursor: pointer;
     background-size: 24px;
 }
+
 /* End of Share Container Styles */
 
 /* Slider */
 
 .esriSimpleSliderDecrementButton, .esriSimpleSliderIncrementButton {
     margin-bottom: 2px;
-    background-color: #007ac2 !important;
     border: #fff solid 0 !important;
     margin-top: 2px;
+    background-color: rgba(102, 102, 102, 0.8);
 }
 
 .esriSimpleSliderTL {
@@ -576,7 +567,6 @@ html, body {
     border-top: 0 !important;
     border-radius: 0px !important;
     margin-bottom: 2px;
-    background-color: #007ac2;
     background-position: center;
     border: #fff solid 0 !important;
 }
@@ -604,17 +594,15 @@ html, body {
 
     .BasemapToggle .toggleButton {
         border-radius: 0px !important;
-        border: 2px solid #007ac2 !important;
     }
 
-    .BasemapToggle .basemapTitle {
-        color: #007ac2 !important;
-    }
+    /*.BasemapToggle .basemapTitle {
+
+    }*/
 
     .BasemapToggle .basemapImage {
         height: 68px;
         width: 72px;
-        border: 1px solid #007ac2;
     }
 
 /* End of Basemap */
@@ -622,7 +610,7 @@ html, body {
 
 /*Exit*/
 .esriCTExitImg {
-    padding: 12px 24px;
+    margin: 12px 24px;
     background-image: url("../images/exit.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -631,7 +619,7 @@ html, body {
     width: 24px;
     float: left;
     cursor: pointer;
-    background-size: 26px auto;
+    background-size: 24px auto;
 }
 /* End of Exit */
 
@@ -822,12 +810,11 @@ html, body {
     color: #9b9b9b;
     float: left;
     font-size: 15px;
-    padding: 5px;
+    padding: 10px 5px;
     line-height: 25px;
 }
 
 .esriCTApplicationHeaderTextSelected {
-    color: #007AC2 !important;
     font-size: 22px!important;
 }
 /* End of splash Screen */
@@ -1057,14 +1044,13 @@ html, body {
 }
 
 .legendbox {
-    float: none;
+    float: none; /* not needed, just for clarification */
     background: #FFFFFF; /* the next props are meant to keep this block independent from the other floated one */
     width: auto;
     overflow: hidden;
 }
 
 .legenboxInner {
-    border: 1px solid #007ac2;
     border-bottom: none !important;
 }
 
@@ -1130,7 +1116,7 @@ html, body {
     position: absolute;
     height: 30px;
     width: 30px;
-    right: 0px; /*286px;*/
+    right: 0px;
     overflow: hidden;
     padding-bottom: 1px;
     bottom: 0;
@@ -1149,13 +1135,26 @@ html, body {
     width: 30px;
 }
 
+
 .divLeftArrow {
     position: absolute;
     height: 30px;
     width: 30px;
 }
-/* End of legends */
 
+.esriCTRightArrow {
+    background-position: center center;
+    background-image: url("../images/right.png") !important;
+    background-repeat: no-repeat;
+}
+
+.esriCTLeftArrow {
+    background-position: center center;
+    background-image: url("../images/left.png") !important;
+    background-repeat: no-repeat;
+}
+
+/* End of legends */
 .simpleDirections .esriRoutesError li {
     padding: 0 10px;
 }
@@ -1192,7 +1191,6 @@ html, body {
     float: left;
     margin-left: 15px;
     width: 100%;
-    color: #007AC2 !important;
     border-bottom: 1px solid #b4b4b4;
 }
 
@@ -1205,7 +1203,6 @@ html, body {
 
 .esriCTHeaderLine {
     border-bottom: 1px solid #b4b4b4;
-    color: #007AC2 !important;
     padding: 5px 5px 5px 10px;
     margin-top: 80px;
     line-height: 25px;
@@ -1215,19 +1212,16 @@ html, body {
 .esriCTRouteToplabel {
     padding: 10px 0px;
     border-bottom: 1px solid #e8e8e8;
-    color: #007AC2;
     font-weight: bold;
 }
 
 .esriCTRouteMapName {
     width: 75%;
-    color: #007AC2;
     display: table-cell;
     vertical-align: middle;
 }
 
 .esriCTRouteMapNum {
-    color: #007AC2;
     width: 15%;
     display: table-cell;
     vertical-align: middle;
@@ -1236,7 +1230,6 @@ html, body {
 
 .esriCTRouteMapArrow {
     float: left;
-    color: #007AC2;
     background-image: url("../images/arrow.png");
     background-repeat: no-repeat;
     width: 10px;
@@ -1246,13 +1239,11 @@ html, body {
 .esriCTRouteToplabelBackView {
     padding: 10px 0px;
     border-bottom: 1px solid #e8e8e8;
-    color: #007AC2;
 }
 
 .esriCTRouteBAck {
     float: left;
     margin-left: 10px;
-    color: #007AC2;
     background-image: url("../images/back.png");
     background-repeat: no-repeat;
     width: 14px;
@@ -1368,7 +1359,6 @@ html, body {
 }
 
 .esriCTdivShowReRouteContainer {
-    color: #007AC2 !important;
     float: left;
     width: 100%;
     background: #ffecab;
@@ -1394,21 +1384,16 @@ html, body {
     .esriPopup .titlePane {
         padding: 3px;
         border-radius: 0px !important;
-        color: #007AC2 !important;
         background: #fff !important;
-        border-color: #007AC2 !important;
-        border-bottom: 1px solid #007AC2;
     }
 
     .esriPopup .contentPane {
         background: #fff !important;
-        border-color: #007AC2 !important;
     }
 
     .esriPopup .actionsPane {
         border-radius: 0px !important;
         background: #fff !important;
-        border-color: #007AC2 !important;
     }
 
     .esriPopup .titleButton {
@@ -1468,7 +1453,6 @@ html, body {
         }
 
 .simpleDirections .esriStopsContainer {
-    border-bottom: 1px solid #007AC2;
     float: left;
     margin: 10px 0 0 0;
     width: 100%;
@@ -1477,7 +1461,6 @@ html, body {
 .esriCTTInfoWindowContainer {
     z-index: 100002;
     position: absolute;
-    border: #007ac2 solid 1px;
     background: #FFF;
     behavior: url("styles/PIE.htc");
 }
@@ -1501,7 +1484,6 @@ html, body {
 .esriCTinfoWindow {
     z-index: 1000002 !important;
     visibility: visible !important;
-    border: #007ac2 solid 1px;
     background: #FFF;
     height: 300px;
     width: 350px;
@@ -1596,7 +1578,6 @@ html, body {
 }
 
 .infopanel {
-    border-top: 1px #007ac2 solid;
     clear: both;
     width: 100%;
     height: 87% !important;
@@ -1701,9 +1682,61 @@ input {
 }
 /*End of icons style*/
 
+/*Start of icons style*/
+.esriCTWalk, .esriCTDrive {
+    float: left;
+}
+
+.driveIconSelected {
+    background-image: url("../images/car-select.png");
+    background-repeat: no-repeat;
+    background-position: top;
+    float: left;
+    height: 30px;
+    width: 30px;
+    margin: 1px 0px 0px 15px;
+    cursor: pointer;
+    background-size: 100%;
+}
+
+.driveIcon {
+    background-image: url("../images/car.png");
+    background-repeat: no-repeat;
+    background-position: top;
+    float: left;
+    height: 30px;
+    width: 30px;
+    margin: 1px 0px 0px 15px;
+    cursor: pointer;
+    background-size: 100%;
+}
+
+.walkIcon {
+    background-image: url("../images/walk.png");
+    background-repeat: no-repeat;
+    float: right;
+    height: 30px;
+    width: 30px;
+    margin: 1px 0px 0px 1px;
+    cursor: pointer;
+    background-size: 100%;
+}
+
+.walkIconSelected {
+    background-image: url("../images/walk-select.png");
+    background-repeat: no-repeat;
+    float: right;
+    height: 30px;
+    width: 30px;
+    margin: 1px 0px 0px 1px;
+    cursor: pointer;
+    background-size: 100%;
+}
+/*End of icons style*/
+
 /*Start of Horizontal slider style*/
 .horizontalSlider {
-    width: 200px;
+    width: 192px;
     margin-left: 17px;
 }
 
@@ -1735,11 +1768,12 @@ input {
     width: 16px !important;
     height: 16px !important;
     background-repeat: no-repeat;
-    background-image: url('../images/thumb-slider-18-16.png') !important;
+    background-image: url('../images/thumb-blue.png') !important;
     background-position: 0px !important;
     margin-top: -1px;
     background-size: 100%;
     outline: none !important;
+    margin-left: 10px !important;
 }
 
 .claro .dijitSliderProgressBarH .dijitSliderThumbHover {
@@ -1747,11 +1781,12 @@ input {
     width: 16px !important;
     height: 16px !important;
     background-repeat: no-repeat;
-    background-image: url('../images/thumb-slider-18-16.png') !important;
+    background-image: url('../images/thumb-blue.png') !important;
     background-position: 0px !important;
     margin-top: -1px !important;
     background-size: 100% !important;
     outline: none !important;
+    margin-left: 10px !important;
 }
 
 .dijitSliderBumperH, .dijitSliderBarH {
@@ -1787,7 +1822,7 @@ input {
 }
 
 .dijitSliderImageHandleH {
-    left: 18% !important;
+    left: 27% !important;
 }
 
 .esriCTSliderMessage {
@@ -1799,19 +1834,20 @@ input {
     color: #808080;
 }
 
+.dijitSliderBumperH {
+    width: 2px !important;
+}
+
 .esriCTSlider {
     width: 200px;
     margin-left: 7px;
     float: left;
+    height: 40px;
 }
 
 .esriCTHorizontalRuleContainer {
     width: 178px;
     margin-left: 28px;
-}
-
-.dijitSliderBumperH {
-    width: 2px !important;
 }
 
 .esriCTHorizontalSliderContainer {
@@ -1820,18 +1856,42 @@ input {
 }
 /*End of Horizontal slider style*/
 
+
 .esriWorkflowLIVE {
     background-color: #007ac2;
 }
 
 .esriWorkflowWORK {
-    background-color: #8f8d0e;
+    background-color: #028D6A;
 }
 
 .esriWorkflowLOCATE {
-    background-color: #703987;
+    background-color: #5C2E6F;
 }
 
 .esriWorkflowTRANSPORT {
-    background-color: #c27000;
+    background-color: #D15706;
+}
+
+.esriCTRouteInformationContainer {
+    border-top-color: #007ac2;
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-top: 10px;
+    width: 350px;
+    margin-left: 1px;
+}
+
+.esriCTGroupResult {
+    width: 100%;
+    clear: both;
+    margin-top: 20px;
+    margin-left: 30px;
+    float: left;
+    text-align: left;
+}
+/*esri MAp Logo*/
+.mapLogo {
+    position: relative !important;
+    margin-bottom: 30px !important;
 }

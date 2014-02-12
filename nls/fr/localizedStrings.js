@@ -16,12 +16,30 @@
 | limitations under the License.
 */
 define({
+    root: {
+        sliderDisplayText: "Show results within 20 mins drive",
+        okButtonText: "OK",
+        splashScreenContent: "Please select an app to continue",
+        shareHtmlcontent:"",
+        addressDisplayText: "Address",
+        incidentInformationDisplayText: "Incident Information",
+        directionsDisplayText: "Directions",
+        informationDispalyText: "511 Information",
+        informationPanelTitle: "Information for current map view",
+        print: "Print",
+        back: "Back",
+        showNullValue: "N/A",
+        webpageDispalyText: "Copy/paste HTML into your web page",
+        reRouteDisplayText: "Traffic Incidents found on this road",
+        errorMessages: {
+            invalidSearch: "No results found",
+            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
+            invalidLocation: "Current Location not found.",
+            invalidProjection: "Unable to plot current location on the map.",
+            widgetNotLoaded: "Fail to load widgets.",
+            shareLoadingFailed: "Unable to load share options.",
+            shareFailed: "Unable to share."
 
-    okButtonText: "OK",
-    splashScreenContent: "Nous allons déchirer les professionnels n'ont jamais cessé , ou désirs à Cilla consectetaur l'argent, mais parce que parfois les circonstances se produisent dans laquelle labeur et la douleur peut lui procurer quelque grand . Pour prendre un exemple trivial, qui de nous n'a jamais entreprend l'exercice physique laborieux, sauf pour obtenir quelque avantage. Nous avons actuellement dans le train arrive à trouver à redire à ce produit aucun plaisir qui en résulte est d'être les applications en ligne . Ces cas sont parfaitement compte du système, ils sont en faute atelier quae laisser adoucit vous recommander . Conscient livre pour vous faire face à la réalité et les lois de punition . Nous allons déchirer les professionnels n'ont jamais cessé , ou désirs à Cilla consectetaur l'argent, mais parce que parfois les circonstances se produisent dans laquelle labeur et la douleur peut lui procurer quelque grand . Pour prendre un exemple trivial, qui de nous n'a jamais entreprend l'exercice physique laborieux, sauf pour obtenir quelque avantage. Nous avons actuellement dans le train arrive à trouver à redire à ce produit aucun plaisir qui en résulte est d'être les applications en ligne . Ces cas sont parfaitement compte du système, ils sont en faute atelier quae laisser adoucit vous recommander . Conscient livre pour vous faire face à la réalité et les lois de punition . Nous allons déchirer les professionnels n'ont jamais cessé , ou désirs à Cilla consectetaur l'argent, mais parce que parfois les circonstances se produisent dans laquelle labeur et la douleur peut lui procurer quelque grand . Pour prendre un exemple trivial, qui de nous n'a jamais entreprend l'exercice physique laborieux, sauf pour obtenir quelque avantage. Nous avons actuellement dans le train arrive à trouver à redire à ce produit aucun plaisir qui en résulte est d'être les applications en ligne . Ces cas sont parfaitement compte du système, ils sont en faute atelier quae laisser adoucit vous recommander . Conscient livre pour vous faire face à la réalité et les lois de punition . Nous allons déchirer les professionnels n'ont jamais cessé , ou désirs à Cilla consectetaur l'argent, mais parce que parfois les circonstances se produisent dans laquelle labeur et la douleur peut lui procurer quelque grand . Pour prendre un exemple trivial, qui de nous n'a jamais entreprend l'exercice physique laborieux, sauf pour obtenir quelque avantage. Nous avons actuellement dans le train arrive à trouver à redire à ce produit aucun plaisir qui en résulte est d'être les applications en ligne . Ces cas sont parfaitement compte du système, ils sont en faute atelier quae laisser adoucit vous recommander . Conscient livre pour vous faire face à la réalité et les lois de punition .",
-    addressDisplayText: "adresse",
-    errorMessages: {
-        invalidSearch: "Aucun résultat",
-        falseConfigParams: "Nécessitait des valeurs de clés de configuration sont soit nul ou pas exactement correspondant à des attributs de la couche, Ce message peut apparaître plusieurs fois."
+        }
     }
 });
