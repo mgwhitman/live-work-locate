@@ -16,14 +16,33 @@
 | limitations under the License.
 */
 define({
-        titles: {
-            informationDisplayText: "@@511 Information",
-            reRouteDisplayText: "@@Traffic Incidents found on this road"
-        },
-        messages: {
-            splashScreenContent: "Un'applicazione che permette al pubblico di trovare informazioni sulle condizioni stradali, 511 avvisi, incidenti stradali, et al."
-        },
-        notUsed: {
-            incidentInformationDisplayText: "@@Incident Information"
+    root: {
+        NearbyText: "What's nearby?",
+        sliderDisplayText: "Show results within <b>25 mins drive</b>",
+        okButtonText: "OK",
+        splashScreenContent: "Please select an app to continue",
+        shareHtmlcontent: "",
+        addressDisplayText: "Address",
+        incidentInformationDisplayText: "Incident Information",
+        directionsDisplayText: "Directions",
+        informationDispalyText: "511 Information",
+        informationPanelTitle: "Information for current map view",
+        print: "Print",
+        back: "Back",
+        showNullValue: "N/A",
+        webpageDispalyText: "Copy/paste HTML into your web page",
+        reRouteDisplayText: "Traffic Incidents found on this road",
+        errorMessages: {
+            invalidSearch: "No results found",
+            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
+            invalidLocation: "Current Location not found.",
+            invalidProjection: "Unable to plot current location on the map.",
+            widgetNotLoaded: "Fail to load widgets.",
+            shareLoadingFailed: "Unable to load share options.",
+            shareFailed: "Unable to share."
+
         }
+    },
+
+    es: true, fr: true, it: true
 });
