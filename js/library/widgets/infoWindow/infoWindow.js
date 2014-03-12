@@ -31,13 +31,14 @@ define([
         "dojo/topic",
         "esri/domUtils",
         "esri/InfoWindowBase",
+        "../scrollBar/scrollBar",
         "dojo/text!./templates/infoWindow.html",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "esri/tasks/query",
         "dijit/_WidgetsInTemplateMixin"
 ],
- function (declare, domConstruct, domStyle, domAttr, lang, on, domGeom, dom, domClass, string, topic, domUtils, InfoWindowBase, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
+ function (declare, domConstruct, domStyle, domAttr, lang, on, domGeom, dom, domClass, string, topic, domUtils, InfoWindowBase, scrollBar, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
      return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
          templateString: template,
          InfoShow: null,
@@ -60,6 +61,7 @@ define([
                      this.InfoShow = false;
                  }
                  domUtils.hide(this.domNode);
+                 topic.publish("clearSelectedFeature");
              })));
          },
 
@@ -70,8 +72,17 @@ define([
                      this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
                  }
              }
-             this.divInfoDetailsScroll.appendChild(detailsTab);
+
              this.setLocation(screenPoint);
+             if (this.infoContainerScrollbar) {
+                 this.infoContainerScrollbar.removeScrollBar();
+             }
+             this.divInfoDetailsScroll.appendChild(detailsTab);
+             this.infoContainerScrollbar = new scrollBar({
+                 domNode: this.divInfoScrollContent
+             });
+             this.infoContainerScrollbar.setContent(this.divInfoDetailsScroll);
+             this.infoContainerScrollbar.createScrollBar();
          },
 
          resize: function (width, height) {
@@ -83,14 +94,16 @@ define([
              });
          },
 
-         setTitle: function (infoTitle) {
+         setTitle: function (str) {
+             var len = 35;
+             var infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
              if (infoTitle.length > 0) {
-                 this.esriCTheadderPanel.innerHTML = infoTitle;
-                 this.esriCTheadderPanel.title = infoTitle;
-             } else {
                  this.esriCTheadderPanel.innerHTML = "";
+                 this.esriCTheadderPanel.innerHTML = infoTitle;
+                 this.esriCTheadderPanel.title = str;
+             } else {
+                 this.esriCTheadderPanel.innerHTML = dojo.configData.ShowNullValueAs;
              }
-
          },
 
          setLocation: function (location) {

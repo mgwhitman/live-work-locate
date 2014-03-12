@@ -23,18 +23,19 @@ define([
     "dojo/_base/lang",
     "dojo/_base/array",
     "dojo/dom-attr",
+    "dojo/on",
     "dojo/dom",
     "dojo/dom-class",
     "dojo/dom-style",
-     "dojo/topic",
-     "dojo/query",
+    "dojo/topic",
+    "dojo/query",
     "dojo/text!./templates/appHeaderTemplate.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!nls/localizedStrings"
 ],
-     function (declare, domConstruct, lang, array, domAttr, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls) {
+     function (declare, domConstruct, lang, array, domAttr, on, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls) {
 
          //========================================================================================================================//
 
@@ -79,7 +80,18 @@ define([
                  */
                  document["title"] = dojo.configData.ApplicationName;
                  for (var i = 0; i < dojo.configData.Workflows.length; i++) {
-                     domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                     var workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: nls.switchWorkflows, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                     on(workflowSpan, "click", lang.hitch(this, function (evt) {
+                         if (dojo.seletedWorkflow != evt.currentTarget.innerHTML) {
+                             topic.publish("loadingIndicatorHandler");
+                             dojo.workFlowIndex = domAttr.get(evt.currentTarget, "index");
+                             dojo.seletedWorkflow = evt.currentTarget.innerHTML;
+                             this.workflows._selectWorkflow(dojo.seletedWorkflow);
+                             this.mapObject._generateLayerURL();
+                             this.mapObject._clearMapGraphics();
+                             topic.publish("hideLoadingIndicatorHandler");
+                         }
+                     }));
                  }
              },
 

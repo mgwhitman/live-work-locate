@@ -10,8 +10,9 @@
                                 <input type="text" data-dojo-attach-point="txtAddress" class="esriCTTxtAddress" onfocus="if(this.setSelectionRange)this.setSelectionRange(this.value.length, this.value.length);" />
                             </div>
                             <div class="esriCTSearchClose" data-dojo-attach-point="clearhide">
-                                <span class="clearInput" title="Clear" data-dojo-attach-point="close"></span><span>
-                                    <img data-dojo-attach-point="imgSearchLoader" class="esriCTSearchLoader" /></span>
+                                <span class="clearInput" title="Clear" data-dojo-attach-point="close"></span>
+                                <span class="clearInputNotAppear" title="Clear" data-dojo-attach-point="closedeAppear"></span>
+                                <span><img data-dojo-attach-point="imgSearchLoader" class="esriCTSearchLoader" /></span>
                             </div>
                         </div>
                         <div class="esriCTSearch" data-dojo-attach-point="esriCTSearch">
@@ -43,7 +44,7 @@
                     <span class="driveIconSelected" data-dojo-attach-point="esriCTimgLocate" title="DriveTime"></span>
                 </div>
                 <div class="esriCTWalk" data-dojo-attach-point="esriCTWalk">
-                    <span class="walkIcon" data-dojo-attach-point="esriCTimgLocate" title="walk time"></span>
+                    <span class="walkIcon" data-dojo-attach-point="esriCTimgLocate" title="WalkTime"></span>
                 </div>
 
             </div>

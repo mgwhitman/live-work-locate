@@ -18,7 +18,7 @@
 define({
     root: {
         NearbyText: "What's nearby?", 
-        sliderDisplayText: "Show results within <b>25 mins drive</b>",
+        sliderDisplayText: "Show results within <b> ${defaultMinute} mins drive</b>",
         okButtonText: "OK",
         splashScreenContent: "Please select an app to continue",
         shareHtmlcontent:"",
@@ -32,6 +32,8 @@ define({
         showNullValue: "N/A",
         webpageDispalyText: "Copy/paste HTML into your web page",
         reRouteDisplayText: "Traffic Incidents found on this road",
+        switchWorkflows: "Click to switch workflows",
+        moreInfo: "More info",
         errorMessages: {
             invalidSearch: "No results found",
             falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
@@ -40,7 +42,6 @@ define({
             widgetNotLoaded: "Fail to load widgets.",
             shareLoadingFailed: "Unable to load share options.",
             shareFailed: "Unable to share."
-
         }
     },
 

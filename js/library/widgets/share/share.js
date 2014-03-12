@@ -35,10 +35,9 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!nls/localizedStrings",
-    "dojo/topic",
-    "dijit/form/Textarea"
+    "dojo/topic"
 ],
-function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, topic, Textarea) {
+function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, topic) {
 
     //========================================================================================================================//
 
@@ -85,28 +84,53 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                 * minimize other open header panel widgets and show share panel
                 */
                 topic.publish("toggleWidget", "share");
-                this._shreLink();
+                this._shareLink();
             })));
+            on(this.embedding, "click", lang.hitch(this, function () {
+                this._showEmbeddingContainer();
+            }));
         },
 
+
+        _showEmbeddingContainer: function () {
+            if (domGeom.getMarginBox(this.esriCTDivshareContainer).h > 1) {
+                domClass.add(this.esriCTDivshareContainer, "esriCTShareBorder");
+                domClass.replace(this.esriCTDivshareContainer, "esriCTHideContainerHeight", "esriCTShowEmbeddingContainer");
+            } else {
+                var height = domGeom.getMarginBox(this.esriCTDivshareCodeContainer).h + domGeom.getMarginBox(this.esriCTDivshareCodeContent).h + "px";
+                domClass.remove(this.esriCTDivshareContainer, "esriCTShareBorder");
+                domClass.replace(this.esriCTDivshareContainer, "esriCTShowEmbeddingContainer", "esriCTHideContainerHeight");
+                domStyle.set(this.esriCTDivshareContainer, "height", height);
+            }
+        },
         /**
         * display sharing panel
         * @param {array} dojo.configData.MapSharingOptions Sharing option settings specified in configuration file
         * @memberOf widgets/share/share
         */
-        _shreLink: function () {
+        _shareLink: function () {
 
             /**
             * get current map extent to be shared
             */
+            if (domGeom.getMarginBox(this.esriCTDivshareContainer).h <= 1) {
+                domClass.add(this.esriCTDivshareContainer, "esriCTShareBorder");
+            }
+            this.esriCTDivshareCodeContent.value = "<iframe width='100%' height='100%' src='" + location.href + "'></iframe> ";
             domAttr.set(this.esriCTDivshareCodeContainer, "innerHTML", nls.webpageDispalyText);
-            if (dojo.configData.WebMapId == "") {
+            if (lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length == 0) {
                 var mapExtent = this._getMapExtent();
             }
 
             url = esri.urlToObject(window.location.toString());
             var splitUrl = url.path.split("#")[0];
-            urlStr = encodeURI(splitUrl) + "?extent=" + mapExtent;
+            //urlStr = encodeURI(splitUrl) + "?extent=" + mapExtent;
+            if (dojo.infoWindow) {
+                urlStr = encodeURI(splitUrl) + "?extent=" + mapExtent + "$layerServerName=" + dojo.layerServerName + "$layerID=" + dojo.layerID + "$featureID=" + dojo.featureID;
+            }
+            else {
+                urlStr = encodeURI(splitUrl) + "?extent=" + mapExtent;
+            }
             try {
 
                 /**
@@ -200,7 +224,6 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                 if (tinyUrl) {
                     this._shareOptions(site, tinyUrl);
                 } else {
-                    domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
                     this._shareOptions(site, urlStr);
                 }
             } catch (err) {
@@ -214,7 +237,8 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
         * @param {string} url URL for sharing
         * @memberOf widgets/share/share
         */
-        _shareOptions: function (site, url) {
+        _shareOptions: function (site, url) {		
+                    domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
             switch (site) {
                 case "facebook":
                     window.open(string.substitute(dojo.configData.MapSharingOptions.FacebookShareURL, [url]));
@@ -225,6 +249,6 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                 case "email":
                     parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
             }
-        },
+        }
     });
 });

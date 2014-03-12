@@ -47,6 +47,16 @@ define([
              postCreate: function () {
                  var _self = this;
                  this.showSplashScreenDialog();
+                 on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function (evt) {
+                     if (dojo.workFlowIndex && dojo.seletedWorkflow) {
+                         domStyle.set(this.domNode, "display", "none");
+                     }
+                 }));
+
+                 on(this.splashScreenWorkflowsContainer, "click", lang.hitch(this, function (evt) {
+                     evt.stopPropagation && evt.stopPropagation();
+                 }));
+                 
                  this.domNode = domConstruct.create("div", { "class": "esriGovtLoadingIndicator" }, dojo.body());
                  this.domNode.appendChild(this.splashScreenScrollBarOuterContainer);
                  var holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
@@ -60,13 +70,17 @@ define([
                          topic.publish("loadingIndicatorHandler");
                          var key = domAttr.get(this, "key");
                          var currentWorkflow = domAttr.get(this, "index");
+                         if (dojo.layerKey == key && dojo.workFlowIndex == currentWorkflow) {
+                             _self._hideSplashScreenDialog();
+                             return;
+                         }
                          dojo.layerKey = key;
                          dojo.workFlowIndex = currentWorkflow;
                          dojo.seletedWorkflow = key;
-
                          _self._selectWorkflow(key);
                          _self.mapObject._generateLayerURL();
                          _self._hideSplashScreenDialog();
+                         _self.mapObject._clearMapGraphics();
                      }));
                  }
                  this.own(on(this.splashscreenPreviousPage, "click", lang.hitch(this, function () {
@@ -94,6 +108,7 @@ define([
              },
 
              _selectWorkflow: function (Workflows) {
+                 topic.publish("_addOperationalLayer");
                  var url = "?app=" + Workflows;
                  location.hash = url;
                  this._applicationThemeLoader();
@@ -113,7 +128,7 @@ define([
                  }
              },
 
-             _loadSelectedWorkflow: function (Workflows, map) {
+             loadSelectedWorkflow: function (Workflows, map) {
                  this.mapObject = map;
                  dojo.layerKey = Workflows;
                  dojo.seletedWorkflow = Workflows;
@@ -125,6 +140,7 @@ define([
                  }
                  this._applicationThemeLoader();
                  this.mapObject._generateLayerURL();
+                 topic.publish("_addOperationalLayer");
              },
 
              _addLayer: function (key) {

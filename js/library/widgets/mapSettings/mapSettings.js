@@ -55,7 +55,6 @@ define([
     "esri/tasks/BufferParameters",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleMarkerSymbol",
-    "esri/graphic",
     "dojo/topic",
     "dojo/_base/array",
     "dojo/DeferredList",
@@ -65,23 +64,26 @@ define([
     "esri/tasks/RouteParameters",
     "esri/tasks/FeatureSet",
     "esri/SpatialReference",
+    "widgets/infoWindow/infoWindow",
+    "dojo/text!../infoWindow/templates/infoWindow.html",
     "esri/units",
     "dojo/aspect",
     "dojo/domReady!"
 ],
-     function (declare, domConstruct, domStyle, lang, esriUtils, on, dom, domAttr, query, Query, QueryTask, domClass, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, string, esriMap, ImageParameters, FeatureLayer, GraphicsLayer, ProjectParameters, Graphic, Color, baseMapGallery, legends, template, geometryExtent, HomeButton, topic, arcGISDynamicMapServiceLayer, servicearea, NATypes, GeometryService, BufferParameters, SimpleFillSymbol, SimpleMarkerSymbol, Graphic, topic, array, DeferredList, Deferred, all, RouteTask, RouteParameters, FeatureSet, SpatialReference, Units, aspect) {
+     function (declare, domConstruct, domStyle, lang, esriUtils, on, dom, domAttr, query, Query, QueryTask, domClass, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, string, esriMap, ImageParameters, FeatureLayer, GraphicsLayer, ProjectParameters, Graphic, Color, baseMapGallery, legends, template, geometryExtent, HomeButton, topic, arcGISDynamicMapServiceLayer, servicearea, NATypes, GeometryService, BufferParameters, SimpleFillSymbol, SimpleMarkerSymbol, topic, array, DeferredList, Deferred, all, RouteTask, RouteParameters, FeatureSet, SpatialReference, infoWindow, template, Units, aspect) {
 
          //========================================================================================================================//
 
          return declare([_WidgetBase], {
-
              map: null,
+             templateString: template,
              tempGraphicsLayerId: "esriGraphicsLayerMapSettings",
              nls: nls,
              stagedSearch: null,
              newLeft: 0,
              logoContainer: null,
              firstStop: null,
+             infoWindowPanel: null,
              operationalLayers: null,
              /**
                          * initialize map object
@@ -98,9 +100,9 @@ define([
                  var extentPoints = dojo.configData && dojo.configData.DefaultExtent && dojo.configData.DefaultExtent.split(",");
                  var graphicsLayer = new GraphicsLayer();
                  graphicsLayer.id = this.tempGraphicsLayerId;
+                 this.infoWindowPanel = new infoWindow({ infoWindowWidth: dojo.configData.InfoPopupWidth, infoWindowHeight: dojo.configData.InfoPopupHeight });
                  topic.subscribe("_addOperationalLayer", lang.hitch(this, function () {
                      this._addOperationalLayer();
-
                  }));
                  topic.subscribe("removeOperationalLayer", this._removeOperationalLayer);
                  topic.subscribe("clearFeatureList", lang.hitch(this, function () {
@@ -150,15 +152,13 @@ define([
                          home.extent = mapDefaultExtent;
                          home.startup();
                          if (dojo.configData.BaseMapLayers.length > 1) {
-
                              this._showBasMapGallery();
-                             this.map.addLayer(graphicsLayer);
-
-                             topic.subscribe("SliderChange", lang.hitch(this, function (defaultMinutes, addressLocation, drive) {
-                                 this._createServiceArea(defaultMinutes, addressLocation, drive);
-                             }));
                          }
-                         this.map.addLayer(graphicsLayer);
+                         topic.subscribe("SliderChange", lang.hitch(this, function (defaultMinutes, addressLocation, drive) {
+                             topic.publish("loadingIndicatorHandler");
+                             this._createServiceArea(defaultMinutes, addressLocation, drive);
+                         }));
+
                          var _self = this;
                          this.map.on("extent-change", function () {
                              topic.publish("setMapTipPosition", dojo.selectedMapPoint, _self.map, _self.infoWindowPanel);
@@ -177,14 +177,17 @@ define([
                  _self = this;
                  params = new esri.tasks.ServiceAreaParameters();
                  if (drive) {
-                     params.defaultBreaks = [defaultMinutes / dojo.configData.DriveTimeSliderSettings.defaultMinutes];
+                     params.defaultBreaks = [defaultMinutes];
                  } else {
-                     params.defaultBreaks = [defaultMinutes / (dojo.configData.DriveTimeSliderSettings.defaultMinutes * 10)];
+                     params.defaultBreaks = [defaultMinutes / 10];
                  }
                  params.outSpatialReference = this.map.spatialReference;
                  params.returnFacilities = false;
-                 params.outputPolygons = NATypes.OutputPolygon.DETAILED;
-
+                 params.outputPolygons = NATypes.OutputPolygon.SIMPLIFIED;
+                 params.impedanceAttributeName = "Time";
+                 params.trimOuterPolygon = true;
+				 params.trimPolygonDistance = 200;
+				 params.trimPolygonDistanceUnits = "esriNAUMeters";
                  features = [];
                  if (addressLocation.geometry.type == "polygon") {
 
@@ -203,12 +206,12 @@ define([
                        esri.symbol.SimpleFillSymbol.STYLE_SOLID,
                        new esri.symbol.SimpleLineSymbol(
                          esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                         new dojo.Color([255, 255, 102, .4])
+                         new dojo.Color([255, 255, 102]), 1
                          ),
                        new dojo.Color([255, 255, 102, .4])
                      );
                      polygonSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
-                                 new dojo.Color([255, 255, 102]), .4), new dojo.Color([255, 255, 102, .4]));
+                                 new dojo.Color([255, 255, 102]), 1), new dojo.Color([255, 255, 102, .4]));
                      dojo.forEach(solveResult.serviceAreaPolygons, function (serviceArea) {
                          if (_self.legendObject) {
                              _self.legendObject.queryGeometry = serviceArea;
@@ -220,69 +223,78 @@ define([
                          _self._selectFeatures(serviceArea);
                      });
                  }, function (err) {
+                     topic.publish("hideLoadingIndicatorHandler");
                  });
              },
 
              _updateBufferGeometry: function (serviceArea, _self) {
-                 var bufferGraphics = _self.map.getLayer("esriGraphicsLayerMapSettings").graphics;
-                 var graphicsIndex = bufferGraphics.length;
-                 while (graphicsIndex > 0) {
-                     _self.map.getLayer("esriGraphicsLayerMapSettings").remove(bufferGraphics[graphicsIndex]);
-                     graphicsIndex--;
-                 }
+                 _self.map.getLayer("esriGraphicsLayerMapSettings").clear();
                  _self.map.getLayer("esriGraphicsLayerMapSettings").add(serviceArea);
              },
 
              _selectFeatures: function (bufferGeometry) {
-                 var _this = this;
                  var deferredArray = [];
                  var selectedFeaturesGroup = [];
                  var selectedFeatures = [];
-                 var _extentResult;
                  this._clearSelectedFeature();
+                 this.map.reorderLayer(this.map.getLayer("esriGraphicsLayerMapSettings"), this.map.graphicsLayerIds.length - 1);
                  array.forEach(this.operationalLayers, lang.hitch(this, function (featureResult, arrayIndex) {
                      var query = new Query();
                      var featureLayer = featureResult;
                      query.geometry = bufferGeometry.geometry;
+                     query.maxAllowableOffset = 250; 
                      query.outSpatialReference = this.map.spatialReference;
                      var featureLayerResult = featureLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
                          var deferred = new Deferred();
                          deferred.resolve(result);
                          var displayField;
-                         for (var i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; i++) {
-                             if (featureLayer.url == dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL) {
-                                 displayField = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].SearchDisplayFields;
-                                 break;
+                         try {
+                             for (var i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; i++) {
+                                 if (featureLayer.url == dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL) {
+                                     displayField = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].SearchDisplayFields;
+                                     break;
+                                 }
                              }
-                         }
-                         if (result.length) {
-                             for (var res = 0; res < result.length; res++) {
-
-                                 selectedFeatures.push({
-                                     attribute: result[res].attributes,
-                                     name: result[res].getLayer().name,
-                                     geometry: result[res].geometry,
-                                     layerId: result[res].getLayer().layerId,
-                                     featureName: displayField ? string.substitute(displayField, result[res].attributes) : dojo.configData.ShowNullValueAs
-                                 });
+                             on(featureLayer, "click", lang.hitch(this, function(evt) {
+                                 topic.publish("showInfoWindow", evt.mapPoint, evt.graphic.attributes, arrayIndex, null, null, this.map);
+                             }));
+                             if (result.length) {
+                                 for (var res = 0; res < result.length; res++) {
+                                     selectedFeatures.push({
+                                         attribute: result[res].attributes,
+                                         name: result[res].getLayer().name,
+                                         geometry: result[res].geometry,
+                                         layerId: result[res].getLayer().layerId,
+                                         layerIndex: arrayIndex,
+                                         featureName: displayField ? string.substitute(displayField, result[res].attributes) : dojo.configData.ShowNullValueAs
+                                     });
+                                 }
+                                 on(featureLayer, "click", lang.hitch(this, function(evt) {
+                                     topic.publish("showInfoWindow", evt.mapPoint, evt.graphic.attributes, arrayIndex, null, null, this.map);
+                                 }));
+                                 var cloneArray = dojo.clone(selectedFeatures);
+                                 selectedFeaturesGroup.push(cloneArray);
+                                 selectedFeatures.length = 0;
                              }
-                             cloneArray = dojo.clone(selectedFeatures);
-                             selectedFeaturesGroup.push(cloneArray);
-                             selectedFeatures.length = 0;
+                         } catch (ex) {
                          }
-
+                         /*if feature is point*/
+                         if (featureLayer.geometryType == "esriGeometryPoint") {
+                             this.map.reorderLayer(featureLayer, this.map.graphicsLayerIds.length - 1);
+                         }
                          return deferred.promise;
                      }), lang.hitch(this, function (err) {
+                         topic.publish("hideLoadingIndicatorHandler");
                      }));
                      deferredArray.push(featureLayerResult);
                  }));
                  var deferredListFeatureResult = new DeferredList(deferredArray);
                  deferredListFeatureResult.then(lang.hitch(this, function (result) {
                      this.map.setExtent(bufferGeometry.geometry.getExtent().expand(2));
-                     this.map.reorderLayer(this.map.getLayer("esriGraphicsLayerMapSettings"), this.map.graphicsLayerIds.length - 1);
                      this._findRoute(selectedFeaturesGroup);
                  }));
              },
+
              _clearSelectedFeature: function () {
                  array.forEach(this.operationalLayers, lang.hitch(this, function (featureLayer) {
                      featureLayer.clearSelection();
@@ -290,6 +302,10 @@ define([
              },
 
              _findRoute: function (selectedFeaturesGroup) {
+                 if (selectedFeaturesGroup.length == 0) {
+                 topic.publish("hideLoadingIndicatorHandler");
+                     return;
+                 }
                  var defferedArray = [];
                  var routeTask = new RouteTask(dojo.configData.routeTask);
                  var routeParams = new RouteParameters();
@@ -301,10 +317,10 @@ define([
                  routeParams.stops.features.push(this.firstStop);
                  array.forEach(selectedFeaturesGroup, lang.hitch(this, function (featureGroup, outerIndex) {
                      array.forEach(featureGroup, lang.hitch(this, function (feature, innerIndex) {
+                     if (feature.geometry.type == "point") {
                          var stopPushpin = dojoConfig.baseURL + dojo.configData.LocatorSettings.DefaultLocatorSymbol;
-                         locatorMarkupSymbol = new esri.symbol.PictureMarkerSymbol(stopPushpin, dojo.configData.LocatorSettings.MarkupSymbolSize.width, dojo.configData.LocatorSettings.MarkupSymbolSize.height);
+                         var locatorMarkupSymbol = new esri.symbol.PictureMarkerSymbol(stopPushpin, dojo.configData.LocatorSettings.MarkupSymbolSize.width, dojo.configData.LocatorSettings.MarkupSymbolSize.height);
                          var stopGraphic = new esri.Graphic(feature.geometry, locatorMarkupSymbol, {}, null);
-                         if (feature.geometry.type == "point") {
                              if (routeParams.stops.features.length == 2) {
                                  routeParams.stops.features.pop();
                              }
@@ -315,6 +331,7 @@ define([
                                  deferred.resolve(route);
                                  return deferred.promise;
                              }), lang.hitch(this, function (err) {
+                                 console.log(err);
                              }));
                              defferedArray.push(routeTaskResult);
                          }
@@ -323,25 +340,27 @@ define([
                  var deferredListResult = new DeferredList(defferedArray);
                  deferredListResult.then(lang.hitch(this, function (result) {
                      topic.publish("_createList", selectedFeaturesGroup);
+                     topic.publish("hideLoadingIndicatorHandler");
                  }));
              },
 
              _addOperationalLayer: function () {
+                 this._clearSelectedFeature();
+                 this.map.getLayer("esriGraphicsLayerMapSettings") && this.map.getLayer("esriGraphicsLayerMapSettings").clear();
                  this.operationalLayers = [];
                  for (var k = 0 ; k < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; k++) {
                      var featureLayer = new FeatureLayer(dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[k].ServiceURL, {
                          id: k,
                          mode: FeatureLayer.MODE_SELECTION,
                          outFields: ["*"],
-                         displayOnPan: false
+                         maxAllowableOffset: 250,
+                         displayOnPan: true
                      });
 
                      this.map.addLayer(featureLayer);
                      this.operationalLayers.push(featureLayer);
                  }
-                 this._addLayerLegend();
              },
-
 
              _onSetInfoWindowPosition: function (infoTitle, divInfoDetailsTab, screenPoint, infoPopupWidth, infoPopupHeight) {
                  this.infoWindowPanel.resize(infoPopupWidth, infoPopupHeight);
@@ -474,7 +493,6 @@ define([
              },
 
              _removeOperationalLayer: function (map) {
-
                  for (var i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
                      if (map.getLayer(i)) {
                          map.removeLayer(map.getLayer(i));
@@ -538,10 +556,8 @@ define([
              },
 
              _addLayerLegend: function () {
-
                  domClass.add(query(".logo-med")[0], "mapLogoLegend");
-
-                 var mapServerArray, legendObject
+                 var mapServerArray, legendObject;
                  mapServerArray = [];
                  for (var i = 0 ; i < dojo.configData.Workflows[i].OperationalLayers.length; i++) {
                      if (dojo.configData.Workflows[i].OperationalLayers[i].ServiceURL) {
@@ -552,8 +568,17 @@ define([
                  legendObject.startup(mapServerArray);
                  topic.publish("setMaxLegendLength");
              },
+
+             _clearMapGraphics: function () {
+                 this.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                 this._clearSelectedFeature();
+                 this.infoWindowPanel.hide();
+                 topic.publish("resetLocatorContainer");
+             },
+
              getMapInstance: function () {
                  return this.map;
+
              }
          });
      });

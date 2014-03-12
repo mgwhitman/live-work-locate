@@ -1,120 +1,150 @@
-﻿.esriCTApplicationHeader {
+﻿.esriCTApplicationHeader
+{
     border-bottom: 1px solid #028D6A !important;
 }
 
-.esriSimpleSliderDecrementButton, .esriSimpleSliderIncrementButton {
+.esriSimpleSliderDecrementButton, .esriSimpleSliderIncrementButton
+{
     background-color: #028D6A !important;
 }
 
-.HomeButton .home, .HomeButton .home:hover {
+.HomeButton .home, .HomeButton .home:hover
+{
     background-color: #028D6A;
 }
 
-.BasemapToggle .toggleButton {
+.BasemapToggle .toggleButton
+{
     border: 2px solid #028D6A !important;
 }
 
-.BasemapToggle .basemapTitle {
+.BasemapToggle .basemapTitle
+{
     color: #028D6A !important;
 }
 
-.BasemapToggle .basemapImage {
+.BasemapToggle .basemapImage
+{
     border: 1px solid #028D6A;
 }
 
-.esriCTApplicationHeaderTextSelected {
+.esriCTApplicationHeaderTextSelected
+{
     color: #028D6A !important;
 }
 
-.legenboxInner {
+.legenboxInner
+{
     border: 1px solid #028D6A;
 }
 
-.esriInfoPanelContainer {
+.esriInfoPanelContainer
+{
     color: #028D6A !important;
 }
 
-.esriCTHeaderLine {
+.esriCTHeaderLine
+{
     color: #028D6A !important;
 }
 
-.esriCTRouteToplabel {
+.esriCTRouteToplabel
+{
     color: #028D6A;
 }
 
-.esriCTRouteMapName {
+.esriCTRouteMapName
+{
     color: #028D6A;
 }
 
-.esriCTRouteMapNum {
+.esriCTRouteMapNum
+{
     color: #028D6A;
 }
 
-.esriCTRouteMapArrow {
+.esriCTRouteMapArrow
+{
     color: #028D6A;
 }
 
-.esriCTRouteToplabelBackView {
+.esriCTRouteToplabelBackView
+{
     color: #028D6A;
 }
 
-.esriCTRouteBAck {
+.esriCTRouteBAck
+{
     color: #028D6A;
 }
 
-.esriCTdivShowReRouteContainer {
+.esriCTdivShowReRouteContainer
+{
     color: #028D6A !important;
 }
 
-.esriPopup .titlePane {
+.esriPopup .titlePane
+{
     color: #028D6A !important;
     border-color: #028D6A !important;
     border-bottom: 1px solid #028D6A;
 }
 
-.esriPopup .contentPane {
+.esriPopup .contentPane
+{
     border-color: #028D6A !important;
 }
 
-.esriPopup .actionsPane {
+.esriPopup .actionsPane
+{
     border-color: #028D6A !important;
 }
 
-.simpleDirections .esriStopsContainer {
+.simpleDirections .esriStopsContainer
+{
     border-bottom: 1px solid #028D6A;
 }
 
-.esriCTTInfoWindowContainer {
+.esriCTTInfoWindowContainer
+{
     border: #028D6A solid 1px;
 }
 
-.esriCTinfoWindow {
+.esriCTinfoWindow
+{
     border: #028D6A solid 1px;
 }
 
-.infopanel {
+.infopanel
+{
     border-top: 1px #028D6A solid;
 }
 
-.esriCTAddressContent {
+.esriCTAddressContent
+{
     border-right: 1px solid #028D6A;
     border-left: 1px solid #028D6A;
     border-bottom: 1px solid #028D6A;
 }
 
-.esriCTDivAppHolder {
+.esriCTDivAppHolder
+{
+    background-color: #fff;
     border-right: 1px solid #028D6A;
     border-left: 1px solid #028D6A;
     border-bottom: 1px solid #028D6A;
 }
 
-.esriCTDivshareContainer {
+.esriCTDivshareContainer
+{
+    background-color: #fff;
     border-right: 1px solid #028D6A;
     border-left: 1px solid #028D6A;
     border-bottom: 1px solid #028D6A;
 }
 
-.esriCTTxtShare {
+.esriCTTxtShare
+{
     border-top: 1px solid #028D6A;
     border-bottom: 1px solid #028D6A;
     border-left: 1px solid #028D6A;
@@ -122,92 +152,119 @@
 }
 
 /*header*/
-.driveIconSelected {
+.driveIconSelected
+{
     background-image: url("../images/car-select-green.png");
 }
 
-.walkIconSelected {
+.walkIconSelected
+{
     background-image: url("../images/walk-select-green.png");
 }
 
-.esriCTTdHeaderSearch-select {
+.esriCTTdHeaderSearch-select
+{
     background-image: url("../images/search-select-green.png");
 }
 
-.esriCTImgSocialMedia-select {
+.esriCTImgSocialMedia-select
+{
     background-image: url("../images/share-select-green.png");
 }
 
 /*slider*/
-.dijitSliderImageHandleH {
+.dijitSliderImageHandleH
+{
     background-image: url('../images/thumb-green.png') !important;
 }
 
-.claro .dijitSliderProgressBarH .dijitSliderThumbHover {
+.claro .dijitSliderProgressBarH .dijitSliderThumbHover
+{
     background-image: url('../images/thumb-green.png') !important;
 }
 
-.dijitSliderBumperH, .dijitSliderBarH {
+.dijitSliderBumperH, .dijitSliderBarH
+{
     background-color: #028D6A;
 }
 
-.claro .dijitSlider .dijitSliderProgressBarH, .claro .dijitSlider .dijitSliderLeftBumper {
+.claro .dijitSlider .dijitSliderProgressBarH, .claro .dijitSlider .dijitSliderLeftBumper
+{
     background-color: #028D6A;
 }
 /*seach button*/
-.locateSearchicon {
+.locateSearchicon
+{
     background-image: url("../images/search-green.png") !important;
 }
 /*share*/
 
-.facebook {
+.facebook
+{
     background-image: url("../images/img_facebook_green.png") !important;
 }
 
-.twitter {
+.twitter
+{
     background-image: url("../images/img_twitter_green.png") !important;
 }
 
-.email {
+.email
+{
     background-image: url("../images/img_email_green.png") !important;
 }
+
+.embedding
+{
+    background-image: url("../images/embedding_green.png") !important;
+}
 /*Legend*/
-.esriCTRightArrow {
+.esriCTRightArrow
+{
     background-image: url("../images/right-green_Legend-arrow.png") !important;
 }
 
-.esriCTLeftArrow {
+.esriCTLeftArrow
+{
     background-image: url("../images/left-green_Legend-arrow.png") !important;
-   
 }
 /*grouped address*/
 
-.esriCTResultColor {
+.esriCTResultColor
+{
     color: #028D6A;
 }
 
-.collapse {
-    background-image:url('../images/collapse-select-blue.png'); 
+.collapse
+{
+    background-image: url('../images/collapse-select-blue.png');
 }
-.expand {
+.expand
+{
     background-image: url('../images/expand-select-green.png');
 }
-.layerTitle {
+.layerTitle
+{
     color: #028D6A;
 }
 
-.esriCTlayerFeatures {
+.esriCTlayerFeatures
+{
     color: #028D6A;
 }
-.divSelectedFeature {
-     border-top: 1px solid #028D6A;
+.divSelectedFeature
+{
+    border-top: 1px solid #028D6A;
 }
-.collapseSelectedBlue {
-    background-image:url('../images/list-legend-select-green.png') !important; 
+.collapseSelectedBlue
+{
+    background-image: url('../images/list-legend-select-green.png') !important;
 }
-.expandSelectedBlue {
+.expandSelectedBlue
+{
     background-image: url('../images/expand-select-green.png') !important;
 }
-.esriCTArrow {
+.esriCTArrow
+{
     background-image: url("../images/right-green_Legend-arrow.png");
 }

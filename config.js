@@ -67,27 +67,27 @@ define([], function () {
         // MapInstanceRequired: true if widget is dependent on the map instance.
 
         AppHeaderWidgets: [
-           {
-               Title: "Search",
-               WidgetPath: "widgets/locator/locator",
-               MapInstanceRequired: true
-           }, {
-               Title: "Locate",
-               WidgetPath: "widgets/geoLocation/geoLocation",
-               MapInstanceRequired: true
-           }, {
-               Title: "Share",
-               WidgetPath: "widgets/share/share",
-               MapInstanceRequired: true
-           },{
-               Title: "Help",
-               WidgetPath: "widgets/help/help",
-               MapInstanceRequired: false
-           }, {
-               Title: "Exit",
-               WidgetPath: "widgets/exit/exit",
-               MapInstanceRequired: true
-           }
+            {
+                Title: "Search",
+                WidgetPath: "widgets/locator/locator",
+                MapInstanceRequired: true
+            }, {
+                Title: "Locate",
+                WidgetPath: "widgets/geoLocation/geoLocation",
+                MapInstanceRequired: true
+            }, {
+                Title: "Share",
+                WidgetPath: "widgets/share/share",
+                MapInstanceRequired: true
+            }, {
+                Title: "Help",
+                WidgetPath: "widgets/help/help",
+                MapInstanceRequired: false
+            }, {
+                Title: "Exit",
+                WidgetPath: "widgets/exit/exit",
+                MapInstanceRequired: true
+            }
         ],
 
         // ------------------------------------------------------------------------------------------------------------------------
@@ -96,22 +96,24 @@ define([], function () {
         // Set baseMap layers
         // Please note: All base-maps need to use the same spatial reference. By default, on application start the first base-map will be loaded
 
-        BaseMapLayers: [{
-            Key: "topo",
-            ThumbnailSource: "js/library/themes/images/Topographic.jpg",
-            Name: "Topographic Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
-        }, {
-            Key: "streets",
-            ThumbnailSource: "js/library/themes/images/streets.png",
-            Name: "Street Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
-        }, {
-            Key: "imagery",
-            ThumbnailSource: "js/library/themes/images/imagery.png",
-            Name: "Imagery Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
-        }],
+        BaseMapLayers: [
+            {
+                Key: "topo",
+                ThumbnailSource: "js/library/themes/images/Topographic.jpg",
+                Name: "Topographic Map",
+                MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
+            }, {
+                Key: "streets",
+                ThumbnailSource: "js/library/themes/images/streets.png",
+                Name: "Street Map",
+                MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
+            }, {
+                Key: "imagery",
+                ThumbnailSource: "js/library/themes/images/imagery.png",
+                Name: "Imagery Map",
+                MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+            }
+        ],
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GEOMETRY SERVICE SETTINGS
@@ -187,118 +189,118 @@ define([], function () {
         // 				FieldName: Field used for displaying the value
 
         Workflows: [
-          {
-              Name: "LIVE",
-              SplashscreenImage: "js/library/themes/images/live-img.png",
-              ThemeColor: "js/library/themes/styles/blueTheme.css",
-              WebMapId: "",
-              FeatureHighlightColor: "#1C86EE",
-              OperationalLayers: [
-                  {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/1",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/4",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/7",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/8",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/25",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/32",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/33",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/34",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/35",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/36",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/37",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/38",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/39",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/40",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/41",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/42",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/43",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/44",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/45",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/46",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/47",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/48",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/50",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/51",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/52",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/53",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/54",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/56",
-                      LoadAsServiceType: "dynamic"
-                  }, {
-                      ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
-                      LoadAsServiceType: "dynamic"
-                  }
-              ],
+            {
+                Name: "LIVE",
+                SplashscreenImage: "js/library/themes/images/live-img.png",
+                ThemeColor: "js/library/themes/styles/blueTheme.css",
+                WebMapId: "",
+                FeatureHighlightColor: "#1C86EE",
+                OperationalLayers: [
+                    {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/1",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/4",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/7",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/8",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/25",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/32",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/33",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/34",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/35",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/36",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/37",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/38",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/39",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/40",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/41",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/42",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/43",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/44",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/45",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/46",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/47",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/48",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/50",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/51",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/52",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/53",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/54",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/56",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
+                        LoadAsServiceType: "dynamic"
+                    }
+                ],
 
-              // ------------------------------------------------------------------------------------------------------------------------
-              // SEARCH SETTINGS FOR THIS WORKFLOW
-              // ------------------------------------------------------------------------------------------------------------------------
+                // ------------------------------------------------------------------------------------------------------------------------
+                // SEARCH SETTINGS FOR THIS WORKFLOW
+                // ------------------------------------------------------------------------------------------------------------------------
 
-              // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
-              // 		  it should be the name of Map/Feature Service.
-              // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
-              // SearchDisplayTitle: This text is displayed in search results as the title to group results.
-              // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
-              // SearchExpression: Configure the query expression to be used for search.
+                // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
+                // 		  it should be the name of Map/Feature Service.
+                // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
+                // SearchDisplayTitle: This text is displayed in search results as the title to group results.
+                // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
+                // SearchExpression: Configure the query expression to be used for search.
 
-              SearchSettings: [
+                SearchSettings: [
                     {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "1",
@@ -407,1043 +409,1015 @@ define([], function () {
                         SearchDisplayTitle: "Wineries",
                         SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-					{
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "44",
-					    SearchDisplayTitle: "Historical and Cultural Museums",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "45",
-					    SearchDisplayTitle: "Visual Arts Venues",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "46",
-					    SearchDisplayTitle: "Traditional Arts Venues",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "47",
-					    SearchDisplayTitle: "Art Galleries",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "48",
-					    SearchDisplayTitle: "State and National Parks",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "50",
-					    SearchDisplayTitle: "Higher Edu 4-Year Independent",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "51",
-					    SearchDisplayTitle: "Higher Edu 4-Year Public",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "52",
-					    SearchDisplayTitle: "Higher Edu 2-Year Independent",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "53",
-					    SearchDisplayTitle: "Higher Edu Regional Edu Center",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "54",
-					    SearchDisplayTitle: "Higher Edu 2-Year Public",
-					    SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "56",
-					    SearchDisplayTitle: "Mass Transit Stations",
-					    SearchDisplayFields: "${sitename}, ${city}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}, {
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "59",
-					    SearchDisplayTitle: "Municipalities",
-					    SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
-					    SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					}
-              ],
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "44",
+                        SearchDisplayTitle: "Historical and Cultural Museums",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "45",
+                        SearchDisplayTitle: "Visual Arts Venues",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "46",
+                        SearchDisplayTitle: "Traditional Arts Venues",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "47",
+                        SearchDisplayTitle: "Art Galleries",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "48",
+                        SearchDisplayTitle: "State and National Parks",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "50",
+                        SearchDisplayTitle: "Higher Edu 4-Year Independent",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "51",
+                        SearchDisplayTitle: "Higher Edu 4-Year Public",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "52",
+                        SearchDisplayTitle: "Higher Edu 2-Year Independent",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "53",
+                        SearchDisplayTitle: "Higher Edu Regional Edu Center",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "54",
+                        SearchDisplayTitle: "Higher Edu 2-Year Public",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "56",
+                        SearchDisplayTitle: "Mass Transit Stations",
+                        SearchDisplayFields: "${sitename}, ${city}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "59",
+                        SearchDisplayTitle: "Municipalities",
+                        SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
+                        SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }
+                ],
 
-              InfowindowSettings: [
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "1",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Value:",
-                              FieldName: "${value}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "4",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Organization Name:",
-                              FieldName: "${orgname}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website URL:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "7",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Population:",
-                              FieldName: "${value}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "8",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Population Change:",
-                              FieldName: "${value}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "25",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Tax Rate:",
-                              FieldName: "${value}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "27",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Tax Rate:",
-                              FieldName: "${value}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "32",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website URL:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "33",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip +4:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "34",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "35",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "36",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Building Name or Suite Number:",
-                              FieldName: "${building_suite}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "37",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "38",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "39",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "40",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "41",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "42",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "43",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "44",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Organization the site belongs to:",
-                              FieldName: "${orgname}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip +4:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "45",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip +4:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "46",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip +4:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "47",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Organization the site belongs to:",
-                              FieldName: "${orgname}"
-                          }, {
-                              DisplayText: "Building Name or Suite Number:",
-                              FieldName: "${building_suite}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "48",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "50",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "Image URL:",
-                              FieldName: "${image}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }, {
-                              DisplayText: "Enrollment Numbers:",
-                              FieldName: "${enrollment}"
-                          }, {
-                              DisplayText: "Grades Supported/Degrees Awarded:",
-                              FieldName: "${grades_degrees}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "51",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "Image URL:",
-                              FieldName: "${image}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }, {
-                              DisplayText: "Enrollment Numbers:",
-                              FieldName: "${enrollment}"
-                          }, {
-                              DisplayText: "Grades Supported/Degrees Awarded:",
-                              FieldName: "${grades_degrees}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "52",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "Image URL:",
-                              FieldName: "${image}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }, {
-                              DisplayText: "Enrollment Numbers:",
-                              FieldName: "${enrollment}"
-                          }, {
-                              DisplayText: "Grades Supported/Degrees Awarded:",
-                              FieldName: "${grades_degrees}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "53",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "Image URL:",
-                              FieldName: "${image}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }, {
-                              DisplayText: "Enrollment Numbers:",
-                              FieldName: "${enrollment}"
-                          }, {
-                              DisplayText: "Grades Supported/Degrees Awarded:",
-                              FieldName: "${grades_degrees}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "54",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "County:",
-                              FieldName: "${county}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Phone:",
-                              FieldName: "${phonenumber}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "Image URL:",
-                              FieldName: "${image}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }, {
-                              DisplayText: "Header Image URL:",
-                              FieldName: "${headerimage}"
-                          }, {
-                              DisplayText: "Enrollment Numbers:",
-                              FieldName: "${enrollment}"
-                          }, {
-                              DisplayText: "Grades Supported/Degrees Awarded:",
-                              FieldName: "${grades_degrees}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "56",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "Name:",
-                              FieldName: "${sitename}"
-                          }, {
-                              DisplayText: "Desc:",
-                              FieldName: "${sitedesc}"
-                          }, {
-                              DisplayText: "Organization the site belongs to:",
-                              FieldName: "${orgname}"
-                          }, {
-                              DisplayText: "Street Address:",
-                              FieldName: "${streetaddress}"
-                          }, {
-                              DisplayText: "City:",
-                              FieldName: "${city}"
-                          }, {
-                              DisplayText: "Zip Code:",
-                              FieldName: "${zip}"
-                          }, {
-                              DisplayText: "Website:",
-                              FieldName: "${website}"
-                          }, {
-                              DisplayText: "More Info Link URL:",
-                              FieldName: "${more_info}"
-                          }
-                      ]
-                  },
-                  {
-                      Title: "EconomicDevelopment",
-                      QueryLayerId: "59",
-                      InfoWindowHeaderField: "${sitename}",
-                      ShowAllFields: "false",
-                      InfoWindowData: [
-                          {
-                              DisplayText: "COUNTY:",
-                              FieldName: "${COUNTY}"
-                          }, {
-                              DisplayText: "MUNICIPALI:",
-                              FieldName: "${MUNICIPALI}"
-                          }, {
-                              DisplayText: "RESOLUTION:",
-                              FieldName: "${RESOLUTION}"
-                          }, {
-                              DisplayText: "ANNEXATION:",
-                              FieldName: "${ANNEXATION}"
-                          }, {
-                              DisplayText: "ACRES:",
-                              FieldName: "${ACRES}"
-                          }
-                      ]
-                  }
-              ]
-          },
-          {
-              Name: "WORK",
-              SplashscreenImage: "js/library/themes/images/work-img.png",
-              ThemeColor: "js/library/themes/styles/greenTheme.css",
-              WebMapId: "",
-              FeatureHighlightColor: "#1C86EE",
-              OperationalLayers: [
+                InfowindowSettings: [
+                    {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "1",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Value:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "4",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "7",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "value ",
+                                FieldName: "${value}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            },
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "8",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Population Change:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "25",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Tax Rate:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "27",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Tax Rate:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "32",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "33",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip +4:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "34",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "35",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "36",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Building Name or Suite Number:",
+                                FieldName: "${building_suite}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "37",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "38",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "39",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "40",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "41",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "42",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "43",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "44",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Organization the site belongs to:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip +4:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "45",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip +4:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "46",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip +4:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "47",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Organization the site belongs to:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Building Name or Suite Number:",
+                                FieldName: "${building_suite}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "48",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "50",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }, {
+                                DisplayText: "Enrollment Numbers:",
+                                FieldName: "${enrollment}"
+                            }, {
+                                DisplayText: "Grades Supported/Degrees Awarded:",
+                                FieldName: "${grades_degrees}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "51",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }, {
+                                DisplayText: "Enrollment Numbers:",
+                                FieldName: "${enrollment}"
+                            }, {
+                                DisplayText: "Grades Supported/Degrees Awarded:",
+                                FieldName: "${grades_degrees}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "52",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }, {
+                                DisplayText: "Enrollment Numbers:",
+                                FieldName: "${enrollment}"
+                            }, {
+                                DisplayText: "Grades Supported/Degrees Awarded:",
+                                FieldName: "${grades_degrees}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "53",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }, {
+                                DisplayText: "Enrollment Numbers:",
+                                FieldName: "${enrollment}"
+                            }, {
+                                DisplayText: "Grades Supported/Degrees Awarded:",
+                                FieldName: "${grades_degrees}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "54",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Header Image URL:",
+                                FieldName: "${headerimage}"
+                            }, {
+                                DisplayText: "Enrollment Numbers:",
+                                FieldName: "${enrollment}"
+                            }, {
+                                DisplayText: "Grades Supported/Degrees Awarded:",
+                                FieldName: "${grades_degrees}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "56",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Organization the site belongs to:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Website:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "59",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "COUNTY:",
+                                FieldName: "${COUNTY}"
+                            }, {
+                                DisplayText: "MUNICIPALI:",
+                                FieldName: "${MUNICIPALI}"
+                            }, {
+                                DisplayText: "RESOLUTION:",
+                                FieldName: "${RESOLUTION}"
+                            }, {
+                                DisplayText: "ANNEXATION:",
+                                FieldName: "${ANNEXATION}"
+                            }, {
+                                DisplayText: "ACRES:",
+                                FieldName: "${ACRES}"
+                            }
+                        ]
+                    }
+                ]
+            }, {
+                Name: "WORK",
+                SplashscreenImage: "js/library/themes/images/work-img.png",
+                ThemeColor: "js/library/themes/styles/greenTheme.css",
+                WebMapId: "",
+                FeatureHighlightColor: "#1C86EE",
+                OperationalLayers: [
                     {
                         ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/14",
                         LoadAsServiceType: "dynamic"
@@ -1490,372 +1464,1598 @@ define([], function () {
                         ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
                         LoadAsServiceType: "dynamic"
                     }
-              ],
+                ],
 
-              SearchSettings: [
-
-					{
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "14",
-					    SearchDisplayTitle: "Unemployment",
-					    SearchDisplayFields: "${sitename} / ${value}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					},
-					{
-					    Title: "EconomicDevelopment",
-					    QueryLayerId: "16",
-					    SearchDisplayTitle: "Home Median Price",
-					    SearchDisplayFields: "${sitename} / ${city}",
-					    SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-					},
+                SearchSettings: [
                     {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "14",
+                        SearchDisplayTitle: "Unemployment",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "16",
+                        SearchDisplayTitle: "Home Median Price",
+                        SearchDisplayFields: "${sitename} / ${city}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "17",
                         SearchDisplayTitle: "Research Parks",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "19",
                         SearchDisplayTitle: "Top Military Employers",
                         SearchDisplayFields: "${sitename} / ${city}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "20",
                         SearchDisplayTitle: "Top Bioscience Employers",
                         SearchDisplayFields: "${sitename} / ${city}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "21",
                         SearchDisplayTitle: "Top Privately Held Employers",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "22",
                         SearchDisplayTitle: "Fastest Growing Companies",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "23",
                         SearchDisplayTitle: "Top Company Headquarters",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "25",
                         SearchDisplayTitle: "Local Personal IncomeTaxRate",
                         SearchDisplayFields: "${sitename} / ${value}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "29",
                         SearchDisplayTitle: "Labor Force",
                         SearchDisplayFields: "${sitename} / ${value}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "30",
                         SearchDisplayTitle: "Employment",
                         SearchDisplayFields: "${sitename} / ${value}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "56",
                         SearchDisplayTitle: " Mass TransitStations",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "57",
                         SearchDisplayTitle: "Sea Ports",
                         SearchDisplayFields: "${sitename} / ${city}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "58",
                         SearchDisplayTitle: "Airports",
                         SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
                         SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                    },
-                    {
+                    }, {
                         Title: "EconomicDevelopment",
                         QueryLayerId: "59",
                         SearchDisplayTitle: "Municipalities",
                         SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
                         SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
                     }
-              ]
-          },
-                  {
-                      Name: "LOCATE",
-                      SplashscreenImage: "js/library/themes/images/locate-img.png",
-                      ThemeColor: "js/library/themes/styles/purpleTheme.css",
-                      WebMapId: "",
-                      FeatureHighlightColor: "#1C86EE",
-                      OperationalLayers: [
-                       {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/3",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/4",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/5",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/7",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/8",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/9",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/10",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/11",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/12",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/13",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/14",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/16",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/17",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/18",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/26",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/29",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/30",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/56",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/57",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/58",
-                           LoadAsServiceType: "dynamic"
-                       }, {
-                           ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
-                           LoadAsServiceType: "dynamic"
-                       }
-                      ],
+                ],
 
-                      SearchSettings: [
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "3",
-                                SearchDisplayTitle: "Local Economic Development Offices",
-                                SearchDisplayFields: "${sitename} / ${city}/Phone: ${phonenumber}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "4",
-                                SearchDisplayTitle: "Hospitals And Healthcare Facilities ",
-                                SearchDisplayFields: "${sitename} / ${city}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "5",
-                                SearchDisplayTitle: " Federal Facilities",
-                                SearchDisplayFields: "${Agency} / ${City}/Phone: ${Telephone}",
-                                SearchExpression: "UPPER(Agency) LIKE UPPER('${0}%') OR UPPER(City) LIKE UPPER('${0}%') OR UPPER(County) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "7",
-                                SearchDisplayTitle: "Population",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-				            {
-				                Title: "EconomicDevelopment",
-				                QueryLayerId: "8",
-				                SearchDisplayTitle: "Population Change",
-				                SearchDisplayFields: "${sitename} / ${value}",
-				                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-				            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "9",
-                                SearchDisplayTitle: "Median Household Income",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "10",
-                                SearchDisplayTitle: "Population Density",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "11",
-                                SearchDisplayTitle: "Per Captia Personal Income",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "12",
-                                SearchDisplayTitle: "Bachelors Degree Attainment",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "13",
-                                SearchDisplayTitle: "HighSchool Attainment",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-
-					        {
-					            Title: "EconomicDevelopment",
-					            QueryLayerId: "14",
-					            SearchDisplayTitle: "Unemployment",
-					            SearchDisplayFields: "${sitename} / ${value}",
-					            SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-					        },
-					        {
-					            Title: "EconomicDevelopment",
-					            QueryLayerId: "16",
-					            SearchDisplayTitle: "Home Median Price",
-					            SearchDisplayFields: "${sitename} / ${city}",
-					            SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-					        },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "17",
-                                SearchDisplayTitle: "Research Parks",
-                                SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "18",
-                                SearchDisplayTitle: "Incubators",
-                                SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "26",
-                                SearchDisplayTitle: "Business Personal Property Tax Rate",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "27",
-                                SearchDisplayTitle: "Real Property TaxRate",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "29",
-                                SearchDisplayTitle: "Labor Force",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "30",
-                                SearchDisplayTitle: "Employment",
-                                SearchDisplayFields: "${sitename} / ${value}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "56",
-                                SearchDisplayTitle: "Mass TransitStations",
-                                SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "57",
-                                SearchDisplayTitle: " Sea Ports",
-                                SearchDisplayFields: "${sitename} / ${city}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "58",
-                                SearchDisplayTitle: "Airports",
-                                SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
-                                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
-                            },
-                            {
-                                Title: "EconomicDevelopment",
-                                QueryLayerId: "59",
-                                SearchDisplayTitle: "Municipalities",
-                                SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
-                                SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                            }
-                      ]
-                  },
+                InfowindowSettings: [
                     {
-                        Name: "TRANSPORT",
-                        SplashscreenImage: "js/library/themes/images/transport-img.png",
-                        ThemeColor: "js/library/themes/styles/orangeTheme.css",
-                        WebMapId: "",
-                        FeatureHighlightColor: "#1C86EE",
-                        OperationalLayers: [{
-                            ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/51",
-                            LoadAsServiceType: "dynamic"
-                        }],
-                        SearchSettings: [{
-                            Title: "EconomicDevelopment",
-                            QueryLayerId: "51",
-                            SearchDisplayTitle: "Higher Edu 4-Year Public",
-                            SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
-                            SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-                        }
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "14",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Value:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "16",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "17",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "19",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "20",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "21",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            },
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "22",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "23",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "25",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Value:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "29",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "Value:",
+                                FieldName: "${value}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "30",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Value:",
+                                FieldName: "${value}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "56",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "57",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "58",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Image URL:",
+                                FieldName: "${image}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "59",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "COUNTY:",
+                                FieldName: "${COUNTY}"
+                            }, {
+                                DisplayText: "MUNICIPALI:",
+                                FieldName: "${MUNICIPALI}"
+                            }, {
+                                DisplayText: "RESOLUTION:",
+                                FieldName: "${RESOLUTION}"
+                            }, {
+                                DisplayText: "ANNEXATION:",
+                                FieldName: "${ANNEXATION}"
+                            }, {
+                                DisplayText: "ACRES:",
+                                FieldName: "${ACRES}"
+                            }
                         ]
                     }
+                ]
+            }, {
+                Name: "LOCATE",
+                SplashscreenImage: "js/library/themes/images/locate-img.png",
+                ThemeColor: "js/library/themes/styles/purpleTheme.css",
+                WebMapId: "",
+                FeatureHighlightColor: "#1C86EE",
+                OperationalLayers: [
+                    {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/3",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/4",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/5",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/7",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/8",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/9",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/10",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/11",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/12",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/13",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/14",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/16",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/17",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/18",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/26",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/29",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/30",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/56",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/57",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/58",
+                        LoadAsServiceType: "dynamic"
+                    }, {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
+                        LoadAsServiceType: "dynamic"
+                    }
+                ],
+
+                SearchSettings: [
+                    {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "3",
+                        SearchDisplayTitle: "Local Economic Development Offices",
+                        SearchDisplayFields: "${sitename} / ${city}/Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "4",
+                        SearchDisplayTitle: "Hospitals And Healthcare Facilities ",
+                        SearchDisplayFields: "${sitename} / ${city}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "5",
+                        SearchDisplayTitle: " Federal Facilities",
+                        SearchDisplayFields: "${Agency} / ${City}/Phone: ${Telephone}",
+                        SearchExpression: "UPPER(Agency) LIKE UPPER('${0}%') OR UPPER(City) LIKE UPPER('${0}%') OR UPPER(County) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "7",
+                        SearchDisplayTitle: "Population",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "8",
+                        SearchDisplayTitle: "Population Change",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "9",
+                        SearchDisplayTitle: "Median Household Income",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "10",
+                        SearchDisplayTitle: "Population Density",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "11",
+                        SearchDisplayTitle: "Per Captia Personal Income",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "12",
+                        SearchDisplayTitle: "Bachelors Degree Attainment",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "13",
+                        SearchDisplayTitle: "HighSchool Attainment",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    },
+                    {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "14",
+                        SearchDisplayTitle: "Unemployment",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "16",
+                        SearchDisplayTitle: "Home Median Price",
+                        SearchDisplayFields: "${sitename} / ${city}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "17",
+                        SearchDisplayTitle: "Research Parks",
+                        SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "18",
+                        SearchDisplayTitle: "Incubators",
+                        SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "26",
+                        SearchDisplayTitle: "Business Personal Property Tax Rate",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "27",
+                        SearchDisplayTitle: "Real Property TaxRate",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "29",
+                        SearchDisplayTitle: "Labor Force",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "30",
+                        SearchDisplayTitle: "Employment",
+                        SearchDisplayFields: "${sitename} / ${value}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "56",
+                        SearchDisplayTitle: "Mass TransitStations",
+                        SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "57",
+                        SearchDisplayTitle: " Sea Ports",
+                        SearchDisplayFields: "${sitename} / ${city}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "58",
+                        SearchDisplayTitle: "Airports",
+                        SearchDisplayFields: "${sitename} / ${city}/ Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "59",
+                        SearchDisplayTitle: "Municipalities",
+                        SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
+                        SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }
+                ],
+
+                InfowindowSettings: [
+                    {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "3",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            },
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "4",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "5",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Address1 :",
+                                FieldName: "${Address1}"
+                            }, {
+                                DisplayText: "Address2:",
+                                FieldName: "${Address2}"
+                            }, {
+                                DisplayText: "Telephone:",
+                                FieldName: "${Telephone}"
+                            }, {
+                                DisplayText: "Agency:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Website :",
+                                FieldName: "${Website }"
+                            }, {
+                                DisplayText: "Name:",
+                                FieldName: "${Name}"
+                            }, {
+                                DisplayText: "USProcurement2009:",
+                                FieldName: "${USProcurement2009}"
+                            }, {
+                                DisplayText: "MDProcurement2009 :",
+                                FieldName: "${MDProcurement2009}"
+                            }, {
+                                DisplayText: "USProcurement2010 :",
+                                FieldName: "${USProcurement2010}"
+                            }, {
+                                DisplayText: "MDProcurement2010 :",
+                                FieldName: "${MDProcurement2010 }"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "7",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "value:",
+                                FieldName: "${value}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "8",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Organization Name:",
+                                FieldName: "${orgname}"
+                            }, {
+                                DisplayText: "value:",
+                                FieldName: "${value}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "9",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "value :",
+                                FieldName: "${value}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "10",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "11",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "12",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "13",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "14",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "16",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "17",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "18",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "26",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "27",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "29",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "30",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "56",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "57",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "58",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "Name:",
+                                FieldName: "${sitename}"
+                            }, {
+                                DisplayText: "Desc:",
+                                FieldName: "${sitedesc}"
+                            }, {
+                                DisplayText: "Street Address:",
+                                FieldName: "${streetaddress}"
+                            }, {
+                                DisplayText: "City:",
+                                FieldName: "${city}"
+                            }, {
+                                DisplayText: "County:",
+                                FieldName: "${county}"
+                            }, {
+                                DisplayText: "Zip Code:",
+                                FieldName: "${zip}"
+                            }, {
+                                DisplayText: "Phone:",
+                                FieldName: "${phonenumber}"
+                            }, {
+                                DisplayText: "Website URL:",
+                                FieldName: "${website}"
+                            }, {
+                                DisplayText: "More Info Link URL:",
+                                FieldName: "${more_info}"
+                            }
+                        ]
+                    }, {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "59",
+                        InfoWindowHeaderField: "${sitename}",
+                        ShowAllFields: "false",
+                        InfoWindowData: [
+                            {
+                                DisplayText: "COUNTY:",
+                                FieldName: "${COUNTY}"
+                            }, {
+                                DisplayText: "MUNICIPALI:",
+                                FieldName: "${MUNICIPALI}"
+                            }, {
+                                DisplayText: "RESOLUTION:",
+                                FieldName: "${RESOLUTION}"
+                            }, {
+                                DisplayText: "ANNEXATION:",
+                                FieldName: "${ANNEXATION}"
+                            }, {
+                                DisplayText: "ACRES:",
+                                FieldName: "${ACRES}"
+                            }
+                        ]
+                    }
+                ]
+            }, {
+                Name: "TRANSPORT",
+                SplashscreenImage: "js/library/themes/images/transport-img.png",
+                ThemeColor: "js/library/themes/styles/orangeTheme.css",
+                WebMapId: "",
+                FeatureHighlightColor: "#1C86EE",
+                OperationalLayers: [
+                    {
+                        ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/51",
+                        LoadAsServiceType: "dynamic"
+                    }
+                ],
+                SearchSettings: [
+                    {
+                        Title: "EconomicDevelopment",
+                        QueryLayerId: "51",
+                        SearchDisplayTitle: "Higher Edu 4-Year Public",
+                        SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
+                        SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+                    }
+                ]
+            }
         ],
-       
+
         // Time interval to refresh all layers on map
         LayersRefreshInterval: 5, // in minutes
 
@@ -1887,7 +3087,7 @@ define([], function () {
                 Value: 80
             },
             FilterFieldName: 'Addr_Type',
-            FilterFieldValues: ["StreetAddress", "StreetName", "PointAddress", "POI"],
+            FilterFieldValues: ["StreetAddress", "StreetName", "PointAddress", "POI", "POSTAL"],
             MaxResults: 200
         },
 
@@ -1921,5 +3121,5 @@ define([], function () {
             TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=esri%Template ${0}",
             ShareByMailLink: "mailto:%20?subject=Check%20out%20this%20map!&body=${0}"
         }
-    }
+    };
 });

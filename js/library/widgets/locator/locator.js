@@ -51,9 +51,10 @@ define([
     "dojo/i18n!nls/localizedStrings",
     "dojo/_base/Color",
     "esri/symbol",
-    "dojo/topic"
+    "dojo/topic",
+    "dojo/mouse"
 ],
-     function (declare, domConstruct, domStyle, domAttr, array, lang, on, domGeom, dom, domClass, html, string, Locator, HorizontalSlider, HorizontalRule, HorizontalRuleLabels, window, Query, SimpleLineSymbol, Polyline, query, scrollBar, point, Deferred, DeferredList, QueryTask, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, Color, Symbol, topic) {
+     function (declare, domConstruct, domStyle, domAttr, array, lang, on, domGeom, dom, domClass, html, string, Locator, HorizontalSlider, HorizontalRule, HorizontalRuleLabels, dojoWindow, Query, SimpleLineSymbol, Polyline, query, scrollBar, point, Deferred, DeferredList, QueryTask, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, Color, Symbol, topic, mouse) {
          //========================================================================================================================//
 
          return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -91,6 +92,17 @@ define([
                  topic.subscribe("_createList", lang.hitch(this, function (featureList) {
                      this._createFeatureList(featureList);
                  }));
+                 topic.subscribe("setMapTipPosition", lang.hitch(this, function (selectedPoint, map, infoWindow) {
+                     this._onSetMapTipPosition(selectedPoint, map, infoWindow);
+                 }));
+
+                 topic.subscribe("showInfoWindow", lang.hitch(this, function (mapPoint, attributes, infoIndex, featureArray, count, map) {
+                     this._createInfoWindowContent(mapPoint, attributes, infoIndex, featureArray, count, map);
+                 }));
+                 topic.subscribe("clearSelectedFeature", lang.hitch(this, function () {
+                     this.map.getLayer("esriGraphicsLayerMapSettings").remove(this.selectedPolygon);
+                 }));
+
                  this.domNode = domConstruct.create("div", { "title": this.title, "class": "esriCTTdHeaderSearch" }, null);
                  domConstruct.place(this.divAddressContainer, dom.byId("esriCTParentDivContainer"));
                  this.own(on(this.domNode, "click", lang.hitch(this, function () {
@@ -108,7 +120,6 @@ define([
                  domAttr.set(this.imgSearchLoader, "src", dojoConfig.baseURL + "/js/library/themes/images/blue-loader.gif");
                  this._setDefaultTextboxValue();
                  this._attachLocatorEvents();
-
                  this._createHorizontalSlider();
                  on(this.esriCTDrive, "click", lang.hitch(this, function (evt) {
                      if (domClass.contains(this.esriCTDrive.firstElementChild, "driveIcon")) {
@@ -135,7 +146,6 @@ define([
                          domClass.remove(query(".collapse")[0], "collapseSelectedBlue");
                      }
                      domClass.add(evt.currentTarget, "expandSelectedBlue");
-
                      this.featureListScrollbar.resetScrollBar();
                  }));
 
@@ -144,11 +154,10 @@ define([
                      this._collapseList();
                      if (domClass.contains(query(".expand")[0], "expandSelectedBlue")) {
                          domClass.remove(query(".expand")[0], "expandSelectedBlue");
-
                      }
                      this.featureListScrollbar.resetScrollBar();
                  }));
-
+                 domAttr.set(this.sliderMessage, "innerHTML", string.substitute(nls.sliderDisplayText, { defaultMinute: dojo.configData.DriveTimeSliderSettings.defaultMinutes }));
              },
              /**
              * set default value of locator textbox as specified in configuration file
@@ -166,6 +175,7 @@ define([
                  * @memberOf widgets/locator/locator
                  */
                  domAttr.set(this.txtAddress, "defaultAddress", locatorSettings.LocatorDefaultAddress);
+                 domClass.replace(this.close, "clearInput", "clearInputNotApear");
              },
 
              /**
@@ -182,7 +192,11 @@ define([
                  })));
                  this.own(on(this.txtAddress, "keyup", lang.hitch(this, function (evt) {
                      domStyle.set(this.close, "display", "block");
-
+                     if (this.txtAddress.value == "") {
+                         domClass.replace(this.close, "clearInputNotApear", "clearInput");
+                     } else {
+                         domClass.replace(this.close, "clearInput", "clearInputNotApear");
+                     }
                      this._submitAddress(evt);
                  })));
                  this.own(on(this.txtAddress, "dblclick", lang.hitch(this, function (evt) {
@@ -198,6 +212,7 @@ define([
 
              _hideText: function () {
                  this.txtAddress.value = "";
+                 domClass.replace(this.close, "clearInputNotApear", "clearInput");
                  domConstruct.empty(this.divAddressResults, this.divAddressScrollContent);
                  domAttr.set(this.txtAddress, "defaultAddress", this.txtAddress.value);
                  domClass.remove(this.divAddressContent, "esriCTAddressResultHeight");
@@ -205,7 +220,6 @@ define([
                      domClass.add(this.locatorScrollbar._scrollBarContent, "esriCTZeroHeight");
                      this.locatorScrollbar.removeScrollBar();
                  }
-
              },
 
              /**
@@ -314,7 +328,6 @@ define([
              */
              _locateAddress: function () {
                  domConstruct.empty(this.divAddressResults);
-
                  if (lang.trim(this.txtAddress.value) == '') {
                      domStyle.set(this.imgSearchLoader, "display", "none");
                      domStyle.set(this.close, "display", "block");
@@ -331,7 +344,6 @@ define([
              * @memberOf widgets/locator/locator
              */
              _searchLocation: function () {
-
                  var nameArray = { Address: [] };
                  domStyle.set(this.imgSearchLoader, "display", "block");
                  domStyle.set(this.close, "display", "none");
@@ -367,7 +379,6 @@ define([
                  * @param {object} candidates Contains results from locator service
                  */
                  var defferedArray = [];
-
                  for (var index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
                      this._locateLayersearchResult(defferedArray, index);
                  }
@@ -428,10 +439,8 @@ define([
              },
 
              _addressResult: function (candidates, nameArray, searchFields, addressFieldName) {
-
                  domClass.add(this.divAddressScrollContent, "esriCTdivAddressScrollContent");
                  domClass.add(this.divAddressResultContainer, "border_bottom");
-
                  for (var order = 0; order < candidates.length; order++) {
                      if (candidates[order].attributes[dojo.configData.LocatorSettings.AddressMatchScore.Field] > dojo.configData.LocatorSettings.AddressMatchScore.Value) {
                          for (var j in searchFields) {
@@ -510,7 +519,6 @@ define([
                  this.locatorScrollbar.setContent(this.divAddressResults);
                  domStyle.set(this.divAddressScrollContent, "height", "200px");
                  this.locatorScrollbar.createScrollBar();
-
                  if (resultLength > 0) {
                      for (var candidateArray in candidates) {
                          if (candidates[candidateArray].length > 0) {
@@ -550,8 +558,6 @@ define([
                      } else {
                          domClass.add(query(".listContainer")[idx], "showAddressList");
                          domAttr.set(query(".plus-minus")[idx], "innerHTML", "-");
-
-
                      }
                      this.locatorScrollbar.resetScrollBar();
                  }));
@@ -568,7 +574,8 @@ define([
                  domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
                  domClass.remove(this.logoContainer, "mapLogo");
                  topic.publish("setMaxLegendLength");
-                 var candidateDate = domConstruct.create("div", { "class": "esriCTContentBottomBorder esriCTCursorPointer" }, listContainer);
+                 var esriCTrowResult = domConstruct.create("div", { "class": "esriCTrowTable esriCTContentBottomBorder" }, listContainer);
+                 var candidateDate = domConstruct.create("div", { "class": "esriCTrowTableSerchClm  esriCTCursorPointer" }, esriCTrowResult);
                  domAttr.set(candidateDate, "index", index);
                  try {
                      if (candidate.name) {
@@ -595,7 +602,6 @@ define([
                      }
                      _this.txtAddress.value = this.innerHTML;
                      domAttr.set(_this.txtAddress, "defaultAddress", _this.txtAddress.value);
-
                      if (candidate.geometry) {
                          if (candidate.geometry.type) {
                              if (candidate.geometry.type == "point") {
@@ -633,9 +639,7 @@ define([
                  this.map.getLayer("esriGraphicsLayerMapSettings").add(graphic);
                  topic.publish("hideProgressIndicator");
                  this.addressLocation = graphic;
-
-                 topic.publish("_addOperationalLayer");
-                 topic.publish("SliderChange", dojo.configData.DriveTimeSliderSettings.defaultMinutes, this.addressLocation, this.drive);
+                 topic.publish("SliderChange", this.sliderValue, this.addressLocation, this.drive);
              },
 
              _locateAddressOnMap: function (mapPoint) {
@@ -715,10 +719,10 @@ define([
              _clearDefaultText: function (evt) {
                  var target = window.event ? window.event.srcElement : evt ? evt.target : null;
                  if (!target) return;
-                 target.style.color = "#FFF";
                  target.value = '';
                  this.txtAddress.value = "";
                  domAttr.set(this.txtAddress, "defaultAddress", this.txtAddress.value);
+                 domClass.replace(this.close, "clearInputNotApear", "clearInput");
              },
 
              /**
@@ -764,8 +768,8 @@ define([
                  horizontalRule.domNode.firstChild.style.border = "none";
                  horizontalRule.domNode.lastChild.innerHTML = dojo.configData.DriveTimeSliderSettings.maxMinutes;
                  horizontalRule.domNode.lastChild.style.border = "none";
-                 horizontalRule.domNode.lastChild.style.marginLeft = "-6%";
-
+                 domClass.add(horizontalRule.domNode.lastChild, "esriCTLastChild");
+                 this.sliderValue = dojo.configData.DriveTimeSliderSettings.defaultMinutes;
                  var horizontalSlider = new HorizontalSlider({
                      value: dojo.configData.DriveTimeSliderSettings.defaultMinutes,
                      minimum: dojo.configData.DriveTimeSliderSettings.minMinutes,
@@ -781,7 +785,7 @@ define([
                      this.sliderMessage.innerHTML = message;
                      this.sliderValue = defaultMinutes;
                      if (this.addressLocation) {
-                         topic.publish("SliderChange", defaultMinutes, this.addressLocation, this.drive);
+                         topic.publish("SliderChange", this.sliderValue, this.addressLocation, this.drive);
                      }
                  }));
              },
@@ -793,6 +797,9 @@ define([
              },
 
              _createFeatureList: function (featureList) {
+                 topic.subscribe("resetLocatorContainer", lang.hitch(this, function () {
+                     this._resetLocateContainer();
+                 }));
                  var layerName;
                  domClass.remove(this.divAddressResultContainer, "border_bottom");
                  topic.publish("setMinLegendLength");
@@ -800,7 +807,6 @@ define([
                  domClass.add(this.logoContainer, "mapLogo");
                  var featureListArray = [];
                  domStyle.set(this.divSelectedFeature, "display", "block");
-
                  domStyle.set(query(".esriCTAddressScrollContent")[0], "display", "none");
                  if (this.featureListScrollbar) {
                      domClass.add(this.featureListScrollbar._scrollBarContent, "esriCTZeroHeight");
@@ -811,8 +817,7 @@ define([
                  } else {
                      domStyle.set(this.headerContainer, "display", "none");
                  }
-                 var scrollContentHeight = (domGeom.getMarginBox(this.divSelectedFeature).h - domGeom.getMarginBox(this.divSelectedFeature).t) + "px";
-
+                 var scrollContentHeight = ((domGeom.getMarginBox(this.divSelectedFeature).h - domGeom.getMarginBox(this.divSelectedFeature).t) - 60) + "px";
                  domStyle.set(this.divSelectedFeatureContent, "height", scrollContentHeight);
                  this.featureListScrollbar = new scrollBar({ domNode: this.divSelectedFeatureContent });
                  this.featureListScrollbar.setContent(this.divSelectedFeatureList);
@@ -829,11 +834,27 @@ define([
                      }
                  );
                      array.forEach(featureGroup, lang.hitch(this, function (feature) {
-                         var featueNamediv = domConstruct.create("div", { "class": "esriCTContentBottomBorder esriCTCursorPointer" }, divAddressListGroup);
-                         var layerFeature = domConstruct.create("span", { "innerHTML": feature.featureName, "class": "featureName" }, featueNamediv);
+                         var featueNamediv = domConstruct.create("div", { "class": "esriCTContentBottomBorder divAddressListGrouprow esriCTCursorPointer" }, divAddressListGroup);
+                         var layerFeature = domConstruct.create("div", { "innerHTML": feature.featureName, "class": "featureName" }, featueNamediv);
                          if (feature.routelength) {
-                             var spanRouteLength = domConstruct.create("span", { "innerHTML": feature.routelength.toFixed(2) + " miles", "class": "spanRouteLength" }, featueNamediv);
+                             var spanRouteLength = domConstruct.create("div", { "innerHTML": feature.routelength.toFixed(2) + " miles", "class": "spanRouteLength" }, featueNamediv);
                          }
+                         on(featueNamediv, mouse.enter, lang.hitch(this, function () {
+                             this.map.getLayer("esriGraphicsLayerMapSettings").remove(this.selectedPolygon);
+                             if (feature.geometry.type == "point") {
+                                 this._createInfoWindowContent(feature.geometry, feature.attribute, feature.layerIndex, null, null, this.map);
+                             } else if (feature.geometry.type == "polygon") {
+                                 this._createInfoWindowContent(feature.geometry.getCentroid(), feature.attribute, feature.layerIndex, null, null, this.map);
+                                 this._highlightFeature(feature);
+                             }
+                         }));
+                         on(featueNamediv, "click", lang.hitch(this, function () {
+                             if (feature.geometry.type == "point") {
+                                 this.map.centerAndZoom(feature.geometry, dojo.configData.ZoomLevel);
+                             } else if (feature.geometry.type == "polygon") {
+                                 this.map.centerAndZoom(feature.geometry.getCentroid(), dojo.configData.ZoomLevel);
+                             }
+                         }));
                      }));
                  }));
              },
@@ -850,11 +871,10 @@ define([
                          domClass.add(query(".divAddressListGroup")[idx], "listExpand");
                      }
                  }));
-                 
              },
              _expandList: function () {
                  array.forEach(query(".plusMinusFeatureTitle"), function (featureNode, idx) {
-                   
+
                      domClass.replace(featureNode, "esriCTExpand", "esriCTCollapse");
                      domClass.add(query(".divAddressListGroup")[idx], "listExpand");
                      query(".plusMinusFeatureTitle")[idx].innerHTML = "-";
@@ -862,10 +882,118 @@ define([
              },
              _collapseList: function () {
                  array.forEach(query(".plusMinusFeatureTitle"), function (featureNode, idx) {
-                 domClass.replace(featureNode, "esriCTCollapse", "esriCTExpand");
+                     domClass.replace(featureNode, "esriCTCollapse", "esriCTExpand");
                      domClass.remove(query(".divAddressListGroup")[idx], "listExpand");
                      query(".plusMinusFeatureTitle")[idx].innerHTML = "+";
                  });
+             },
+
+             _createInfoWindowContent: function (mapPoint, attributes, infoIndex, featureArray, count, map) {
+                 dojo.featureID = attributes.OBJECTID;
+                 var layerSettings = dojo.configData;
+                 dojo.layerServerName = layerSettings.Workflows[dojo.workFlowIndex].SearchSettings[infoIndex].Title;
+                 dojo.layerID = layerSettings.Workflows[dojo.workFlowIndex].SearchSettings[infoIndex].QueryLayerId;
+                 var infoPopupFieldsCollection = layerSettings.Workflows[dojo.workFlowIndex].InfowindowSettings[infoIndex].InfoWindowData;
+                 var infoWindowTitle = layerSettings.Workflows[dojo.workFlowIndex].InfowindowSettings[infoIndex].InfoWindowHeaderField;
+                 var infoPopupHeight = layerSettings.InfoPopupHeight;
+                 var infoPopupWidth = layerSettings.InfoPopupWidth;
+                 var divInfoDetailsTab = domConstruct.create("div", { "class": "esriCTInfoDetailsTab" }, null);
+                 this.divInfoDetailsContainer = domConstruct.create("div", { "class": "divInfoDetailsContainer" }, divInfoDetailsTab);
+                 for (var key = 0; key < infoPopupFieldsCollection.length; key++) {
+                     var divInfoRow = domConstruct.create("div", { "className": "esriCTDisplayRow" }, this.divInfoDetailsContainer);
+                     // Create the row's label
+                     this.divInfoDisplayField = domConstruct.create("div", { "className": "esriCTDisplayField", "innerHTML": infoPopupFieldsCollection[key].DisplayText }, divInfoRow);
+                     this.divInfoFieldValue = domConstruct.create("div", { "className": "esriCTValueField" }, divInfoRow);
+                     for (var i in attributes) {
+                         if (attributes.hasOwnProperty(i)) {
+                             if (!attributes[i]) {
+                                 attributes[i] = nls.showNullValue;
+                             }
+                         }
+                     }
+                     var fieldNames = string.substitute(infoPopupFieldsCollection[key].FieldName, attributes);
+                     if (infoPopupFieldsCollection[key].FieldName == "${more_info}" || infoPopupFieldsCollection[key].FieldName == "${headerimage}" || infoPopupFieldsCollection[key].FieldName == "${image}" || infoPopupFieldsCollection[key].FieldName == "${website}") {
+                         var link = fieldNames;
+                         var divLink = domConstruct.create("div", { class: "esriCTLink", innerHTML: nls.moreInfo }, this.divInfoFieldValue);
+                         on(divLink, "click", lang.hitch(this, function () {
+                             window.open(link);
+                         }));
+                     }
+                     else {
+                         this.divInfoFieldValue.innerHTML = fieldNames;
+                     }
+                 }
+
+                 for (var j in attributes) {
+                     if (attributes.hasOwnProperty(j)) {
+                         if (!attributes[j]) {
+                             attributes[j] = nls.showNullValue;
+                         }
+                     }
+                 }
+                 var infoTitle = string.substitute(layerSettings.Workflows[dojo.workFlowIndex].InfowindowSettings[infoIndex].InfoWindowHeaderField, attributes);
+                 dojo.selectedMapPoint = mapPoint;
+                 var extentChanged = map.setExtent(this._calculateCustomMapExtent(mapPoint));
+                 extentChanged.then(lang.hitch(this, function () {
+                     topic.publish("hideProgressIndicator");
+                     var screenPoint = map.toScreen(dojo.selectedMapPoint);
+                     screenPoint.y = map.height - screenPoint.y;
+                     topic.publish("setInfoWindowOnMap", infoTitle, divInfoDetailsTab, screenPoint, infoPopupWidth, infoPopupHeight);
+                 }));
+             },
+
+             _calculateCustomMapExtent: function (mapPoint, map) {
+                 var width = this.map.extent.getWidth();
+                 var height = this.map.extent.getHeight();
+                 var ratioHeight = height / this.map.height;
+                 var totalYPoint = dojo.configData.InfoPopupHeight + 30 + 61;
+                 var infoWindowHeight = height - (ratioHeight * totalYPoint);
+                 var xmin = mapPoint.x - (width / 2);
+                 var ymin = mapPoint.y - infoWindowHeight;
+                 var xmax = xmin + width;
+                 var ymax = ymin + height;
+                 return new esri.geometry.Extent(xmin, ymin, xmax, ymax, this.map.spatialReference);
+             },
+
+             _resetLocateContainer: function () {
+                 domConstruct.empty(this.divAddressResults);
+                 domConstruct.empty(this.divSelectedFeatureList);
+                 domStyle.set(this.divSelectedFeature, "display", "none");
+                 domStyle.set(query(".esriCTAddressScrollContent")[0], "display", "none");
+                 domClass.replace(this.domNode, "esriCTTdHeaderSearch", "esriCTTdHeaderSearch-select");
+                 domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+                 domClass.replace(this.divAddressHolder, "esriCTZeroHeight", "esriCTAddressContainerHeight");
+                 domClass.remove(this.logoContainer, "mapLogo");
+                 domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
+                 topic.publish("setMaxLegendLength");
+                 this.txtAddress.blur();
+             },
+
+             _highlightFeature: function (feature) {
+                 var gLayer, symbolColor, outlineColor;
+                 gLayer = this.map.getLayer("esriGraphicsLayerMapSettings");
+                 symbolColor = outlineColor = new dojo.Color(dojo.configData.Workflows[dojo.workFlowIndex].FeatureHighlightColor);
+                 symbolColor.a = 0.6;
+                 var myPolygon = {
+                     "geometry": feature.geometry,
+                     "symbol": {
+                         "color": symbolColor, "outline": {
+                             "color": outlineColor,
+                             "width": 1, "type": "esriSLS", "style": "esriSLSSolid"
+                         },
+                         "type": "esriSFS", "style": "esriSFSSolid"
+                     }
+                 };
+                 this.selectedPolygon = new esri.Graphic(myPolygon);
+                 gLayer.add(this.selectedPolygon);
+             },
+
+             _onSetMapTipPosition: function (selectedPoint, map, infoWindow) {
+                 if (selectedPoint) {
+                     var screenPoint = map.toScreen(selectedPoint);
+                     screenPoint.y = map.height - screenPoint.y;
+                     infoWindow.setLocation(screenPoint);
+                 }
              }
          });
      });

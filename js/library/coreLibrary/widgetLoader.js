@@ -56,7 +56,7 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                 if (location.hash.split("#")[1] != undefined) {
                     var workflow = (location.hash.split("#")[1].split("?app=")[1]).toUpperCase();
                     splashScreen._hideSplashScreenDialog();
-                    splashScreen._loadSelectedWorkflow(workflow, map);
+                    splashScreen.loadSelectedWorkflow(workflow, map);
                 }
                 else {
                     splashScreen.showSplashScreenDialog(map);
@@ -87,7 +87,7 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                     /**
                     * create application header
                     */
-                    this._createApplicationHeader(widgets);
+                    this._createApplicationHeader(widgets, map, splashScreen);
                 } catch (ex) {
                     alert(nls.errorMessages.widgetNotLoaded);
                 }
@@ -110,10 +110,10 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
         * @param {object} widgets Contain widgets to be displayed in header panel
         * @memberOf coreLibrary/widgetLoader
         */
-        _createApplicationHeader: function (widgets) {
-            var applicationHeader = new appHeader();
+        _createApplicationHeader: function (widgets, map, workflows) {
+            var applicationHeader = new appHeader({ mapObject: map , workflows: workflows});
             applicationHeader.loadHeaderWidgets(widgets);
 
-        },
+        }
     });
 });

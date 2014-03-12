@@ -110,13 +110,17 @@
     border-bottom: 1px solid #007ac2;
 }
 
-.esriCTDivAppHolder {
+.esriCTDivAppHolder 
+{
+    background-color: #fff;
     border-right: 1px solid #007ac2;
     border-left: 1px solid #007ac2;
     border-bottom: 1px solid #007ac2;
 }
 
-.esriCTDivshareContainer {
+.esriCTDivshareContainer 
+{
+    background-color: #fff;
     border-right: 1px solid #007ac2;
     border-left: 1px solid #007ac2;
     border-bottom: 1px solid #007ac2;
@@ -186,7 +190,7 @@
 }
 
 .collapse {
-    background-image: url('../images/collapse-select-blue.png');
+    background-image: url('../images/list-legend.png');
 }
 
 .expand {

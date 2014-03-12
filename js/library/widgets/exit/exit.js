@@ -48,7 +48,6 @@ function (declare, domConstruct, on, topic, lang, _WidgetBase, nls) {
         },
 
         _exitPage: function () {
-            topic.publish("removeOperationalLayer", this.map);
             topic.publish("showSplashScreen");
         }
     });
