@@ -26,26 +26,26 @@ define([
     "dojo/dom-attr",
     "dojo/on",
     "dojo/dom-geometry",
-    "dojo/window",
     "dojo/text!./templates/splashScreenTemplate.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/i18n!nls/localizedStrings",
+    "dojo/i18n!application/nls/localizedStrings",
     "../scrollBar/scrollBar",
      "dojo/query",
     "dojo/topic",
     "dojo/dom"
 ],
-     function (declare, domConstruct, domStyle, lang, domClass, domAttr, on, domGeom, window, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls, scrollBar, query, topic, dom) {
+     function (declare, domConstruct, domStyle, lang, domClass, domAttr, on, domGeom, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, appNls, scrollBar, query, topic, dom) {
          return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
              templateString: template,
-             nls: nls,
+             appNls: appNls,
              currentIndex: null,
              splashScreenScrollbar: null,
              currentWorkflow: null,
              postCreate: function () {
-                 var _self = this;
+                 var _self, holder, i, innercontainer, workflowContainer, innercontainer, imgcontainerdiv, imgcontainer, key, currentWorkflow;
+                 _self = this;
                  this.showSplashScreenDialog();
                  on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function (evt) {
                      if (dojo.workFlowIndex && dojo.seletedWorkflow) {
@@ -56,20 +56,17 @@ define([
                  on(this.splashScreenWorkflowsContainer, "click", lang.hitch(this, function (evt) {
                      evt.stopPropagation && evt.stopPropagation();
                  }));
-                 
                  this.domNode = domConstruct.create("div", { "class": "esriGovtLoadingIndicator" }, dojo.body());
                  this.domNode.appendChild(this.splashScreenScrollBarOuterContainer);
-                 var holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
-                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
-                     var workflowContainer = domConstruct.create("div", { "class": "workflowContainer", "key": dojo.configData.Workflows[i].Name, "index": i }, holder);
-
-                     var innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + dojo.configData.Workflows[i].Name, innerHTML: dojo.configData.Workflows[i].Name }, workflowContainer);
-                     var imgcontainerdiv = domConstruct.create("div", { "class": "workflowContainerImg" }, innercontainer);
-                     var imgcontainer = domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].SplashscreenImage }, imgcontainerdiv);
+                 holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
+                 for (i = 0; i < dojo.configData.Workflows.length; i++) {
+                     workflowContainer = domConstruct.create("div", { "class": "workflowContainer", "key": dojo.configData.Workflows[i].Name, "index": i }, holder);
+                     innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + dojo.configData.Workflows[i].Name, innerHTML: dojo.configData.Workflows[i].Name }, workflowContainer);
+                     imgcontainerdiv = domConstruct.create("div", { "class": "workflowContainerImg" }, innercontainer);
+                     imgcontainer = domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].SplashscreenImage }, imgcontainerdiv);
                      this.own(on(workflowContainer, "click", function (evt) {
-                         topic.publish("loadingIndicatorHandler");
-                         var key = domAttr.get(this, "key");
-                         var currentWorkflow = domAttr.get(this, "index");
+                         key = domAttr.get(this, "key");
+                         currentWorkflow = domAttr.get(this, "index");
                          if (dojo.layerKey == key && dojo.workFlowIndex == currentWorkflow) {
                              _self._hideSplashScreenDialog();
                              return;
@@ -81,6 +78,12 @@ define([
                          _self.mapObject._generateLayerURL();
                          _self._hideSplashScreenDialog();
                          _self.mapObject._clearMapGraphics();
+                         if (dojo.configData.Workflows[currentWorkflow].WebMapId && lang.trim(dojo.configData.Workflows[currentWorkflow].WebMapId).length != 0) {
+                             topic.publish("initializeWebmap");
+                             topic.publish("loadingIndicatorHandler");
+                         } else {
+                             topic.publish("loadBasemapToggleWidget");
+                         }
                      }));
                  }
                  this.own(on(this.splashscreenPreviousPage, "click", lang.hitch(this, function () {
@@ -99,22 +102,27 @@ define([
                      var slideWidth = domStyle.get(query('.workflowContainer')[0], "width") * i;
                      domStyle.set(holder, "width", slideWidth + 'px');
                  }
+                 if (i <= 3) {
+                     domClass.add(this.splashscreenNextPage, "esriNextDisabled");
+                 }
              },
              showSplashScreenDialog: function (map) {
                  this.mapObject = map;
                  domStyle.set(this.domNode, "display", "block");
-
-                 this.splashScreenLableDiv.innerHTML = nls.splashScreenContent;
+                 this.splashScreenLableDiv.innerHTML = appNls.messages.splashScreenContent;
              },
 
-             _selectWorkflow: function (Workflows) {
+             _selectWorkflow: function (Workflows, share) {
+                 var url, j;
                  topic.publish("_addOperationalLayer");
-                 var url = "?app=" + Workflows;
+                 url = "?app=" + Workflows;
                  location.hash = url;
                  this._applicationThemeLoader();
-                 for (var j = 0; j < dojo.configData.Workflows.length; j++) {
-                     domClass.remove(query("." + dojo.configData.Workflows[j].Name)[0], "esriCTApplicationHeaderTextSelected");
-                     domClass.add(query("." + dojo.seletedWorkflow)[0], "esriCTApplicationHeaderTextSelected");
+                 if (!share) {
+                     for (j = 0; j < dojo.configData.Workflows.length; j++) {
+                         domClass.remove(query("." + dojo.configData.Workflows[j].Name)[0], "esriCTApplicationHeaderTextSelected");
+                         domClass.add(query("." + dojo.seletedWorkflow)[0], "esriCTApplicationHeaderTextSelected");
+                     }
                  }
              },
 
@@ -129,29 +137,27 @@ define([
              },
 
              loadSelectedWorkflow: function (Workflows, map) {
+                 var i;
                  this.mapObject = map;
                  dojo.layerKey = Workflows;
                  dojo.seletedWorkflow = Workflows;
-                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
+                 for (i = 0; i < dojo.configData.Workflows.length; i++) {
                      if (dojo.configData.Workflows[i].Name == Workflows) {
-                         dojo.workFlowIndex = i;
+                         dojo.workFlowIndex = i.toString();
                          break;
                      }
                  }
                  this._applicationThemeLoader();
+                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length != 0) {
+                     topic.publish("initializeWebmap");
+                     topic.publish("loadingIndicatorHandler");
+                 }
                  this.mapObject._generateLayerURL();
                  topic.publish("_addOperationalLayer");
              },
 
-             _addLayer: function (key) {
-                 for (var i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
-                     this.mapObject._addOperationalLayerToMap(i, dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i]);
-                 }
-             },
-
              _hideSplashScreenDialog: function () {
                  domStyle.set(this.domNode, "display", "none");
-                 topic.publish("hideLoadingIndicatorHandler");
              },
 
              _slideSplashscreenPage: function (isSlideNext) {

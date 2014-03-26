@@ -33,15 +33,15 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/i18n!nls/localizedStrings"
+    "dojo/i18n!application/nls/localizedStrings"
 ],
-     function (declare, domConstruct, lang, array, domAttr, on, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, nls) {
+     function (declare, domConstruct, lang, array, domAttr, on, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, appNls) {
 
          //========================================================================================================================//
 
          return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
              templateString: template,
-             nls: nls,
+             appNls: appNls,
 
              /**
              * create header panel
@@ -52,6 +52,7 @@ define([
              * @name widgets/appHeader/appHeader
              */
              postCreate: function () {
+                 var applicationHeaderDiv, i, workflowSpan;
                  topic.subscribe("loadingIndicatorHandler", (lang.hitch(this, function () {
                      this._showProgressIndicator();
                  })));
@@ -67,7 +68,7 @@ define([
                  * @private
                  * @memberOf widgets/appHeader/appHeader
                  */
-                 var applicationHeaderDiv = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
+                 applicationHeaderDiv = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
                  domConstruct.place(this.applicationHeaderParentContainer, applicationHeaderDiv);
                  this._loadApplicationHeaderIcon();
                  /**
@@ -79,17 +80,21 @@ define([
                  * @memberOf widgets/appHeader/appHeader
                  */
                  document["title"] = dojo.configData.ApplicationName;
-                 for (var i = 0; i < dojo.configData.Workflows.length; i++) {
-                     var workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: nls.switchWorkflows, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                 for (i = 0; i < dojo.configData.Workflows.length; i++) {
+                     workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: appNls.messages.switchWorkflows, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
                      on(workflowSpan, "click", lang.hitch(this, function (evt) {
-                         if (dojo.seletedWorkflow != evt.currentTarget.innerHTML) {
-                             topic.publish("loadingIndicatorHandler");
+                         if (dojo.seletedWorkflow !== evt.currentTarget.innerHTML) {
                              dojo.workFlowIndex = domAttr.get(evt.currentTarget, "index");
                              dojo.seletedWorkflow = evt.currentTarget.innerHTML;
                              this.workflows._selectWorkflow(dojo.seletedWorkflow);
                              this.mapObject._generateLayerURL();
                              this.mapObject._clearMapGraphics();
-                             topic.publish("hideLoadingIndicatorHandler");
+                             if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                                 topic.publish("initializeWebmap");
+                                 topic.publish("loadingIndicatorHandler");
+                             } else {
+                                 topic.publish("loadBasemapToggleWidget");
+                             }
                          }
                      }));
                  }
@@ -101,30 +106,32 @@ define([
              * @memberOf widgets/appHeader/appHeader
              */
              loadHeaderWidgets: function (widgets) {
-
+                 var i, workflow;
                  /**
                  * applicationHeaderWidgetsContainer container for header panel widgets
                  * @member {div} applicationHeaderWidgetsContainer
                  * @private
                  * @memberOf widgets/appHeader/appHeader
                  */
-                 for (var i in widgets) {
+                 for (i in widgets) {
                      if (widgets[i].domNode) {
                          domConstruct.place(widgets[i].domNode, this.applicationHeaderWidgetsContainer);
                      }
                  }
                  if (location.hash) {
-                     var workflow = (location.hash.split("#")[1].split("?app=")[1]).toUpperCase();
+                     workflow = (location.hash.split("#")[1].split("?app=")[1]).toUpperCase();
                      domClass.add(query("." + workflow)[0], "esriCTApplicationHeaderTextSelected");
                      if (query(".esriCTExitImg")[0]) {
                          domStyle.set(query(".esriCTExitImg")[0], "display", "none");
                      }
+                 } else if (dojo.share) {
+                     domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex) + 1], "esriCTApplicationHeaderTextSelected");
                  }
              },
              /**
-                         * load Application Header Icon
-                         * @memberOf widgets/appHeader/appHeader
-                         */
+             * load Application Header Icon
+             * @memberOf widgets/appHeader/appHeader
+             */
              _loadApplicationHeaderIcon: function () {
                  if (dojo.configData.ApplicationFavicon && lang.trim(dojo.configData.ApplicationFavicon).length != 0) {
                      this._loadIcons("shortcut icon", dojo.configData.ApplicationFavicon);

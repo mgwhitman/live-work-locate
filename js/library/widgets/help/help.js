@@ -23,13 +23,15 @@ define([
     "dojo/on",
     "dojo/topic",
     "dojo/_base/lang",
-    "dijit/_WidgetBase"
-  ],
-function (declare, domConstruct, on, topic, lang, _WidgetBase) {
+    "dijit/_WidgetBase",
+    "dojo/i18n!application/js/library/nls/localizedStrings"
+],
+function (declare, domConstruct, on, topic, lang, _WidgetBase, sharedNls) {
 
     //========================================================================================================================//
 
     return declare([_WidgetBase], {
+        sharedNls: sharedNls,
 
         /**
         * create help widget
@@ -38,7 +40,7 @@ function (declare, domConstruct, on, topic, lang, _WidgetBase) {
         * @name widgets/help/help
         */
         postCreate: function () {
-            this.domNode = domConstruct.create("div", { "title": this.title, "class": "esriCTHelpImg" }, null);
+            this.domNode = domConstruct.create("div", { "title": sharedNls.tooltips.help, "class": "esriCTHelpImg" }, null);
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
 
                 /**

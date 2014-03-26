@@ -29,14 +29,14 @@ define([
     "esri/symbols/PictureMarkerSymbol",
     "esri/SpatialReference",
     "esri/graphic",
-    "dojo/i18n!nls/localizedStrings"
-  ],
-function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, Point, PictureMarkerSymbol, SpatialReference, Graphic, nls) {
+    "dojo/i18n!application/js/library/nls/localizedStrings"
+],
+function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, Point, PictureMarkerSymbol, SpatialReference, Graphic, sharedNls) {
 
     //========================================================================================================================//
 
     return declare([_WidgetBase], {
-        nls: nls,
+        sharedNls: sharedNls,
 
         /**
         * create geolocation widget
@@ -51,7 +51,7 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
             * if browser is not supported, geolocation widget is not created
             */
             if (Modernizr.geolocation) {
-                this.domNode = domConstruct.create("div", { "title": this.title, "class": "esriCTTdGeolocation" }, null);
+                this.domNode = domConstruct.create("div", { "title": sharedNls.tooltips.locate, "class": "esriCTTdGeolocation" }, null);
                 this.own(on(this.domNode, "click", lang.hitch(this, function () {
                     /**
                     * minimize other open header panel widgets and call geolocation service
@@ -69,7 +69,7 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
         */
 
         _showCurrentLocation: function () {
-            var mapPoint, self = this, currentBaseMap,
+            var mapPoint, self = this, currentBaseMap, geometryServiceURL, geometryService;
             geometryServiceURL = dojo.configData.GeometryService,
             geometryService = new GeometryService(geometryServiceURL);
 
@@ -89,21 +89,21 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
                 * @param {object} newPoint Map point of device location in spatialReference of map
                 */
                 geometryService.project([mapPoint], self.map.spatialReference).then(function (newPoint) {
-                    currentBaseMap = self.map.getLayer(self.map.basemapLayerIds[0]);
+                    currentBaseMap = self.map.getLayer("esriCTbasemap");
                     if (currentBaseMap.visible) {
                         if (!currentBaseMap.fullExtent.contains(newPoint[0])) {
-                            alert(nls.errorMessages.invalidLocation);
+                            alert(sharedNls.errorMessages.invalidLocation);
                             return;
                         }
                     }
                     mapPoint = newPoint[0];
                     self.map.centerAndZoom(mapPoint, dojo.configData.ZoomLevel);
                     self._addGraphic(mapPoint);
-                }, function (error) {
-                    alert(nls.errorMessages.invalidProjection);
+                }, function () {
+                    alert(sharedNls.errorMessages.invalidProjection);
                 });
-            }, function (error) {
-                alert(nls.errorMessages.invalidLocation);
+            }, function () {
+                alert(sharedNls.errorMessages.invalidLocation);
             });
         },
 

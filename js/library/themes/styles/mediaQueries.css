@@ -28,14 +28,10 @@
         background-image: url("../images/help@2X.png") !important;
     }
 
-
-
     .esriCTTdGeolocation
     {
         background-image: url("../images/geo-location@2x.png") !important;
     }
-
-
 
     .esriCTImgSocialMedia
     {
@@ -46,8 +42,6 @@
     {
         background-image: url("../images/get-route@2x.png") !important;
     }
-
-
 
     .esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select, .esriCTHelpImg, .esriCTHelpImg
     {
@@ -61,7 +55,6 @@
     {
         padding: 15px 0 2px 15px !important;
     }
-
 
     .facebook, .twitter, .email
     {
@@ -109,15 +102,6 @@
         font-size: 14px !important;
     }
 
-    .simpleDirections .esriStopsGetDirections
-    {
-        background: none;
-        border: none;
-        padding: 0px;
-        line-height: 2;
-        color: #007AC2 !important;
-    }
-
     .esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select, .esriCTHelpImg, .esriCTHelpImg, .esriCTExitImg
     {
         height: 44px !important;
@@ -140,6 +124,7 @@
     {
         font-size: 15px !important;
     }
+    
     .esriCTShareCursor, .facebook, .twitter, .email
     {
         height: 44px !important;
@@ -151,25 +136,6 @@
     .esriCTSearchClose
     {
         right: 70px;
-    }
-
-    .simpleDirections .esriStopsGetDirections
-    {
-        background: none;
-        border: none;
-        padding: 0px;
-        line-height: 2;
-        color: #007AC2 !important;
-    }
-
-    .esriCTHeaderRouteContainer
-    {
-        top: 61px;
-    }
-
-    .esriCTDirectionContainer .esriCTRouteInformationContainer
-    {
-        font-size: 14px !important;
     }
 
     .customButtonInner
@@ -198,26 +164,6 @@
         font-size: 14px !important;
     }
 
-    .simpleDirections .esriStopsAdd .esriStopsAddDestination, .simpleDirections .esriStopsGetDirections, .simpleDirections .esriRoutesError li
-    {
-        font-size: 14px !important;
-    }
-
-    .simpleDirections .esriResultsViewFullRoute
-    {
-        font-size: 14px !important;
-    }
-
-    .esriCTDirectionContainer .esriCTRouteInformationContainer
-    {
-        font-size: 14px !important;
-    }
-
-    .simpleDirections .esriResultsSummary
-    {
-        font-size: 14px !important;
-    }
-
     .esriPopup
     {
         font-size: 14px !important;
@@ -240,8 +186,6 @@
     {
         height: 60px;
     }
-
-
 
     .esriCTTxtAddress
     {
@@ -266,46 +210,29 @@
         right: 70px;
     }
 
-    .simpleDirections .esriStopsGetDirections
-    {
-        background: none;
-        border: none;
-        padding: 0px;
-        line-height: 2;
-        color: #007AC2 !important;
-    }
-
     .esriCTApplicationHeaderTextTD
     {
         line-height: 40px;
         cursor: pointer;
     }
 
-    .esriCTHeaderRouteContainer
-    {
-        top: 61px;
-    }
-
-    .esriCTDirectionContainer .esriCTRouteInformationContainer
-    {
-        font-size: 14px !important;
-    }
-
     .customButtonInner
     {
         padding-top: 4px;
     }
+    
     .esriCTApplicationHeaderIcon
     {
         padding: 15px 0 2px 15px !important;
     }
+    
     .esriCTshareContainer
     {
         width: 100%;
     }
 }
 
-@media screen and (min-width: 641px) and (max-width: 767px)
+@media screen and (min-width: 681px) and (max-width: 767px)
 {
     html, body
     {
@@ -313,26 +240,6 @@
     }
 
     input
-    {
-        font-size: 14px !important;
-    }
-
-    .simpleDirections .esriStopsAdd .esriStopsAddDestination, .simpleDirections .esriStopsGetDirections, .simpleDirections .esriRoutesError li
-    {
-        font-size: 14px !important;
-    }
-
-    .esriCTDirectionContainer .esriCTRouteInformationContainer
-    {
-        font-size: 14px !important;
-    }
-
-    .simpleDirections .esriResultsViewFullRoute
-    {
-        font-size: 14px !important;
-    }
-
-    .simpleDirections .esriResultsSummary
     {
         font-size: 14px !important;
     }
@@ -388,28 +295,9 @@
         right: 70px;
     }
 
-    .simpleDirections .esriStopsGetDirections
-    {
-        background: none;
-        border: none;
-        padding: 0px;
-        line-height: 2;
-        color: #007AC2 !important;
-    }
-
     .esriCTApplicationHeaderTextTD
     {
         line-height: 40px;
-    }
-
-    .esriCTHeaderRouteContainer
-    {
-        top: 61px;
-    }
-
-    .esriCTDirectionContainer .esriCTRouteInformationContainer
-    {
-        font-size: 14px !important;
     }
 
     .customButtonInner
@@ -422,10 +310,10 @@
     }
 }
 
-@media screen and (max-width: 690px)
+@media screen and (max-width: 680px)
 {
 
-    .esriCTApplicationHeaderTextTD
+    .esriCTApplicationHeaderTextTD,.esriCTApplicationHeaderIcon
     {
         display: none;
     }
@@ -443,4 +331,5 @@
     {
         width: 100%;
     }
+    .esriCTApplicationHeader{HEIGHT:61PX;}
 }

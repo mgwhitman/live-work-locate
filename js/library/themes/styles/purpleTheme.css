@@ -150,6 +150,19 @@
     border-left: 1px solid #5C2E6F;
     border-right: 1px solid #5C2E6F;
 }
+.esriCTRightArrow
+{
+    background-image: url("../images/right-purple_Legend-arrow.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.esriCTLeftArrow
+{
+    background-image: url('../images/left-purple_Legend-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
 /*header*/
 .driveIconSelected
 {
@@ -234,12 +247,11 @@
 
 .collapse
 {
-    background-image: url('../images/collapse-select-blue.png');
+    background-image: url('../images/expand-select-purple.png');
 }
-
 .expand
 {
-    background-image: url('../images/expand-select-purple.png');
+    background-image: url('../images/list-legend-select-purple.png');
 }
 
 .layerTitle
@@ -271,3 +283,41 @@
 {
     background-image: url("../images/right-purple_Legend-arrow.png");
 }
+.spanRouteLength
+{
+    color: #5C2E6F;
+    padding: 5px 15px 5px 0px;
+    vertical-align: middle !important;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: left !important;
+    cursor: pointer;
+    width: 40px;
+}
+
+/*legends */
+
+.legendbox
+{
+    /* not needed, just for clarification */
+    background: #FFFFFF; /* the next props are meant to keep this block independent from the other floated one */
+}
+
+.legenboxInner
+{
+    border: 1px solid #007ac2;
+    border-bottom: none !important;
+}
+
+.legendlbl
+{
+    color: #6e6e6e;
+}
+
+
+.legenboxInner div
+{
+    color: #6e6e6e;
+}
+
+/* End of legends */

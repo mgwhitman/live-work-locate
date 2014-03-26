@@ -24,15 +24,16 @@ define([
     "dojo/topic",
     "dojo/_base/lang",
     "dijit/_WidgetBase",
-    "dojo/i18n!nls/localizedStrings"
+    "dijit/_TemplatedMixin",
+    "dojo/i18n!application/js/library/nls/localizedStrings"
 
 ],
-function (declare, domConstruct, on, topic, lang, _WidgetBase, nls) {
+function (declare, domConstruct, on, topic, lang, _WidgetBase, _TemplatedMixin, sharedNls) {
 
     //========================================================================================================================//
 
     return declare([_WidgetBase], {
-
+        sharedNls: sharedNls,
         /**
         * create exit widget
         *
@@ -41,7 +42,7 @@ function (declare, domConstruct, on, topic, lang, _WidgetBase, nls) {
 
         */
         postCreate: function () {
-            this.domNode = domConstruct.create("div", { "title": this.title, "class": "esriCTExitImg" }, null);
+            this.domNode = domConstruct.create("div", { "title": sharedNls.tooltips.exit, "class": "esriCTExitImg" }, null);
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
                 this._exitPage();
             })));

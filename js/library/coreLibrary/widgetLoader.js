@@ -48,13 +48,21 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
         * @name coreLibrary/widgetLoader
         */
         startup: function () {
-            var widgets = {},
-           deferredArray = [];
-            var map = new Map();
+            var widgets, deferredArray, map, splashScreen, appUrl, workflow, mapInstance;
+            widgets = {},
+            deferredArray = [];
+            map = new Map();
             if (dojo.configData.SplashScreen && dojo.configData.SplashScreen.IsVisible) {
-                var splashScreen = new SplashScreen();
-                if (location.hash.split("#")[1] != undefined) {
-                    var workflow = (location.hash.split("#")[1].split("?app=")[1]).toUpperCase();
+                splashScreen = new SplashScreen();
+                appUrl = window.location.toString();
+                if (appUrl.search("app") > 0) {
+                    if (appUrl.search("extent") > 0) {
+                        dojo.share = true;
+                        workflow = appUrl.slice(appUrl.indexOf("=") + 1, appUrl.indexOf("$"));
+
+                    } else {
+                        workflow = appUrl.slice(appUrl.indexOf("=") + 1);
+                    }
                     splashScreen._hideSplashScreenDialog();
                     splashScreen.loadSelectedWorkflow(workflow, map);
                 }
@@ -65,11 +73,11 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                     splashScreen.showSplashScreenDialog(map);
                 });
             }
-            var mapInstance = this._initializeMap(map);
+            mapInstance = this._initializeMap(map);
             /**
-                       * create an object with widgets specified in Header Widget Settings of configuration file
-                       * @param {array} dojo.configData.AppHeaderWidgets Widgets specified in configuration file
-                       */
+            * create an object with widgets specified in Header Widget Settings of configuration file
+            * @param {array} dojo.configData.AppHeaderWidgets Widgets specified in configuration file
+            */
             array.forEach(dojo.configData.AppHeaderWidgets, function (widgetConfig, index) {
                 var deferred = new Deferred();
                 widgets[widgetConfig.WidgetPath] = null;
@@ -88,6 +96,11 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                     * create application header
                     */
                     this._createApplicationHeader(widgets, map, splashScreen);
+                    if (dojo.share) {
+                        setTimeout(function () {
+                            topic.publish("locateAddressOnMap");
+                        }, 2000);
+                    }
                 } catch (ex) {
                     alert(nls.errorMessages.widgetNotLoaded);
                 }
@@ -95,10 +108,10 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
             }));
         },
         /**
-           * create map object
-           * @return {object} Current map instance
-           * @memberOf coreLibrary/widgetLoader
-           */
+        * create map object
+        * @return {object} Current map instance
+        * @memberOf coreLibrary/widgetLoader
+        */
         _initializeMap: function (map) {
 
             var mapInstance = map.getMapInstance();
@@ -111,9 +124,8 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
         * @memberOf coreLibrary/widgetLoader
         */
         _createApplicationHeader: function (widgets, map, workflows) {
-            var applicationHeader = new appHeader({ mapObject: map , workflows: workflows});
+            var applicationHeader = new appHeader({ mapObject: map, workflows: workflows });
             applicationHeader.loadHeaderWidgets(widgets);
-
         }
     });
 });

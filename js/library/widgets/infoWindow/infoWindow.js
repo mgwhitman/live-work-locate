@@ -21,13 +21,9 @@ define([
  "dojo/_base/declare",
         "dojo/dom-construct",
         "dojo/dom-style",
-        "dojo/dom-attr",
         "dojo/_base/lang",
         "dojo/on",
-        "dojo/dom-geometry",
         "dojo/dom",
-        "dojo/dom-class",
-        "dojo/string",
         "dojo/topic",
         "esri/domUtils",
         "esri/InfoWindowBase",
@@ -38,7 +34,7 @@ define([
         "esri/tasks/query",
         "dijit/_WidgetsInTemplateMixin"
 ],
- function (declare, domConstruct, domStyle, domAttr, lang, on, domGeom, dom, domClass, string, topic, domUtils, InfoWindowBase, scrollBar, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
+ function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
      return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
          templateString: template,
          InfoShow: null,
@@ -54,13 +50,14 @@ define([
              this.infoWindowContainer.appendChild(this.domNode);
              this._anchor = domConstruct.create("div", { "class": "esriCTdivTriangle" }, this.domNode);
              domUtils.hide(this.domNode);
-             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function (evt) {
+             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function () {
                  if (query(".map .logo-sm")) {
                      this.InfoShow = true;
                  } else {
                      this.InfoShow = false;
                  }
                  domUtils.hide(this.domNode);
+                 dojo.infoWindowIsShowing = false;
                  topic.publish("clearSelectedFeature");
              })));
          },
@@ -72,13 +69,12 @@ define([
                      this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
                  }
              }
-
              this.setLocation(screenPoint);
              if (this.infoContainerScrollbar) {
                  this.infoContainerScrollbar.removeScrollBar();
              }
              this.divInfoDetailsScroll.appendChild(detailsTab);
-             this.infoContainerScrollbar = new scrollBar({
+             this.infoContainerScrollbar = new ScrollBar({
                  domNode: this.divInfoScrollContent
              });
              this.infoContainerScrollbar.setContent(this.divInfoDetailsScroll);
@@ -95,8 +91,8 @@ define([
          },
 
          setTitle: function (str) {
-             var len = 35;
-             var infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
+             var infoTitle, len = 30;
+             infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
              if (infoTitle.length > 0) {
                  this.esriCTheadderPanel.innerHTML = "";
                  this.esriCTheadderPanel.innerHTML = infoTitle;
@@ -114,24 +110,22 @@ define([
                  left: (location.x - (this.infoWindowWidth / 2)) + "px",
                  bottom: (location.y + 28) + "px"
              });
-             if (this.InfoShow) {
-             } else {
+             if (!this.InfoShow) {
                  domUtils.show(this.domNode);
              }
              this.isShowing = true;
          },
 
          hide: function () {
-             domUtils.hide(this.domNode);
              this.isShowing = false;
              this.onHide();
+             domUtils.hide(this.domNode);
          },
 
-         _hideInfoContainer: function (map) {
-             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function (evt) {
+         _hideInfoContainer: function () {
+             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function () {
                  domUtils.hide(this.domNode);
              })));
          }
-
      });
  });

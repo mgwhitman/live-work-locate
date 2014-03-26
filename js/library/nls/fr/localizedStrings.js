@@ -1,5 +1,4 @@
-﻿/*global define */
-/** @license
+﻿/** @license
 | Version 10.2
 | Copyright 2013 Esri
 |
@@ -16,22 +15,12 @@
 | limitations under the License.
 */
 define({
-    root: {
-        NearbyText: "What's nearby?",
-        sliderDisplayText: "Show results within <b>25 mins drive</b>",
-        okButtonText: "OK",
-        splashScreenContent: "Please select an app to continue",
-        shareHtmlcontent: "",
-        addressDisplayText: "Address",
-        incidentInformationDisplayText: "Incident Information",
-        directionsDisplayText: "Directions",
-        informationDispalyText: "511 Information",
-        informationPanelTitle: "Information for current map view",
-        print: "Print",
-        back: "Back",
         showNullValue: "N/A",
-        webpageDispalyText: "Copy/paste HTML into your web page",
-        reRouteDisplayText: "Traffic Incidents found on this road",
+        titles: {
+            webpageDispalyText: "Copy/paste HTML into your web page",
+            NearbyText: "What's nearby?",
+            moreInfo: "Website",
+        },
         errorMessages: {
             invalidSearch: "No results found",
             falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
@@ -39,10 +28,26 @@ define({
             invalidProjection: "Unable to plot current location on the map.",
             widgetNotLoaded: "Fail to load widgets.",
             shareLoadingFailed: "Unable to load share options.",
-            shareFailed: "Unable to share."
-
+            shareFailed: "Unable to share.",
+            invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
+        },
+        buttons: {
+            embedding: "Embedding",
+            email: "email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
+            facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
+            twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
+        },
+        tooltips: {
+            locate: "Locate",
+            share: "Share",
+            help: "Help",
+            clear: "Clear",
+            search: "Search",
+            exit: "Exit",
+            locateAddress: "LocateAddress",
+            driveTime: "DriveTime",
+            walkTime: "WalkTime",
+            collapseResult: "Collapse Result",
+            loadingText: "Loading..."
         }
-    },
-
-    es: true, fr: true, it: true
 });

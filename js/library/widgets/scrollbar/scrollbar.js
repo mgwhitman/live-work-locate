@@ -20,7 +20,7 @@
 define([
     "dojo/_base/declare",
     "dijit/_WidgetBase"
- ],
+],
 function (declare, WidgetBase) {
 
     //========================================================================================================================//
@@ -49,15 +49,13 @@ function (declare, WidgetBase) {
         * @name widgets/scrollbar/scrollbar
         */
 
-        postCreate: function (parameters) {
+        postCreate: function () {
             this.inherited(arguments);
             var coords = dojo.coords(this.domNode);
             this._containerHeight = coords.h;
             this._containerWidth = coords.w;
-
             this._scrollBarContainer = dojo.create("div", {}, this.domNode);
             this._scrollBarContent = dojo.create("div", { "class": "scrollbar_content" }, this._scrollBarContainer);
-
             this._scrollBarContent.style.width = this._containerWidth + "px";
             this._scrollBarContent.style.height = this._containerHeight + "px";
         },
@@ -105,7 +103,6 @@ function (declare, WidgetBase) {
 
         createScrollBar: function (duration) {
             setTimeout(dojo.hitch(this, function () {
-                var pxLeft, pxTop, xCoord, yCoord;
                 var isHandleClicked = false;
                 this._scrollBarTrack = dojo.create("div", { "class": "scrollbar_track" }, this._scrollBarContent);
                 this._scrollBarTrack.style.height = this._containerHeight + "px";
@@ -163,8 +160,8 @@ function (declare, WidgetBase) {
                 y = this._topPosition - 10;
             }
             //setting scrollbar handel
-            if (y > this._yMax) y = this._yMax // Limit vertical movement
-            if (y < 0) y = 0 // Limit vertical movement
+            if (y > this._yMax) y = this._yMax; // Limit vertical movement
+            if (y < 0) y = 0; // Limit vertical movement
             this._scrollBarHandle.style.top = y + "px";
 
             //setting content position
@@ -173,7 +170,7 @@ function (declare, WidgetBase) {
 
         },
 
-        _onTouchEnd: function (evt) {
+        _onTouchEnd: function () {
             this._scrollingTimer = setTimeout(dojo.hitch(this, function () { clearTimeout(this._scrollingTimer); this._isScrolling = false; }), 100);
         },
 
@@ -184,7 +181,7 @@ function (declare, WidgetBase) {
                 if (evt.stopPropagation)
                     evt.stopPropagation();
                 dojo.stopEvent(evt);
-                this._topPosition = this._scrollBarHandle.offsetTop // Sliders vertical position at start of slide.
+                this._topPosition = this._scrollBarHandle.offsetTop; // Sliders vertical position at start of slide.
                 var offsetY;
                 if (!evt.offsetY) {
                     var coords = dojo.coords(evt.target);
@@ -198,8 +195,8 @@ function (declare, WidgetBase) {
                 }
                 else if (offsetY > (this._scrollBarHandle.offsetTop + this._scrollBarHandle.clientHeight)) {
                     var y = offsetY - this._scrollBarHandle.clientHeight;
-                    if (y > this._yMax) y = this._yMax // Limit vertical movement
-                    if (y < 0) y = 0 // Limit vertical movement
+                    if (y > this._yMax) y = this._yMax; // Limit vertical movement
+                    if (y < 0) y = 0; // Limit vertical movement
                     this._scrollBarHandle.style.top = y + "px";
                     this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
                 }
@@ -210,7 +207,7 @@ function (declare, WidgetBase) {
             this._dragStart = false;
         },
 
-        _onDragEnd: function (evt) {
+        _onDragEnd: function () {
             document.body.onselectstart = null;
             document.onmousemove = null;
             dojo.disconnect(this._documentMouseMoveHandle);
@@ -224,13 +221,13 @@ function (declare, WidgetBase) {
                 evt.stopPropagation();
             dojo.stopEvent(evt);
 
-            this._topPosition = this._scrollBarHandle.offsetTop // Sliders vertical position at start of slide.
-            this._currentYCoordinate = evt.screenY // Vertical mouse position at start of slide.
+            this._topPosition = this._scrollBarHandle.offsetTop; // Sliders vertical position at start of slide.
+            this._currentYCoordinate = evt.screenY; // Vertical mouse position at start of slide.
             document.body.style.MozUserSelect = 'none';
             document.body.style.userSelect = 'none';
             document.onselectstart = function () {
                 return false;
-            }
+            };
             document.onmousemove = dojo.hitch(this, "_onDocumentMouseMove");
         },
 
@@ -241,8 +238,8 @@ function (declare, WidgetBase) {
                 evt.stopPropagation();
             dojo.stopEvent(evt);
             var y = this._topPosition + evt.screenY - this._currentYCoordinate;
-            if (y > this._yMax) y = this._yMax // Limit vertical movement
-            if (y < 0) y = 0 // Limit vertical movement
+            if (y > this._yMax) y = this._yMax; // Limit vertical movement
+            if (y < 0) y = 0; // Limit vertical movement
             this._scrollBarHandle.style.top = y + "px";
             this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
         },
@@ -254,20 +251,20 @@ function (declare, WidgetBase) {
             if (evt.stopPropagation)
                 evt.stopPropagation();
             dojo.stopEvent(evt);
-            var delta = evt.detail ? evt.detail * (-120) : evt.wheelDelta //delta returns +120 when wheel is scrolled up, -120 when scrolled down
+            var delta = evt.detail ? evt.detail * (-120) : evt.wheelDelta; //delta returns +120 when wheel is scrolled up, -120 when scrolled down
             this._topPosition = this._scrollBarHandle.offsetTop;
 
             if (delta <= -120) {
                 var y = this._topPosition + 10;
-                if (y > this._yMax) y = this._yMax // Limit vertical movement
-                if (y < 0) y = 0 // Limit vertical movement
+                if (y > this._yMax) y = this._yMax; // Limit vertical movement
+                if (y < 0) y = 0; // Limit vertical movement
                 this._scrollBarHandle.style.top = y + "px";
                 this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
             }
             else {
                 var y = this._topPosition - 10;
-                if (y > this._yMax) y = this._yMax // Limit vertical movement
-                if (y < 0) y = 0 // Limit vertical movement
+                if (y > this._yMax) y = this._yMax; // Limit vertical movement
+                if (y < 0) y = 0; // Limit vertical movement
                 this._scrollBarHandle.style.top = y + "px";
                 this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
             }

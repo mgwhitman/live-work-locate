@@ -88,10 +88,6 @@
     border-color: #007AC2 !important;
 }
 
-.simpleDirections .esriStopsContainer {
-    border-bottom: 1px solid #007AC2;
-}
-
 .esriCTTInfoWindowContainer {
     border: #007ac2 solid 1px;
 }
@@ -131,6 +127,20 @@
     border-bottom: 1px solid #007AC2;
     border-left: 1px solid #007AC2;
     border-right: 1px solid #007AC2;
+}
+
+.esriCTRightArrow
+{
+    background-image: url("../images/right.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.esriCTLeftArrow
+{
+    background-image: url('../images/left.png');
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 /*header*/
 .driveIconSelected {
@@ -190,11 +200,11 @@
 }
 
 .collapse {
-    background-image: url('../images/list-legend.png');
+    background-image: url('../images/expand-select-Blue.png');
 }
 
 .expand {
-    background-image: url('../images/expand.png');
+    background-image: url('../images/list-legend-select-blue.png');
 }
 
 .esriCTlayerFeatures {
@@ -220,3 +230,40 @@
 .expandSelectedBlue {
     background-image: url('../images/expand-select-Blue.png') !important;
 }
+.spanRouteLength
+{
+    color: #007ac2;
+    padding: 5px 15px 5px 0px;
+    vertical-align: middle !important;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: right !important;
+    cursor: pointer;
+}
+
+/*legends */
+
+.legendbox
+{
+    /* not needed, just for clarification */
+    background: #FFFFFF; /* the next props are meant to keep this block independent from the other floated one */
+}
+
+.legenboxInner
+{
+    border: 1px solid #007ac2;
+    border-bottom: none !important;
+}
+
+.legendlbl
+{
+    color: #6e6e6e;
+}
+
+
+.legenboxInner div
+{
+    color: #6e6e6e;
+}
+
+/* End of legends */

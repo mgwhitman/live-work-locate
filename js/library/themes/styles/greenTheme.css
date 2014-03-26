@@ -100,11 +100,6 @@
     border-color: #028D6A !important;
 }
 
-.simpleDirections .esriStopsContainer
-{
-    border-bottom: 1px solid #028D6A;
-}
-
 .esriCTTInfoWindowContainer
 {
     border: #028D6A solid 1px;
@@ -150,7 +145,18 @@
     border-left: 1px solid #028D6A;
     border-right: 1px solid #028D6A;
 }
-
+.esriCTRightArrow
+{
+    background-image: url("../images/right-green_Legend-arrow.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+.esriCTLeftArrow
+{
+    background-image: url('../images/left-green_Legend-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
 /*header*/
 .driveIconSelected
 {
@@ -218,16 +224,31 @@
 {
     background-image: url("../images/embedding_green.png") !important;
 }
-/*Legend*/
-.esriCTRightArrow
+
+/*legends */
+
+.legendbox
 {
-    background-image: url("../images/right-green_Legend-arrow.png") !important;
+    /* not needed, just for clarification */
+    background: #FFFFFF; /* the next props are meant to keep this block independent from the other floated one */
 }
 
-.esriCTLeftArrow
+.legenboxInner
 {
-    background-image: url("../images/left-green_Legend-arrow.png") !important;
+    border: 1px solid #028D6A;
+    border-bottom: none !important;
 }
+
+.legendlbl
+{
+    color: #6e6e6e;
+}
+
+.legenboxInner div
+{
+    color: #6e6e6e;
+}
+/* End of legends */
 /*grouped address*/
 
 .esriCTResultColor
@@ -237,11 +258,11 @@
 
 .collapse
 {
-    background-image: url('../images/collapse-select-blue.png');
+    background-image: url('../images/expand-select-green.png');
 }
 .expand
 {
-    background-image: url('../images/expand-select-green.png');
+    background-image: url('../images/list-legend-select-green.png');
 }
 .layerTitle
 {
@@ -267,4 +288,14 @@
 .esriCTArrow
 {
     background-image: url("../images/right-green_Legend-arrow.png");
+}
+.spanRouteLength
+{
+    color: #028d6a;
+    padding: 5px 15px 5px 0px;
+    vertical-align: middle !important;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: right !important;
+    cursor: pointer;
 }
