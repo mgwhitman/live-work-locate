@@ -1,0 +1,326 @@
+﻿.esriCTApplicationHeader
+{
+    border-bottom: 1px solid #D15706 !important;
+}
+
+.esriSimpleSliderDecrementButton, .esriSimpleSliderIncrementButton
+{
+    background-color: #D15706 !important;
+}
+
+.HomeButton .home, .HomeButton .home:hover
+{
+    background-color: #D15706;
+}
+
+.BasemapToggle .toggleButton
+{
+    border: 2px solid #D15706 !important;
+}
+
+.BasemapToggle .basemapTitle
+{
+    color: #D15706 !important;
+}
+
+.BasemapToggle .basemapImage
+{
+    border: 1px solid #D15706;
+}
+
+.esriCTApplicationHeaderTextSelected
+{
+    color: #D15706 !important;
+}
+
+.legenboxInner
+{
+    border: 1px solid #D15706;
+}
+
+.esriInfoPanelContainer
+{
+    color: #D15706 !important;
+}
+
+.esriCTHeaderLine
+{
+    color: #D15706 !important;
+}
+
+.esriCTRouteToplabel
+{
+    color: #D15706;
+}
+
+.esriCTRouteMapName
+{
+    color: #D15706;
+}
+
+.esriCTRouteMapNum
+{
+    color: #D15706;
+}
+
+.esriCTRouteMapArrow
+{
+    color: #D15706;
+}
+
+.esriCTRouteToplabelBackView
+{
+    color: #D15706;
+}
+
+.esriCTRouteBAck
+{
+    color: #D15706;
+}
+
+.esriCTdivShowReRouteContainer
+{
+    color: #D15706 !important;
+}
+
+.esriPopup .titlePane
+{
+    color: #D15706 !important;
+    border-color: #D15706 !important;
+    border-bottom: 1px solid #D15706;
+}
+
+.esriPopup .contentPane
+{
+    border-color: #D15706 !important;
+}
+
+.esriPopup .actionsPane
+{
+    border-color: #D15706 !important;
+}
+
+.simpleDirections .esriStopsContainer
+{
+    border-bottom: 1px solid #D15706;
+}
+
+.esriCTTInfoWindowContainer
+{
+    border: #D15706 solid 1px;
+}
+
+.esriCTinfoWindow
+{
+    border: #D15706 solid 1px;
+}
+
+.infopanel
+{
+    border-top: 1px #D15706 solid;
+}
+
+.esriCTAddressContent
+{
+    border-right: 1px solid #D15706;
+    border-left: 1px solid #D15706;
+    border-bottom: 1px solid #D15706;
+}
+
+.esriCTDivAppHolder
+{
+    background-color: #fff;
+    border-right: 1px solid #D15706;
+    border-left: 1px solid #D15706;
+    border-bottom: 1px solid #D15706;
+}
+
+.esriCTDivshareContainer
+{
+    background-color: #fff;
+    border-right: 1px solid #D15706;
+    border-left: 1px solid #D15706;
+    border-bottom: 1px solid #D15706;
+}
+
+.esriCTTxtShare
+{
+    border-top: 1px solid #D15706;
+    border-bottom: 1px solid #D15706;
+    border-left: 1px solid #D15706;
+    border-right: 1px solid #D15706;
+}
+
+.esriCTRightArrow
+{
+    background-image: url('../images/right-orange_Legend-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.esriCTLeftArrow
+{
+    background-image: url('../images/left-orange_Legend-arrow.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+/*header*/
+.driveIconSelected
+{
+    background-image: url("../images/car-orange-select.png");
+}
+
+.walkIconSelected
+{
+    background-image: url("../images/walk-orange-select.png");
+}
+
+.esriCTTdHeaderSearch-select
+{
+    background-image: url("../images/search-orange--select.png");
+}
+
+.esriCTImgSocialMedia-select
+{
+    background-image: url("../images/share-orange-select.png");
+}
+
+
+/*slider*/
+.dijitSliderImageHandleH
+{
+    background-image: url('../images/thumb-orange.png') !important;
+}
+
+.claro .dijitSliderProgressBarH .dijitSliderThumbHover
+{
+    background-image: url('../images/thumb-orange.png') !important;
+}
+
+.dijitSliderBumperH, .dijitSliderBarH
+{
+    background-color: #D15706;
+}
+
+.claro .dijitSlider .dijitSliderProgressBarH, .claro .dijitSlider .dijitSliderLeftBumper
+{
+    background-color: #D15706;
+}
+/*seach button*/
+.locateSearchicon
+{
+    background-image: url("../images/search-orange.png") !important;
+}
+/*share*/
+.facebook
+{
+    background-image: url("../images/img_facebook_orange.png") !important;
+}
+
+.twitter
+{
+    background-image: url("../images/img_twitter_orange.png") !important;
+}
+
+.email
+{
+    background-image: url("../images/img_email_orange.png") !important;
+}
+
+.embedding
+{
+    background-image: url("../images/embedding_orange.png") !important;
+}
+
+/*Legend*/
+.esriCTRightArrow
+{
+    background-image: url("../images/right-orange_Legend-arrow.png") !important;
+}
+
+.esriCTLeftArrow
+{
+    background-image: url("../images/left-orange_Legend-arrow.png") !important;
+}
+/*grouped address*/
+
+.esriCTResultColor
+{
+    color: #D15706;
+}
+
+.collapse
+{
+    background-image: url('../images/expand-select-orange.png');
+}
+.expand
+{
+    background-image: url('../images/list-legend-select-orange.png');
+}
+
+.layerTitle
+{
+    color: #D15706;
+}
+
+.esriCTlayerFeatures
+{
+    color: #D15706;
+}
+
+.divSelectedFeature
+{
+    border-top: 1px solid #D15706;
+}
+
+.collapseSelectedBlue
+{
+    background-image: url('../images/list-legend-select-orange.png') !important;
+}
+
+.expandSelectedBlue
+{
+    background-image: url('../images/expand-select-orange.png') !important;
+}
+
+.esriCTArrow
+{
+    background-image: url("../images/right-orange_Legend-arrow.png");
+}
+.spanRouteLength
+{
+    color: #D15706;
+    padding: 5px 15px 5px 0px;
+    vertical-align: middle !important;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: right !important;
+    cursor: pointer;
+}
+/*legends */
+
+.legendbox
+{
+    /* not needed, just for clarification */
+    background: #FFFFFF; /* the next props are meant to keep this block independent from the other floated one */
+}
+
+.legenboxInner
+{
+    border: 1px solid #d15706;
+    border-bottom: none !important;
+}
+
+.legendlbl
+{
+    color: #6e6e6e;
+}
+
+
+.legenboxInner div
+{
+    color: #6e6e6e;
+}
+
+/* End of legends */

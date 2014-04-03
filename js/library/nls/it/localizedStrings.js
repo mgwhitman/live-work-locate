@@ -1,5 +1,4 @@
-﻿/*global define */
-/** @license
+﻿/** @license
 | Version 10.2
 | Copyright 2013 Esri
 |
@@ -16,14 +15,39 @@
 | limitations under the License.
 */
 define({
+        showNullValue: "N/A",
         titles: {
-            informationDisplayText: "@@511 Information",
-            reRouteDisplayText: "@@Traffic Incidents found on this road"
+            webpageDispalyText: "Copy/paste HTML into your web page",
+            NearbyText: "What's nearby?",
+            moreInfo: "Website",
         },
-        messages: {
-            splashScreenContent: "Un'applicazione che permette al pubblico di trovare informazioni sulle condizioni stradali, 511 avvisi, incidenti stradali, et al."
+        errorMessages: {
+            invalidSearch: "No results found",
+            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
+            invalidLocation: "Current Location not found.",
+            invalidProjection: "Unable to plot current location on the map.",
+            widgetNotLoaded: "Fail to load widgets.",
+            shareLoadingFailed: "Unable to load share options.",
+            shareFailed: "Unable to share.",
+            invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
         },
-        notUsed: {
-            incidentInformationDisplayText: "@@Incident Information"
+        buttons: {
+            embedding: "Embedding",
+            email: "email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
+            facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
+            twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
+        },
+        tooltips: {
+            locate: "Locate",
+            share: "Share",
+            help: "Help",
+            clear: "Clear",
+            search: "Search",
+            exit: "Exit",
+            locateAddress: "LocateAddress",
+            driveTime: "DriveTime",
+            walkTime: "WalkTime",
+            collapseResult: "Collapse Result",
+            loadingText: "Loading..."
         }
 });

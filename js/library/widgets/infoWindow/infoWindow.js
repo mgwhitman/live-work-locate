@@ -1,0 +1,131 @@
+﻿/*global define, document, Modernizr */
+/*jslint sloppy:true */
+/** @license
+| Version 10.2
+| Copyright 2013 Esri
+|
+| Licensed under the Apache License, Version 2.0 (the "License");
+| you may not use this file except in compliance with the License.
+| You may obtain a copy of the License at
+|
+|    http://www.apache.org/licenses/LICENSE-2.0
+|
+| Unless required by applicable law or agreed to in writing, software
+| distributed under the License is distributed on an "AS IS" BASIS,
+| WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+| See the License for the specific language governing permissions and
+| limitations under the License.
+*/
+//============================================================================================================================//
+define([
+ "dojo/_base/declare",
+        "dojo/dom-construct",
+        "dojo/dom-style",
+        "dojo/_base/lang",
+        "dojo/on",
+        "dojo/dom",
+        "dojo/topic",
+        "esri/domUtils",
+        "esri/InfoWindowBase",
+        "../scrollBar/scrollBar",
+        "dojo/text!./templates/infoWindow.html",
+        "dijit/_WidgetBase",
+        "dijit/_TemplatedMixin",
+        "esri/tasks/query",
+        "dijit/_WidgetsInTemplateMixin"
+],
+ function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
+     return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+         templateString: template,
+         InfoShow: null,
+
+         postCreate: function () {
+             if (!this.infoWindowWidth) {
+                 this.infoWindowWidth = "100px";
+             }
+             if (!this.infoWindowHeight) {
+                 this.infoWindowHeight = "100px";
+             }
+             this.infoWindowContainer = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
+             this.infoWindowContainer.appendChild(this.domNode);
+             this._anchor = domConstruct.create("div", { "class": "esriCTdivTriangle" }, this.domNode);
+             domUtils.hide(this.domNode);
+             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function () {
+                 if (query(".map .logo-sm")) {
+                     this.InfoShow = true;
+                 } else {
+                     this.InfoShow = false;
+                 }
+                 domUtils.hide(this.domNode);
+                 dojo.infoWindowIsShowing = false;
+                 topic.publish("clearSelectedFeature");
+             })));
+         },
+
+         show: function (detailsTab, screenPoint) {
+             this.InfoShow = false;
+             if (this.divInfoDetailsScroll) {
+                 while (this.divInfoDetailsScroll.hasChildNodes()) {
+                     this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
+                 }
+             }
+             this.setLocation(screenPoint);
+             if (this.infoContainerScrollbar) {
+                 this.infoContainerScrollbar.removeScrollBar();
+             }
+             this.divInfoDetailsScroll.appendChild(detailsTab);
+             this.infoContainerScrollbar = new ScrollBar({
+                 domNode: this.divInfoScrollContent
+             });
+             this.infoContainerScrollbar.setContent(this.divInfoDetailsScroll);
+             this.infoContainerScrollbar.createScrollBar();
+         },
+
+         resize: function (width, height) {
+             this.infoWindowWidth = width;
+             this.infoWindowHeight = height;
+             domStyle.set(this.domNode, {
+                 width: width + "px",
+                 height: height + "px"
+             });
+         },
+
+         setTitle: function (str) {
+             var infoTitle, len = 30;
+             infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
+             if (infoTitle.length > 0) {
+                 this.esriCTheadderPanel.innerHTML = "";
+                 this.esriCTheadderPanel.innerHTML = infoTitle;
+                 this.esriCTheadderPanel.title = str;
+             } else {
+                 this.esriCTheadderPanel.innerHTML = dojo.configData.ShowNullValueAs;
+             }
+         },
+
+         setLocation: function (location) {
+             if (location.spatialReference) {
+                 location = this.map.toScreen(location);
+             }
+             domStyle.set(this.domNode, {
+                 left: (location.x - (this.infoWindowWidth / 2)) + "px",
+                 bottom: (location.y + 28) + "px"
+             });
+             if (!this.InfoShow) {
+                 domUtils.show(this.domNode);
+             }
+             this.isShowing = true;
+         },
+
+         hide: function () {
+             this.isShowing = false;
+             this.onHide();
+             domUtils.hide(this.domNode);
+         },
+
+         _hideInfoContainer: function () {
+             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function () {
+                 domUtils.hide(this.domNode);
+             })));
+         }
+     });
+ });
