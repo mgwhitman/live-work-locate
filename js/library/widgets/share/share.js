@@ -1,5 +1,5 @@
-﻿/*global dojo,define,document */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -26,6 +26,7 @@ define([
     "dojo/dom-attr",
     "dojo/on",
     "dojo/dom",
+    "dojo/query",
     "dojo/dom-class",
     "dojo/dom-geometry",
     "dojo/string",
@@ -37,7 +38,7 @@ define([
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dojo/topic"
 ],
-function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic) {
+function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic) {
 
     //========================================================================================================================//
 
@@ -57,7 +58,6 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
             */
             topic.subscribe("toggleWidget", lang.hitch(this, function (widgetID) {
                 if (widgetID != "share") {
-
                     /**
                     * divAppContainer Sharing Options Container
                     * @member {div} divAppContainer
@@ -84,16 +84,15 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
                 topic.publish("toggleWidget", "share");
                 topic.publish("setMaxLegendLength");
                 this._shareLink();
+                if (domClass.contains(query(".esriControlsBR")[0], "esriLogoShiftRight")) {
+                    domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
+                }
             })));
             topic.subscribe("setMap", lang.hitch(this, function (map) {
                 this.map = map;
             }));
             on(this.embedding, "click", lang.hitch(this, function () {
                 this._showEmbeddingContainer();
-                domAttr.set(this.embedding, "title", sharedNls.buttons.embedding);
-                domAttr.set(this.imgMail, "title", sharedNls.buttons.email);
-                domAttr.set(this.imgTwitter, "title", sharedNls.buttons.twitter);
-                domAttr.set(this.imgFacebook, "title", sharedNls.buttons.facebook);
             }));
         },
 
@@ -114,7 +113,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
         * @memberOf widgets/share/share
         */
         _shareLink: function () {
-            var url, mapExtent, splitUrl, locGeom, urlStr;
+            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords;
             /**
             * get current map extent to be shared
             */
@@ -129,10 +128,19 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, domCla
             if (dojo.addresslocation) {
                 locGeom = dojo.addresslocation.x + "," + dojo.addresslocation.y;
                 if (dojo.infoWindowIsShowing) {
-                    urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$layerID=" + dojo.layerID + "$featureID=" + dojo.featureID + "$sliderValue=" + dojo.sliderValue;
+                    if (dojo.mapClickedPoint) {
+                        clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
+                        urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$mapClickPoint=" + clickCoords;
+                    } else {
+                        urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$layerID=" + dojo.layerID + "$featureID=" + dojo.featureID + "$sliderValue=" + dojo.sliderValue + "$driveType=" + dojo.driveTime;
+                    }
                 } else {
-                    urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$sliderValue=" + dojo.sliderValue;
+                    urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$sliderValue=" + dojo.sliderValue + "$driveType=" + dojo.driveTime;
                 }
+            }
+            else if (dojo.mapClickedPoint) {
+                clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
+                urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$mapClickPoint=" + clickCoords;
             }
             else {
                 urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent;

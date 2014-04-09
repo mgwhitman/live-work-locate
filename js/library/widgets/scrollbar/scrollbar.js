@@ -1,5 +1,5 @@
-﻿/*global dojo,define,document */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -19,9 +19,10 @@
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
-    "dijit/_WidgetBase"
+    "dijit/_WidgetBase",
+    "dojo/dom-geometry"
 ],
-function (declare, WidgetBase) {
+function (declare, WidgetBase, domGeom) {
 
     //========================================================================================================================//
 
@@ -51,7 +52,7 @@ function (declare, WidgetBase) {
 
         postCreate: function () {
             this.inherited(arguments);
-            var coords = dojo.coords(this.domNode);
+            var coords = domGeom.getMarginBox(this.domNode);
             this._containerHeight = coords.h;
             this._containerWidth = coords.w;
             this._scrollBarContainer = dojo.create("div", {}, this.domNode);

@@ -29,11 +29,12 @@ define({
             widgetNotLoaded: "Fail to load widgets.",
             shareLoadingFailed: "Unable to load share options.",
             shareFailed: "Unable to share.",
+            noLegend: "No Legend",
             invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
-        },
+           },
         buttons: {
             embedding: "Embedding",
-            email: "email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
+            email: "Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
             facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
             twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
         },
@@ -47,7 +48,10 @@ define({
             locateAddress: "LocateAddress",
             driveTime: "DriveTime",
             walkTime: "WalkTime",
+            expandResult: "Expand Result",
             collapseResult: "Collapse Result",
-            loadingText: "Loading..."
+            loadingText: "Loading...",
+            previous: "Previous",
+            next: "Next"
         }
 });

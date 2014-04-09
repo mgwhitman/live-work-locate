@@ -1,5 +1,5 @@
-﻿/*global define, document, Modernizr */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -32,12 +32,14 @@ define([
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "esri/tasks/query",
+        "dojo/i18n!application/js/library/nls/localizedStrings",
         "dijit/_WidgetsInTemplateMixin"
 ],
- function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, _WidgetsInTemplateMixin) {
+ function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, sharedNls, _WidgetsInTemplateMixin) {
      return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
          templateString: template,
          InfoShow: null,
+         sharedNls: sharedNls,
 
          postCreate: function () {
              if (!this.infoWindowWidth) {
@@ -63,12 +65,15 @@ define([
          },
 
          show: function (detailsTab, screenPoint) {
+             var scrollContentHeight;
              this.InfoShow = false;
              if (this.divInfoDetailsScroll) {
                  while (this.divInfoDetailsScroll.hasChildNodes()) {
                      this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
                  }
              }
+             scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
+             domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
              this.setLocation(screenPoint);
              if (this.infoContainerScrollbar) {
                  this.infoContainerScrollbar.removeScrollBar();

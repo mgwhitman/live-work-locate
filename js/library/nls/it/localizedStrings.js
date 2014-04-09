@@ -29,6 +29,7 @@ define({
             widgetNotLoaded: "Fail to load widgets.",
             shareLoadingFailed: "Unable to load share options.",
             shareFailed: "Unable to share.",
+            noLegend: "No Legend",
             invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
         },
         buttons: {
@@ -47,7 +48,10 @@ define({
             locateAddress: "LocateAddress",
             driveTime: "DriveTime",
             walkTime: "WalkTime",
+            expandResult: "Expand Result",
             collapseResult: "Collapse Result",
-            loadingText: "Loading..."
+            loadingText: "Loading...",
+            previous: "Previous",
+            next: "Next"
         }
 });

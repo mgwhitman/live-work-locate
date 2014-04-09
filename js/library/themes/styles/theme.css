@@ -457,7 +457,6 @@ html, body
     border-top: 1px solid #DFDFDF;
     border-right: 1px solid #DFDFDF;
     border-bottom: 1px solid #DFDFDF;
-    cursor: pointer;
     float: left;
     padding: 4px;
 }
@@ -482,6 +481,7 @@ html, body
     width: 20px;
     float: left;
     display: none;
+    cursor: default;
 }
 
 .esriCTAddressResultContainer
@@ -497,7 +497,7 @@ html, body
 .esriCTDivAppContainer
 {
     position: absolute;
-    z-index: 996;
+    z-index: 1000;
     top: 48px;
     right: 0px;
     width: 287px;
@@ -792,13 +792,13 @@ html, body
     color: #fff;
     padding: 10PX;
     height: 130px;
+    cursor: pointer;
 }
 
 .workflowContainer
 {
     margin-top: 10px;
     display: table-cell;
-    cursor: pointer;
     font-size: 24px;
     text-align: center;
 }
@@ -954,6 +954,7 @@ html, body
 .esriCTApplicationHeaderTextSelected
 {
     font-size: 22px !important;
+    cursor: default;
 }
 /* End of splash Screen */
 
@@ -962,7 +963,7 @@ html, body
 {
     height: 100%;
     width: 100%;
-    z-index: 1001;
+    z-index: 1005;
     position: absolute;
     bottom: 0;
     top: 0;
@@ -1261,7 +1262,17 @@ html, body
     position: relative;
     width: 100%;
 }
-.divlegendLoadingContainer{margin-top:7px; float:left;}
+.divlegendLoadingContainer
+{
+    margin-top:7px; 
+    float:left;
+}
+.divNoLegendContainer
+{
+    width: 120px;
+    margin-top:7px; 
+    float:left;
+}
 .divlegendList
 {
     height: 100%;
@@ -1549,9 +1560,13 @@ html, body
 .esriCTInfoDetailsTab
 {
     width: 100%;
-    height: 100%;
+    display: table;
 }
 
+.divInfoDetailsContainer
+{
+    width: 98%;
+}
 .esriCTInfoContainer
 {
     top: 0;
@@ -1585,35 +1600,32 @@ html, body
     margin-left: 5px;
 }
 
+.esriCTdivTriangle
+{
+    background-position: center center;
+    background-repeat: no-repeat;
+    bottom: -17px;
+    display: block;
+    height: 18px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    background-image: url("../images/bottomArrow.png");
+    background-repeat: no-repeat;
+}
 .infopanel
 {
     clear: both;
     width: 100%;
     height: 87% !important;
-    position: absolute;
     bottom: 0px;
-    color: #fff;
 }
-
-.esriCTInfoContent
+ 
+.esriCTFullHeightWidth
 {
-    height: 250px;
-    width: 300px;
-}
-
-
-.esriCTdivTriangle
-{
-    overflow: hidden;
-    display: block;
-    position: relative;
-    margin: auto;
-    bottom: 0;
-    height: 18px;
-    top: 250px;
-    width: 25px;
-    background-image: url("../images/bottomArrow.png");
-    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
 }
 
 .esriCTInfoDetailsScroll
@@ -1642,6 +1654,7 @@ input
 .esriControlsBR
 {
     bottom: 5px !important;
+    z-index: 1001;
 }
 
 
@@ -1712,7 +1725,7 @@ input
 .horizontalRule
 {
     height: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     width: 188px;
 }
 
@@ -1897,14 +1910,24 @@ input
 .mapLogo
 {
     position: relative !important;
-    right: 287px;
-    margin-bottom: 30px;
+    right: 287px !important;
+    margin-bottom: 30px !important;
+}
+
+.esriLogoShiftRight
+{
+    margin-right: 285px !important;
 }
 
 .mapLogoLegend
 {
     position: relative !important;
-    margin-bottom: 30px;
+    bottom: 32px !important;
+}
+
+.esriLogoLegend
+{
+    bottom: 35px !important;
 }
 /*grouped address*/
 .hideAddressList
@@ -1931,6 +1954,7 @@ input
     vertical-align: middle;
     padding-right: 5px;
     font-weight:bold;
+    width:238px;
 }
 
 .esriCTSearchGroupCell
@@ -2035,7 +2059,6 @@ input
 {
     background-repeat: no-repeat;
     background-position: top;
-    display: inline-block;
     height: 30px;
     width: 30px;
     cursor: pointer;
@@ -2124,7 +2147,7 @@ input
 .divInfoScrollContainer
 {
     overflow: hidden;
-    width: 300px !important;
+    width: 100%;
     height: 100%;
 }
 
@@ -2132,8 +2155,7 @@ input
 {
     overflow: hidden;
     width: 100%;
-    margin-right: 5px;
-    height: 200px;
+    height: 100%;
     position: relative;
 }
 .routeDistanceLoading
@@ -2174,6 +2196,7 @@ input
 .leftRightCrasualcount
 {
     height: 18px;
+    width: 18px;
     float: left;
 }
 .esriCTdivInfoLeftArrow
