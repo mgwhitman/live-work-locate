@@ -98,7 +98,9 @@ function (declare, _WidgetBase, Map, appHeader, SplashScreen, array, lang, Defer
                     this._createApplicationHeader(widgets, map, splashScreen);
                     if (dojo.share) {
                         setTimeout(function () {
-                            topic.publish("locateAddressOnMap");
+                            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId === "") {
+                                topic.publish("locateAddressOnMap");
+                            }
                         }, 2000);
                     }
                 } catch (ex) {

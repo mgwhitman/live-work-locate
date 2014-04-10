@@ -1,5 +1,5 @@
-﻿/*global define, document, Modernizr */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -45,7 +45,6 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
         * @name widgets/geoLocation/geoLocation
         */
         postCreate: function () {
-
             /**
             * Modernizr.geolocation checks for support for geolocation on client browser
             * if browser is not supported, geolocation widget is not created
@@ -60,6 +59,9 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
                     this._showCurrentLocation();
                 })));
             }
+            topic.subscribe("setMap", lang.hitch(this, function (map) {
+                this.map = map;
+            }));
         },
 
         /**
@@ -89,7 +91,11 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
                 * @param {object} newPoint Map point of device location in spatialReference of map
                 */
                 geometryService.project([mapPoint], self.map.spatialReference).then(function (newPoint) {
-                    currentBaseMap = self.map.getLayer("esriCTbasemap");
+                    if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                        currentBaseMap = self.map.getLayer("defaultBasemap");
+                    } else {
+                        currentBaseMap = self.map.getLayer("esriCTbasemap");
+                    }
                     if (currentBaseMap.visible) {
                         if (!currentBaseMap.fullExtent.contains(newPoint[0])) {
                             alert(sharedNls.errorMessages.invalidLocation);

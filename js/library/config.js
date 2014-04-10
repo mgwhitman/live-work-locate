@@ -26,20 +26,31 @@ define([], function () {
         // 2.  Set path for application icon                 - [ Tag(s) to look for: ApplicationIcon ]
         // 3.  Set path for application favicon              - [ Tag(s) to look for: ApplicationFavicon ]
         // 4.  Set URL for help page                         - [ Tag(s) to look for: HelpURL ]
-        // 5.  Specify header widget settings                - [ Tag(s) to look for: AppHeaderWidgets ]
-        // 6.  Specify URLs for base maps                    - [ Tag(s) to look for: BaseMapLayers ]
-        // 7.  Set initial map extent                        - [ Tag(s) to look for: DefaultExtent ]
-        // 8.  Specify URLs for operational layers           - [ Tag(s) to look for: OperationalLayers]
-        // 9.  Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
-        // 10.  Customize address search settings            - [ Tag(s) to look for: LocatorSettings]
-        // 11.  Set URL for geometry service                 - [ Tag(s) to look for: GeometryService ]
-        // 12. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
+        // 5.  Set URL for logo                              - [ Tag(s) to look for: LogoURL ]
+        // 6.  Set settings  for splash screen               - [ Tag(s) to look for: SplashScreen ]
+        // 7.  Specify header widget settings                - [ Tag(s) to look for: AppHeaderWidgets ]
+        // 8.  Specify URLs for base maps                    - [ Tag(s) to look for: BaseMapLayers ]
+        // 9.  Geometry service setting                      - [ Tag(s) to look for: GeometryService ]
+        // 10. RouteTask setting                             - [ Tag(s) to look for: RouteTask ]
+        // 11. ServiceAreaTask setting                       - [ Tag(s) to look for: ServiceAreaTask ]
+        // 12. Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
+        // 13. Customize InfoPopupHeight                     - [ Tag(s) to look for: InfoPopupHeight ]
+        // 14. Customize InfoPopupWidth                      - [ Tag(s) to look for: InfoPopupWidth ]
+        // 15. Specify ShowNullValueAs                       - [ Tag(s) to look for: ShowNullValueAs ]
+        // 16. Customize DriveTimeSliderSettings             - [ Tag(s) to look for: DriveTimeSliderSettings ]
+        // 17. Customize  DriveTimeSliderRulerSettings       - [ Tag(s) to look for: DriveTimeSliderRulerSettings ]
+        // 18. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
+        // 19. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
+        // 20. Customize  LayersRefreshInterval              - [ Tag(s) to look for: LayersRefreshInterval ]
+        // 21. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
+        // 22. Set URL for TaskService                       - [ Tag(s) to look for: TaskService ]
+        // 23. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
+        // 24. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GENERAL SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Set application title
-        ApplicationName: "Live Work Locate",
 
         // Set application icon path
         ApplicationIcon: "/js/library/themes/images/applicationIcon.png",
@@ -57,7 +68,7 @@ define([], function () {
         SplashScreen: {
             // splash screen Message is set in locale file in nls dirctory
             IsVisible: true
-        },
+           },
         //------------------------------------------------------------------------------------------------------------------------
         // Header Widget Settings
         //------------------------------------------------------------------------------------------------------------------------
@@ -110,8 +121,8 @@ define([], function () {
         // Set geometry service URL
         GeometryService: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
         // ------------------------------------------------------------------------------------------------------------------------
-        routeTask: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
-        serviceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
+        RouteTask: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
+        ServiceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
 
 
         // Following zoom level will be set for the map upon searching an address
@@ -136,8 +147,7 @@ define([], function () {
         },
 
         DriveTimeSliderRulerSettings: {
-            SliderRulerContainer: "topDecoration",
-            numberofTicks: 12
+            SliderRulerContainer: "topDecoration"
         },
 
         // Initial map extent. Use comma (,) to separate values and dont delete the last comma
@@ -180,7 +190,7 @@ define([], function () {
             Name: "LIVE",
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
-            WebMapId: "d3aadb931a904c75be7d253295244c48",
+            WebMapId: "",
             FeatureHighlightColor: "#1C86EE",
             OperationalLayers: [{
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/1",
@@ -267,7 +277,7 @@ define([], function () {
             // ------------------------------------------------------------------------------------------------------------------------
 
             // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
-            // 		  it should be the name of Map/Feature Service.
+            // It should be the name of Map/Feature Service.
             // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
             // SearchDisplayTitle: This text is displayed in search results as the title to group results.
             // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
@@ -430,7 +440,13 @@ define([], function () {
                 SearchDisplayFields: "${MUNICIPALI}, County:${COUNTY}",
                 SearchExpression: "UPPER(municipali) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }],
-
+            // ------------------------------------------------------------------------------------------------------------------------
+            // INFOWINDOW SETTING FOR THIS WORKFLOW
+            // ------------------------------------------------------------------------------------------------------------------------
+            // InfoWindowData: Set the content to be displayed in the info-Popup. Define labels and field values.
+            // These fields should be present in the layer referenced by 'QueryLayerId' specified under section 'SearchSettings'
+            // DisplayText: Caption to be displayed instead of field alias names. Set this to empty string ("") if you wish to display field alias names as captions.
+            // FieldName: Field used for displaying the value
             InfowindowSettings: [{
                 Title: "EconomicDevelopment",
                 QueryLayerId: "1",
@@ -3011,7 +3027,18 @@ define([], function () {
             MaxResults: 200
         },
 
+        // TaskService: Services used for route task.
         TaskService: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        // DRIVE TIME SYMBOLOGY SETTING
+        // ------------------------------------------------------------------------------------------------------------------------
+        // DriveTimePolygonSymbology: It shows symbology for polygon.
+        // FillSymbolColor: It shows symbol color for feature.
+        // FillSymbolTransparency: It shows transparency for symbol.
+        // LineSymbolColor: It shows symbol color for line feature.
+        // LineSymbolTransparency: it shows transparency for line.
+
         DriveTimePolygonSymbology: {
             FillSymbolColor: "0,0,255",
             FillSymbolTransparency: "0.10",
@@ -3022,13 +3049,19 @@ define([], function () {
         // ------------------------------------------------------------------------------------------------------------------------
         // SETTINGS FOR MAP SHARING
         // ------------------------------------------------------------------------------------------------------------------------
-
         // Set URL for TinyURL service, and URLs for social media
+        // MapSharingOptions: Allow user to share map using social media.
+        // TinyURLServiceURL: Set URL for TinyURL service.
+        // TinyURLResponseAttribute: Set URL for TinyURL service.
+        // FacebookShareURL:  Allow user to share application using facebook.
+        // TwitterShareURL:  Allow user to share application using twitter.
+        // ShareByMailLink:  Allow user to share application using mail.
+
         MapSharingOptions: {
             TinyURLServiceURL: "http://api.bit.ly/v3/shorten?login=esri&apiKey=R_65fd9891cd882e2a96b99d4bda1be00e&uri=${0}&format=json",
             TinyURLResponseAttribute: "data.url",
-            FacebookShareURL: "http://www.facebook.com/sharer.php?u=${0}&t=esri%Template",
-            TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=esri%Template ${0}",
+            FacebookShareURL: "http://www.facebook.com/sharer.php?u=${0}&t=Live%20Work%20Locate",
+            TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=Live%20Work%20Locate ${0}",
             ShareByMailLink: "mailto:%20?subject=Check%20out%20this%20map!&body=${0}"
         }
     };

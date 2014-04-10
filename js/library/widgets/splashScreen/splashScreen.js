@@ -1,5 +1,5 @@
-﻿/*global dojo,define,document */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -47,7 +47,7 @@ define([
                  var _self, holder, i, innercontainer, workflowContainer, innercontainer, imgcontainerdiv, imgcontainer, key, currentWorkflow;
                  _self = this;
                  this.showSplashScreenDialog();
-                 on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function (evt) {
+                 on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function () {
                      if (dojo.workFlowIndex && dojo.seletedWorkflow) {
                          domStyle.set(this.domNode, "display", "none");
                      }
@@ -64,7 +64,7 @@ define([
                      innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + dojo.configData.Workflows[i].Name, innerHTML: dojo.configData.Workflows[i].Name }, workflowContainer);
                      imgcontainerdiv = domConstruct.create("div", { "class": "workflowContainerImg" }, innercontainer);
                      imgcontainer = domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].SplashscreenImage }, imgcontainerdiv);
-                     this.own(on(workflowContainer, "click", function (evt) {
+                     this.own(on(workflowContainer, "click", function () {
                          key = domAttr.get(this, "key");
                          currentWorkflow = domAttr.get(this, "index");
                          if (dojo.layerKey == key && dojo.workFlowIndex == currentWorkflow) {
@@ -114,7 +114,6 @@ define([
 
              _selectWorkflow: function (Workflows, share) {
                  var url, j;
-                 topic.publish("_addOperationalLayer");
                  url = "?app=" + Workflows;
                  location.hash = url;
                  this._applicationThemeLoader();
@@ -149,12 +148,15 @@ define([
                  }
                  this._applicationThemeLoader();
                  if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length != 0) {
-                     topic.publish("initializeWebmap");
-                     topic.publish("loadingIndicatorHandler");
+                     setTimeout(function () {
+                         topic.publish("initializeWebmap");
+                         topic.publish("loadingIndicatorHandler");
+                     }, 2000);
+                 } else {
+                     topic.publish("loadBasemapToggleWidget");
                  }
                  this.mapObject._generateLayerURL();
-                 topic.publish("_addOperationalLayer");
-             },
+                },
 
              _hideSplashScreenDialog: function () {
                  domStyle.set(this.domNode, "display", "none");

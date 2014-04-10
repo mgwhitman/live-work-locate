@@ -85,59 +85,19 @@ define([
                  * set map extent to default extent specified in configuration file
                  * @param {string} dojo.configData.DefaultExtent Default extent of map specified in configuration file
                  */
-                 var extentPoints, graphicsLayer, layer, home;
+                 var graphicsLayer;
                  this.logoContainer = query(".map .logo-sm") && query(".map .logo-sm")[0] || query(".map .logo-med") && query(".map .logo-med")[0];
-                 extentPoints = dojo.configData && dojo.configData.DefaultExtent && dojo.configData.DefaultExtent.split(",");
                  graphicsLayer = new GraphicsLayer();
                  graphicsLayer.id = this.tempGraphicsLayerId;
                  this.infoWindowPanel = new InfoWindow({ infoWindowWidth: dojo.configData.InfoPopupWidth, infoWindowHeight: dojo.configData.InfoPopupHeight });
-                 topic.subscribe("_addOperationalLayer", lang.hitch(this, function () {
-                     this._addOperationalLayer();
-                 }));
                  topic.subscribe("removeOperationalLayer", this._removeOperationalLayer);
                  topic.subscribe("clearFeatureList", lang.hitch(this, function () {
                      this._clearSelectedFeature();
                  }));
-
-                 /**
-                 * load map
-                 * @param {string} dojo.configData.BaseMapLayers Basemap settings specified in configuration file
-                 */
-                 this.map = esriMap("esriCTParentDivContainer", {
-                 });
-                 layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[0].MapURL, { id: "esriCTbasemap", visible: true });
-                 this.map.addLayer(layer, 0);
-                 /**
-                 * load esri 'Home Button' widget
-                 */
-                 home = this._addHomeButton();
-
-                 /* set position of home button widget after map is successfuly loaded
-                 * @param {array} dojo.configData.OperationalLayers List of operational Layers specified in configuration file
-                 */
-                 this.map.on("load", lang.hitch(this, function () {
-                     var mapDefaultExtent, extent;
-                     extent = this._getQueryString('extent');
-                     if (extent === "") {
-                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
-                         this.map.setExtent(mapDefaultExtent);
-                     } else {
-                         mapDefaultExtent = extent.split(',');
-                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
-                         this.map.setExtent(mapDefaultExtent);
-                     }
-                     this.map.addLayer(graphicsLayer);
-                     domConstruct.place(home.domNode, query(".esriSimpleSliderIncrementButton")[0], "after");
-                     home.extent = mapDefaultExtent;
-                     home.startup();
-                 }));
+                 this._updateMapOnSwitchWorkflow();
                  topic.subscribe("SliderChange", lang.hitch(this, function (defaultMinutes, addressLocation, drive) {
                      topic.publish("loadingIndicatorHandler");
                      this._createServiceArea(defaultMinutes, addressLocation, drive);
-                 }));
-                 topic.subscribe("setMap", lang.hitch(this, function (map) {
-                     this.map = map;
-                     this._activateMapEvents();
                  }));
                  topic.subscribe("setInfoWindowOnMap", lang.hitch(this, function (infoTitle, divInfoDetailsTab, screenPoint, infoPopupWidth, infoPopupHeight) {
                      this._onSetInfoWindowPosition(infoTitle, divInfoDetailsTab, screenPoint, infoPopupWidth, infoPopupHeight);
@@ -146,23 +106,79 @@ define([
                      this._initializeWebmap(graphicsLayer);
                  }));
                  topic.subscribe("loadBasemapToggleWidget", lang.hitch(this, function () {
-                     if (dojo.configData.BaseMapLayers.length > 1) {
-                         this._showBasMapGallery();
+                     this._updateMapOnSwitchWorkflow();
+                 }));
+                 topic.subscribe("showInfoWindowOnMap", lang.hitch(this, function (point, map) {
+                     this._showInfoWindowOnMap(point, map);
+                 }));
+             },
+
+             _updateMapOnSwitchWorkflow: function () {
+                 var extentPoints, graphicsLayer;
+                 extentPoints = dojo.configData && dojo.configData.DefaultExtent && dojo.configData.DefaultExtent.split(",");
+                 graphicsLayer = new GraphicsLayer();
+                 graphicsLayer.id = this.tempGraphicsLayerId;
+                 if (this.map) {
+                     this.map.destroy();
+                     this.map = null;
+                 }
+                 this.map = esriMap("esriCTParentDivContainer", {
+                 });
+                 layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[0].MapURL, { id: "esriCTbasemap", visible: true });
+                 this.map.addLayer(layer, 0);
+                 /**
+                 * load esri 'Home Button' widget
+                 */
+                 home = this._addHomeButton();
+                 this.map.on("load", lang.hitch(this, function () {
+                     var mapDefaultExtent, extent;
+                     extent = this._getQueryString('extent');
+                     if (extent === "") {
+                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                         this.map.setExtent(mapDefaultExtent);
+                     } else {
+                         mapDefaultExtent = extent.split(',');
+                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                         this.map.setExtent(mapDefaultExtent);
+                     }
+                     this.map.addLayer(graphicsLayer);
+                     domConstruct.place(home.domNode, query(".esriSimpleSliderIncrementButton")[0], "after");
+                     home.extent = mapDefaultExtent;
+                     home.startup();
+                     this._showBasMapGallery();
+                     this._addOperationalLayer();
+                     topic.publish("setMap", this.map);
+                     this._activateMapEvents();
+                     if (dojo.share && dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                         this.shareDeferred = new Deferred();
+                         this.shareDeferred.then(lang.hitch(this, function (value) {
+                             this._addLayerLegend();
+                         }));
+                     } else {
+                         this._addLayerLegend();
                      }
                  }));
-                 topic.publish("setMap", this.map);
              },
 
              _activateMapEvents: function () {
+                 var updateLegend;
                  this.map.on("click", lang.hitch(this, function (evt) {
                      topic.publish("loadingIndicatorHandler");
                      dojo.showInfo = false;
                      dojo.setMapTipPosition = false;
                      dojo.openInfowindow = false;
+                     dojo.mapClickedPoint = evt.mapPoint;
                      this._showInfoWindowOnMap(evt.mapPoint, this.map);
                  }));
-                 this.map.on("extent-change", lang.hitch(this, function () {
+                 this.map.on("extent-change", lang.hitch(this, function (evt) {
                      topic.publish("setMapTipPosition", dojo.selectedMapPoint, this.map, this.infoWindowPanel);
+                     topic.publish("resetListContainer");
+                     clearTimeout(updateLegend);
+                     updateLegend = setTimeout(lang.hitch(this, function () {
+                         if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                             topic.publish("updateLegends", evt.extent);
+                         }
+                     }), 10000);
                  }));
              },
              _createServiceArea: function (defaultMinutes, addressLocation, drive) {
@@ -193,7 +209,7 @@ define([
                  facilities = new esri.tasks.FeatureSet();
                  facilities.features = features;
                  params.facilities = facilities;
-                 serviceAreaTask = new esri.tasks.ServiceAreaTask(dojo.configData.serviceAreaTask);
+                 serviceAreaTask = new esri.tasks.ServiceAreaTask(dojo.configData.ServiceAreaTask);
                  serviceAreaTask.solve(params, function (solveResult) {
                      var polygonSymbol;
                      polygonSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_SOLID, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
@@ -287,6 +303,7 @@ define([
                          return;
                      }
                      topic.publish("_createList", selectedFeaturesGroup);
+                     topic.publish("updateLegends", this.serviceAreaGraphic.geometry);
                  }));
              },
 
@@ -428,6 +445,9 @@ define([
              },
 
              _showBasMapGallery: function () {
+                 if (this.basMapGallery) {
+                     this.basMapGallery.destroy();
+                 }
                  this.basMapGallery = new BaseMapGallery({
                      map: this.map
                  }, domConstruct.create("div", {}, null));
@@ -515,7 +535,7 @@ define([
 
              _addLayerLegend: function () {
                  var mapServerArray, legendObject, i;
-                 domClass.add(query(".logo-med")[0], "mapLogoLegend");
+                 domClass.add(query(".esriControlsBR")[0], "esriLogoLegend");
                  mapServerArray = [];
                  for (i = 0; i < this.operationalLayers.length; i++) {
                      if (this.operationalLayers[i].url) {
@@ -566,25 +586,38 @@ define([
                          this.map.destroy();
                          this.map = null;
                          this.map = response.map;
+                         this.map.onUpdateEnd = lang.hitch(this, function () {
+                             topic.publish("hideLoadingIndicatorHandler");
+                             });
                          this.map.addLayer(graphicsLayer);
                          this.operationalLayers = response.itemInfo.itemData.operationalLayers;
+                         if (this.shareDeferred) {
+                             this.shareDeferred.resolve();
+                             }
                          extent = this._getQueryString('extent');
                          if (extent !== "") {
                              mapDefaultExtent = extent.split(',');
-                             mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
+                             mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                              this.map.setExtent(mapDefaultExtent);
                          }
                          this._addLogoUrl();
                          home = this._addHomeButton();
-                         topic.publish("hideLoadingIndicatorHandler");
                          topic.publish("setMap", this.map);
                          domConstruct.place(home.domNode, query(".esriSimpleSliderIncrementButton")[0], "after");
+                         domClass.add(query(".esriControlsBR")[0], "esriLogoLegend");
                          home.extent = mapDefaultExtent;
                          home.startup();
+                         this._activateMapEvents();
                          this._fetchWebMapData(response);
                          if (this.basMapGallery) {
                              this.basMapGallery._hideBaseMapGallery();
                          }
+                         if (this.legendObject) {
+                             topic.publish("updateLegends", this.map.extent);
+                         } else {
+                             this._addLayerLegend();
+                         }
+                         topic.publish("locateAddressOnMap");
                      }));
                  }
              },

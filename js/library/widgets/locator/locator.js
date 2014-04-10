@@ -1,5 +1,5 @@
-﻿/*global define, document, Modernizr */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -75,6 +75,7 @@ define([
              drive: true,
              sliderValue: null,
              logoContainer: null,
+             selectedPolygon: null,
              /**
              * display locator widget
              *
@@ -113,21 +114,30 @@ define([
                      this.map = map;
                  }));
                  topic.subscribe("locateAddressOnMap", lang.hitch(this, function () {
-                     var sharedLocation, mapPoint;
-                     if (window.location.toString().split("$locationPoint=").length > 1) {
-                         this._showLocateContainer();
-                         sharedLocation = window.location.toString().split("$locationPoint=")[1];
-                         mapPoint = new Point(parseFloat(sharedLocation.split(",")[0]), parseFloat(sharedLocation.split(",")[1]), this.map.spatialReference);
-                         this._locateAddressOnMap(mapPoint);
+                     if (window.location.toString().split("$driveType=").length > 1) {
+                         if (window.location.toString().split("$driveType=")[1] === "false") {
+                             domClass.replace(this.esriCTDrive.firstElementChild, "driveIcon", "driveIconSelected");
+                             domClass.replace(this.esriCTWalk.firstElementChild, "walkIconSelected", "walkIcon");
+                             this.sliderMessage.innerHTML = this.sliderMessage.innerHTML.replace("drive", "walk");
+                             this.drive = dojo.driveTime = false;
+                         }
                      }
+                     this._shareApplication();
                  }));
-
+                 window.onresize = lang.hitch(this, function () {
+                     if (domStyle.get(this.divSelectedFeature, "display") === "block") {
+                         this._createFeatureList(this.selectedFeatureList);
+                         domClass.replace(query(".toggleExpandCollapse")[0], "collapse", "expand");
+                         domAttr.set(query(".toggleExpandCollapse")[0], "title", sharedNls.tooltips.expandResult);
+                     }
+                 });
+                 topic.subscribe("resetListContainer", lang.hitch(this, function () {
+                 }));
                  this.domNode = domConstruct.create("div", { "title": sharedNls.tooltips.search, "class": "esriCTTdHeaderSearch" }, null);
                  domConstruct.place(this.divAddressContainer, dom.byId("esriCTParentDivContainer"));
                  this.own(on(this.domNode, "click", lang.hitch(this, function () {
                      domStyle.set(this.imgSearchLoader, "display", "none");
                      domStyle.set(this.close, "display", "block");
-
                      /**
                      * minimize other open header panel widgets and show locator widget
                      */
@@ -140,12 +150,13 @@ define([
                  this._setDefaultTextboxValue();
                  this._attachLocatorEvents();
                  this._createHorizontalSlider();
+                 dojo.driveTime = true;
                  on(this.esriCTDrive, "click", lang.hitch(this, function () {
                      if (domClass.contains(this.esriCTDrive.firstElementChild, "driveIcon")) {
                          domClass.replace(this.esriCTDrive.firstElementChild, "driveIconSelected", "driveIcon");
                          domClass.replace(this.esriCTWalk.firstElementChild, "walkIcon", "walkIconSelected");
                          this.sliderMessage.innerHTML = this.sliderMessage.innerHTML.replace("walk", "drive");
-                         this.drive = true;
+                         this.drive = dojo.driveTime = true;
                          this._updateBufferArea();
                      }
                  }));
@@ -154,16 +165,18 @@ define([
                          domClass.replace(this.esriCTDrive.firstElementChild, "driveIcon", "driveIconSelected");
                          domClass.replace(this.esriCTWalk.firstElementChild, "walkIconSelected", "walkIcon");
                          this.sliderMessage.innerHTML = this.sliderMessage.innerHTML.replace("drive", "walk");
-                         this.drive = false;
+                         this.drive = dojo.driveTime = false;
                          this._updateBufferArea();
                      }
                  }));
                  on(query(".toggleExpandCollapse")[0], "click", lang.hitch(this, function (evt) {
                      if (domClass.contains(evt.currentTarget, "collapse")) {
                          domClass.replace(evt.currentTarget, "expand", "collapse");
+                         domAttr.set(evt.currentTarget, "title", sharedNls.tooltips.collapseResult);
                          this._expandList();
                      } else {
                          domClass.replace(evt.currentTarget, "collapse", "expand");
+                         domAttr.set(evt.currentTarget, "title", sharedNls.tooltips.expandResult);
                          this._collapseList();
                      }
                      this.featureListScrollbar.resetScrollBar();
@@ -201,8 +214,10 @@ define([
                  })));
                  this.own(on(this.txtAddress, "keyup", lang.hitch(this, function (evt) {
                      domStyle.set(this.close, "display", "block");
+                     domAttr.set(this.close, "title", sharedNls.tooltips.clear);
                      if (this.txtAddress.value === "") {
                          domClass.replace(this.close, "clearInputNotApear", "clearInput");
+                         domAttr.set(this.close, "title", "");
                      } else {
                          domClass.replace(this.close, "clearInput", "clearInputNotApear");
                      }
@@ -224,6 +239,7 @@ define([
                  domClass.replace(this.close, "clearInputNotApear", "clearInput");
                  domConstruct.empty(this.divAddressResults, this.divAddressScrollContent);
                  domAttr.set(this.txtAddress, "defaultAddress", this.txtAddress.value);
+                 domAttr.set(this.close, "title", "");
                  domClass.remove(this.divAddressContent, "esriCTAddressResultHeight");
                  if (this.locatorScrollbar) {
                      domClass.add(this.locatorScrollbar._scrollBarContent, "esriCTZeroHeight");
@@ -245,7 +261,7 @@ define([
                      domClass.replace(this.domNode, "esriCTTdHeaderSearch", "esriCTTdHeaderSearch-select");
                      domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                      domClass.replace(this.divAddressHolder, "esriCTZeroHeight", "esriCTAddressContainerHeight");
-                     domClass.remove(this.logoContainer, "mapLogo");
+                     domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
                      topic.publish("setMaxLegendLength");
                      this.txtAddress.blur();
                  } else {
@@ -258,9 +274,9 @@ define([
                      domClass.replace(this.divAddressHolder, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
                      domStyle.set(this.txtAddress, "verticalAlign", "middle");
                      if (domStyle.get(query(".divSelectedFeature")[0], "display", "block") === "block") {
-                         domClass.add(this.logoContainer, "mapLogo");
+                         domClass.add(query(".esriControlsBR")[0], "esriLogoShiftRight");
+                         topic.publish("setMinLegendLength");
                      }
-                     topic.publish("setMaxLegendLength");
                      this.txtAddress.value = domAttr.get(this.txtAddress, "defaultAddress");
                      this.lastSearchString = lang.trim(this.txtAddress.value);
                  }
@@ -292,6 +308,7 @@ define([
                          evt.stopPropagation && evt.stopPropagation();
                          domStyle.set(this.imgSearchLoader, "display", "none");
                          domStyle.set(this.close, "display", "block");
+                         domAttr.set(this.close, "title", sharedNls.tooltips.clear);
                          return;
                      }
 
@@ -325,6 +342,7 @@ define([
                              this.lastSearchString = lang.trim(this.txtAddress.value);
                              domStyle.set(this.imgSearchLoader, "display", "none");
                              domStyle.set(this.close, "display", "block");
+                             domAttr.set(this.close, "title", "");
                              domConstruct.empty(this.divAddressResults);
                          }
                      }
@@ -411,6 +429,7 @@ define([
                  deferredListResult = new DeferredList(defferedArray);
                  deferredListResult.then(lang.hitch(this, function (result) {
                      var num, key, order, i;
+                     dojo.lastSearchAddress = this.lastSearchString;
                      if (result) {
                          if (result.length > 0) {
                              for (num = 0; num < result.length; num++) {
@@ -472,6 +491,11 @@ define([
                          }
                      }
                  }
+                 if (nameArray.Address.length === 0) {
+                     setTimeout(lang.hitch(this, function () {
+                         this._locatorErrBack();
+                     }), 100);
+                 }
              },
 
              _locateLayersearchResult: function (defferedArray, index) {
@@ -510,7 +534,9 @@ define([
                  domStyle.set(query(".esriCTAddressScrollContent")[0], "display", "block");
                  domStyle.set(this.divSelectedFeature, "display", "none");
                  topic.publish("clearFeatureList");
-                 this.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                 if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
+                     this.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                 }
                  domConstruct.empty(this.divAddressResults);
                  if (lang.trim(this.txtAddress.value) === "") {
                      this.txtAddress.focus();
@@ -594,7 +620,7 @@ define([
                  _this = this;
                  domClass.remove(this.divAddressScrollContent, "esriCTdivAddressScrollContent");
                  domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
-                 domClass.remove(this.logoContainer, "mapLogo");
+                 domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
                  topic.publish("setMaxLegendLength");
                  esriCTrowResult = domConstruct.create("div", { "class": "esriCTrowTable esriCTContentBottomBorder" }, listContainer);
                  candidateDate = domConstruct.create("div", { "class": "esriCTrowTableSerchClm  esriCTCursorPointer" }, esriCTrowResult);
@@ -652,7 +678,7 @@ define([
              _graphicLayerOnMap: function (geometry, symbol) {
                  dojo.addresslocation = geometry;
                  if (window.location.toString().split("$sliderValue=").length > 1) {
-                     this.sliderValue = Number(window.location.toString().split("$sliderValue=")[1]);
+                     this.sliderValue = Number(window.location.toString().split("$sliderValue=")[1].split("$")[0]);
                  }
                  var graphic = new esri.Graphic(geometry, symbol, {}, null);
                  if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
@@ -729,8 +755,12 @@ define([
                  domStyle.set(this.imgSearchLoader, "display", "none");
                  domStyle.set(this.close, "display", "block");
                  domClass.add(this.divAddressContent, "esriCTAddressResultHeight");
-                 var errorAddressCounty = domConstruct.create("div", { "class": "esriCTBottomBorder esriCTCursorPointer esriAddressCounty" }, this.divAddressResults);
+                 var errorAddressCounty = domConstruct.create("div", { "class": "esriCTBottomBorder" }, this.divAddressResults);
                  domAttr.set(errorAddressCounty, "innerHTML", sharedNls.errorMessages.invalidSearch);
+                 domClass.remove(this.divAddressScrollContent, "esriCTdivAddressScrollContent");
+                 domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
+                 domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
+                 domAttr.set(this.close, "title", "");
              },
 
              /**
@@ -782,7 +812,7 @@ define([
              _createHorizontalSlider: function () {
                  var horizontalRule, horizontalSlider;
                  if (window.location.toString().split("$sliderValue=").length > 1) {
-                     this.sliderValue = Number(window.location.toString().split("$sliderValue=")[1]);
+                     this.sliderValue = Number(window.location.toString().split("$sliderValue=")[1].split("$")[0]);
                      setTimeout(lang.hitch(this, function () {
                          this._setSliderValueLabel(this.sliderValue);
                      }), 100);
@@ -815,12 +845,13 @@ define([
                          topic.publish("SliderChange", this.sliderValue, this.addressLocation, this.drive);
                      }
                  }));
+                 domClass.add(query(".dijitRuleMark")[0], "moveLeft");
              },
 
              _setSliderValueLabel: function (defaultMinutes) {
                  var sliderMessage, message;
                  sliderMessage = this.sliderMessage.innerHTML.split(/\d+/g);
-                 message = sliderMessage[0] + " " + defaultMinutes + " " + sliderMessage[1];
+                 message = sliderMessage[0] + " " + Math.floor(defaultMinutes) + " " + sliderMessage[1];
                  this.sliderMessage.innerHTML = message;
              },
 
@@ -831,14 +862,13 @@ define([
              },
 
              _createFeatureList: function (featureList) {
-                 var layerName, featureListArray, scrollContentHeight;
+                 var featureListArray, scrollContentHeight;
                  topic.subscribe("resetLocatorContainer", lang.hitch(this, function () {
                      this._resetLocateContainer();
                  }));
                  domClass.remove(this.divAddressResultContainer, "border_bottom");
                  topic.publish("setMinLegendLength");
                  domClass.add(this.divAddressContent, "esriCTAddressHolderHeight");
-                 domClass.add(this.logoContainer, "mapLogo");
                  featureListArray = [];
                  domStyle.set(this.divSelectedFeature, "display", "block");
                  domStyle.set(query(".esriCTAddressScrollContent")[0], "display", "none");
@@ -848,10 +878,12 @@ define([
                  }
                  if (featureList.length) {
                      domStyle.set(this.headerContainer, "display", "block");
+                     this.selectedFeatureList = featureList;
+                     domClass.add(query(".esriControlsBR")[0], "esriLogoShiftRight");
                  } else {
                      domStyle.set(this.headerContainer, "display", "none");
                  }
-                 scrollContentHeight = ((domGeom.getMarginBox(this.divSelectedFeature).h - domGeom.getMarginBox(this.divSelectedFeature).t) - 60) + "px";
+                 scrollContentHeight = ((domGeom.getMarginBox(this.divSelectedFeature).h - domGeom.position(this.divSelectedFeature).y) - 60) + "px";
                  domStyle.set(this.divSelectedFeatureContent, "height", scrollContentHeight);
                  this.featureListScrollbar = new scrollBar({ domNode: this.divSelectedFeatureContent });
                  this.featureListScrollbar.setContent(this.divSelectedFeatureList);
@@ -883,13 +915,16 @@ define([
                              }));
                          }
                          on(featueNamediv, mouse.enter, lang.hitch(this, function () {
-                             this.map.getLayer("esriGraphicsLayerMapSettings").remove(this.selectedPolygon);
-                             if (feature.geometry.type === "point") {
-                                 this._createInfoWindowContent(feature.geometry, feature.attribute, feature.fields, feature.layerIndex, null, null, this.map);
-                             } else if (feature.geometry.type === "polygon") {
-                                 this._createInfoWindowContent(feature.geometry.getCentroid(), feature.attribute, feature.fields, feature.layerIndex, null, null, this.map);
-                                 this._highlightFeature(feature);
-                             }
+                             dojo.mapClickedPoint = false;
+                             setTimeout(lang.hitch(this, function () {
+                                 this.map.getLayer("esriGraphicsLayerMapSettings").remove(this.selectedPolygon);
+                                 if (feature.geometry.type === "point") {
+                                     this._createInfoWindowContent(feature.geometry, feature.attribute, feature.fields, feature.layerIndex, null, null, this.map);
+                                 } else if (feature.geometry.type === "polygon") {
+                                     this._createInfoWindowContent(feature.geometry.getCentroid(), feature.attribute, feature.fields, feature.layerIndex, null, null, this.map);
+                                     this._highlightFeature(feature);
+                                 }
+                             }), 0);
                          }));
                          on(featueNamediv, "click", lang.hitch(this, function () {
                              if (feature.geometry.type === "point") {
@@ -956,7 +991,7 @@ define([
              },
              _calculateRouteDistance: function (pointFeature, distanceHolder) {
                  var routeTask, routeParams, stopPushpin, locatorMarkupSymbol, pointGraphic;
-                 routeTask = new RouteTask(dojo.configData.routeTask);
+                 routeTask = new RouteTask(dojo.configData.RouteTask);
                  routeParams = new RouteParameters();
                  routeParams.stops = new FeatureSet();
                  routeParams.returnRoutes = false;
@@ -1057,7 +1092,7 @@ define([
                  var width, infoWidth, height, diff, ratioHeight, ratioWidth, totalYPoint, xmin,
                  ymin, xmax, ymax;
                  width = this.map.extent.getWidth();
-                 infoWidth = (this.map.width / 2) + dojo.configData.InfoPopupWidth / 2 + 400;
+                 infoWidth = (this.map.width / 2) + dojo.configData.InfoPopupWidth / 2 + 300;
                  height = this.map.extent.getHeight();
                  if (infoWidth > this.map.width) {
                      diff = infoWidth - this.map.width;
@@ -1068,7 +1103,7 @@ define([
                  ratioWidth = width / this.map.width;
                  totalYPoint = dojo.configData.InfoPopupHeight + 30 + 61;
                  xmin = mapPoint.x - (width / 2);
-                 if (dojo.window.getBox().w >= 640) {
+                 if (dojo.window.getBox().w >= 680) {
                      ymin = mapPoint.y - height + (ratioHeight * totalYPoint);
                      xmax = xmin + width + diff * ratioWidth;
                  } else {
@@ -1087,7 +1122,7 @@ define([
                  domClass.replace(this.domNode, "esriCTTdHeaderSearch", "esriCTTdHeaderSearch-select");
                  domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                  domClass.replace(this.divAddressHolder, "esriCTZeroHeight", "esriCTAddressContainerHeight");
-                 domClass.remove(this.logoContainer, "mapLogo");
+                 domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
                  domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
                  topic.publish("setMaxLegendLength");
                  this.txtAddress.blur();
@@ -1117,6 +1152,20 @@ define([
                      var screenPoint = map.toScreen(selectedPoint);
                      screenPoint.y = map.height - screenPoint.y;
                      infoWindow.setLocation(screenPoint);
+                 }
+             },
+
+             _shareApplication: function () {
+                 if (window.location.toString().split("$locationPoint=").length > 1) {
+                     this._showLocateContainer();
+                     sharedLocation = window.location.toString().split("$locationPoint=")[1];
+                     mapPoint = new Point(parseFloat(sharedLocation.split(",")[0]), parseFloat(sharedLocation.split(",")[1]), this.map.spatialReference);
+                     this._locateAddressOnMap(mapPoint);
+                 }
+                 if (window.location.toString().split("$mapClickPoint=").length > 1) {
+                     window.location.toString().split("$mapClickPoint=")[1].split(",");
+                     var point = new Point([window.location.toString().split("$mapClickPoint=")[1].split(",")[0], window.location.toString().split("$mapClickPoint=")[1].split(",")[1]], new SpatialReference({ wkid: 102100 }));
+                     topic.publish("showInfoWindowOnMap", point, this.map);
                  }
              }
          });

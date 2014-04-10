@@ -230,6 +230,10 @@
     {
         width: 100%;
     }
+      .moveLeft
+    {
+        left: -3px !important;
+    }
 }
 
 @media screen and (min-width: 681px) and (max-width: 767px)
@@ -308,6 +312,10 @@
     {
         width: 100%;
     }
+      .moveLeft
+    {
+        left: -3px !important;
+    }
 }
 
 @media screen and (max-width: 680px)
@@ -317,7 +325,6 @@
     {
         display: none;
     }
-
     .esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select, .esriCTHelpImg, .esriCTHelpImg, .esriCTExitImg
     {
         height: 44px !important;

@@ -1,5 +1,5 @@
-﻿/*global dojo,define,document */
-/*jslint sloppy:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -42,8 +42,7 @@ define([
          return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
              templateString: template,
              appNls: appNls,
-
-             /**
+            /**
              * create header panel
              *
              * @param {string} dojo.configData.ApplicationName Applicaton name specified in configuration file
@@ -52,7 +51,7 @@ define([
              * @name widgets/appHeader/appHeader
              */
              postCreate: function () {
-                 var applicationHeaderDiv, i, workflowSpan;
+                 var applicationHeaderDiv, i, workflowSpan, applicationName = "";
                  topic.subscribe("loadingIndicatorHandler", (lang.hitch(this, function () {
                      this._showProgressIndicator();
                  })));
@@ -68,6 +67,10 @@ define([
                  * @private
                  * @memberOf widgets/appHeader/appHeader
                  */
+                 for (i = 0; i < dojo.configData.Workflows.length; i++) {
+                     applicationName = applicationName + dojo.configData.Workflows[i].Name + " ";
+                 }
+                 document.title = applicationName;
                  applicationHeaderDiv = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
                  domConstruct.place(this.applicationHeaderParentContainer, applicationHeaderDiv);
                  this._loadApplicationHeaderIcon();
@@ -79,7 +82,6 @@ define([
                  * @private
                  * @memberOf widgets/appHeader/appHeader
                  */
-                 document["title"] = dojo.configData.ApplicationName;
                  for (i = 0; i < dojo.configData.Workflows.length; i++) {
                      workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: appNls.messages.switchWorkflows, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
                      on(workflowSpan, "click", lang.hitch(this, function (evt) {
@@ -152,7 +154,6 @@ define([
              },
              _showProgressIndicator: function () {
                  domClass.replace(this.divLoadingIndicator, "displayBlockAll", "displayNoneAll");
-
              },
              _hideProgressIndicator: function () {
                  domClass.replace(this.divLoadingIndicator, "displayNoneAll", "displayBlockAll");

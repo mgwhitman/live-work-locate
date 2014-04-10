@@ -1,5 +1,5 @@
-﻿/*global define,dojo,console */
-/*jslint sloppy:true,nomen:true,plusplus:true */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
 | Version 10.2
 | Copyright 2013 Esri
@@ -69,68 +69,87 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
             topic.subscribe("setMinLegendLength", lang.hitch(this, function () {
                 this._setMinLegendLengthResult();
             }));
+            topic.subscribe("setMap", lang.hitch(this, function (map) {
+                this.map = map;
+            }));
+            topic.subscribe("updateLegends", lang.hitch(this, function (geometry) {
+                console.log("sybscribed_UpdatedLegend");
+                this._UpdatedLegend(geometry);
+            }));
+        },
 
-            if (this.isExtentBasedLegend) {
-                this.map.on("extent-change", lang.hitch(this, function (evt) {
-                    setTimeout(lang.hitch(this, function () {
-                        var defQueryArray = [], queryResult, layerObject, rendererObject, index, resultListArray = [], legendListWidth = [],
+        _UpdatedLegend: function (geometry) {
+            console.log("_UpdatedLegend");
+            var defQueryArray = [], queryResult, layerObject, rendererObject, index, resultListArray = [], legendListWidth = [],
                         queryDefList, arryList = 0, boxWidth, i;
-                        this._resetLegendContainer();
-                        this._rendererArray.length = 0;
-                        for (layer in this._layerCollection) {
-                            if (this._layerCollection.hasOwnProperty(layer)) {
-                                layerObject = this._layerCollection[layer];
-                                rendererObject = this._layerCollection[layer].legend;
-                                if (rendererObject.length) {
-                                    for (index = 0; index < rendererObject.length; index++) {
-                                        rendererObject[index].layerUrl = layer;
-                                        this._rendererArray.push(rendererObject[index]);
-                                        queryResult = this._fireQueryOnExtentChange(evt.extent);
-                                        if (layerObject.rendererType === "uniqueValue") {
-                                            if (rendererObject[index].values) {
-                                                queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject[index].values[0] + "'";
-                                            } else {
-                                                queryResult.where = "1=1";
-                                            }
-                                        } else if (layerObject.rendererType === "classBreaks") {
-                                            queryResult.where = rendererObject[index - 1] ? layerObject.fieldName + ">" + rendererObject[index - 1].values[0] + " AND " + layerObject.fieldName + "<=" + rendererObject[index].values[0] : layerObject.fieldName + "=" + rendererObject[index].values[0];
-                                        } else {
-                                            queryResult.where = "1=1";
-                                        }
-                                        this._executeQueryTask(layer, defQueryArray, queryResult);
-                                    }
-                                }
-                            }
-                        }
 
-                        domStyle.set(this.divRightArrow, "display", "block");
-                        if (defQueryArray.length > 0) {
-                            domConstruct.empty(this.divlegendContainer);
-                            domConstruct.create("span", { innerHTML: sharedNls.tooltips.loadingText, "class": "divlegendLoadingContainer" }, this.divlegendContainer);
-                            queryDefList = new DeferredList(defQueryArray);
-                            queryDefList.then(lang.hitch(this, function (result) {
-                                domConstruct.empty(this.divlegendContainer);
-                                for (i = 0; i < result.length; i++) {
-                                    if (result[i][0] && result[i][1] > 0) {
-                                        resultListArray.push(result[i][1]);
-                                        legendListWidth.push(this.divLegendlist.offsetWidth);
-                                        this._addLegendSymbol(this._rendererArray[i], this._layerCollection[this._rendererArray[i].layerUrl].layerName);
-                                    }
-                                }
-                                for (i = 0; i < resultListArray.length; i++) {
-                                    arryList += resultListArray[i] << 0;
-                                }
-                                this._addlegendListWidth(legendListWidth);
-                                boxWidth = this.legendbox.offsetWidth - query(".esriCTHeaderRouteContainer")[0].offsetWidth + 200;
-                                if (arryList <= 0 || this.divlegendContainer.offsetWidth < boxWidth) {
-                                    domStyle.set(this.divRightArrow, "display", "none");
+            this._resetLegendContainer();
+            this._rendererArray.length = 0;
+            if (!geometry) {
+                domConstruct.empty(this.divlegendContainer);
+                domConstruct.create("span", { innerHTML: sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
+                domStyle.set(this.divRightArrow, "display", "none");
+                return;
+            }
+            for (layer in this._layerCollection) {
+                if (this._layerCollection.hasOwnProperty(layer)) {
+                    layerObject = this._layerCollection[layer];
+                    rendererObject = layerObject.legend;
+                    if (rendererObject.length) {
+                        for (index = 0; index < rendererObject.length; index++) {
+                            rendererObject[index].layerUrl = layer;
+                            this._rendererArray.push(rendererObject[index]);
+                            queryResult = this._fireQueryOnExtentChange(geometry);
+
+                            if (layerObject.rendererType === "uniqueValue") {
+                                if (rendererObject[index].values) {
+                                    queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject[index].values[0] + "'";
                                 } else {
-                                    domStyle.set(this.divRightArrow, "display", "block");
+                                    queryResult.where = '1=1';
                                 }
-                            }));
+                            } else if (layerObject.rendererType === "classBreaks") {
+                                queryResult.where = rendererObject[index - 1] ? layerObject.fieldName + ">" + rendererObject[index - 1].values[0] + " AND " + layerObject.fieldName + "<=" + rendererObject[index].values[0] : layerObject.fieldName + "=" + rendererObject[index].values[0];
+                            } else {
+                                queryResult.where = '1=1';
+                            }
+                            this._executeQueryTask(layer, defQueryArray, queryResult);
                         }
-                    }, 1000));
-                }));
+                    }
+                }
+            }
+
+            domStyle.set(this.divRightArrow, "display", "block");
+            if (defQueryArray.length > 0) {
+                domConstruct.empty(this.divlegendContainer);
+                domConstruct.create("span", { innerHTML: sharedNls.tooltips.loadingText, "class": "divlegendLoadingContainer" }, this.divlegendContainer);
+                queryDefList = new DeferredList(defQueryArray);
+                queryDefList.then(lang.hitch(this, function (result) {
+                    domConstruct.empty(this.divlegendContainer);
+                    for (i = 0; i < result.length; i++) {
+                        if (result[i][0] && result[i][1] > 0) {
+                            resultListArray.push(result[i][1]);
+                            legendListWidth.push(this.divLegendlist.offsetWidth);
+                            this._addLegendSymbol(this._rendererArray[i], this._layerCollection[this._rendererArray[i].layerUrl].layerName);
+                        }
+                    }
+                    for (i = 0; i < resultListArray.length; i++) {
+                        arryList += resultListArray[i] << 0;
+                    }
+                    this._addlegendListWidth(legendListWidth);
+                    boxWidth = this.legendbox.offsetWidth - query(".esriCTAddressHolder")[0].offsetWidth + 200;
+                    if (arryList <= 0 || this.divlegendContainer.offsetWidth < boxWidth) {
+                        domStyle.set(this.divRightArrow, "display", "none");
+                    } else {
+                        domStyle.set(this.divRightArrow, "display", "block");
+                    }
+                    if (resultListArray.length === 0) {
+                        domConstruct.create("span", { innerHTML: sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
+                    }
+                }), function (err) {
+                    console.log(err);
+                }, function (err2) {
+                    console.log(err2);
+                });
             }
         },
 
@@ -235,8 +254,8 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         _fireQueryOnExtentChange: function (currentExtent) {
             var queryParams = new Query();
             queryParams.outFields = ["*"];
-            queryParams.geometry = currentExtent;
-            queryParams.spatialRelationship = "esriSpatialRelContains";
+            queryParams.geometry = currentExtent.getExtent();
+            queryParams.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
             queryParams.returnGeometry = false;
             return queryParams;
         },
@@ -246,13 +265,14 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         */
         _executeQueryTask: function (layer, defQueryArray, queryParams) {
             var queryTask = new QueryTask(layer);
-            defQueryArray.push(queryTask.executeForCount(queryParams, function (count) {
+            var queryRequest = queryTask.executeForCount(queryParams, function (count) {
                 var queryDeferred = new Deferred();
                 queryDeferred.resolve(count);
                 return queryDeferred.promise;
             }, function (error) {
                 console.log(error);
-            }));
+            });
+            defQueryArray.push(queryRequest);
         },
 
         /*
@@ -349,15 +369,29 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
 
         _createLegendList: function (layerList, mapServerUrl) {
             var legendListWidth = [], i, j;
+            var workFlowUrls = [];
+            for (i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; i++) {
+                if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL) {
+                    workFlowUrls.push(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL);
+                }
+            }
             for (i = 0; i < layerList.layers.length; i++) {
-                this._layerCollection[mapServerUrl + '/' + layerList.layers[i].layerId] = layerList.layers[i];
-                for (j = 0; j < layerList.layers[i].legend.length; j++) {
-                    this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
-                    legendListWidth.push(this.divLegendlist.offsetWidth);
+                var layerURL = mapServerUrl + '/' + layerList.layers[i].layerId;
+                if (array.indexOf(workFlowUrls, layerURL) !== -1) {
+                    this._layerCollection[layerURL] = layerList.layers[i];
+                    for (j = 0; j < layerList.layers[i].legend.length; j++) {
+                        this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
+                        legendListWidth.push(this.divLegendlist.offsetWidth);
+                    }
                 }
             }
             this._addlegendListWidth(legendListWidth);
             this._addFieldValue();
+            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                this._UpdatedLegend(this.map.extent);
+            } else {
+                this._UpdatedLegend(null);
+            }
         },
 
         _addlegendListWidth: function (legendListWidth) {
@@ -391,7 +425,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         _createImage: function (imageSrc, title, isCursorPointer, imageWidth, imageHeight) {
             var imgLocate, imageHeightWidth;
             imgLocate = domConstruct.create("img");
-            imageHeightWidth = { width: imageWidth + 'px', height: imageHeigsht + 'px' };
+            imageHeightWidth = { width: imageWidth + 'px', height: imageHeight + 'px' };
             domAttr.set(imgLocate, "style", imageHeightWidth);
             if (isCursorPointer) {
                 domStyle.set(imgLocate, "cursor", "pointer");
