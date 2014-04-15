@@ -19,7 +19,7 @@
 
 require([
         "coreLibrary/widgetLoader",
-        "application/js/library/config",
+        "application/js/config",
         "dojo/domReady!"
     ], function (widgetLoader, config, domReady) {
 
