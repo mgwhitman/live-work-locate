@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,console,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,14 +73,12 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                 this.map = map;
             }));
             topic.subscribe("updateLegends", lang.hitch(this, function (geometry) {
-                console.log("sybscribed_UpdatedLegend");
                 this._UpdatedLegend(geometry);
             }));
         },
 
         _UpdatedLegend: function (geometry) {
-            console.log("_UpdatedLegend");
-            var defQueryArray = [], queryResult, layerObject, rendererObject, index, resultListArray = [], legendListWidth = [],
+            var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, resultListArray = [], legendListWidth = [],
                         queryDefList, arryList = 0, boxWidth, i;
 
             this._resetLegendContainer();
@@ -99,7 +98,6 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                             rendererObject[index].layerUrl = layer;
                             this._rendererArray.push(rendererObject[index]);
                             queryResult = this._fireQueryOnExtentChange(geometry);
-
                             if (layerObject.rendererType === "uniqueValue") {
                                 if (rendererObject[index].values) {
                                     queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject[index].values[0] + "'";
@@ -132,7 +130,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                         }
                     }
                     for (i = 0; i < resultListArray.length; i++) {
-                        arryList += resultListArray[i] << 0;
+                        arryList += resultListArray[i];
                     }
                     this._addlegendListWidth(legendListWidth);
                     boxWidth = this.legendbox.offsetWidth - query(".esriCTAddressHolder")[0].offsetWidth + 200;
@@ -263,9 +261,10 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         * performs query task for the no of features present in the current extent
         */
         _executeQueryTask: function (layer, defQueryArray, queryParams) {
-            var queryTask = new QueryTask(layer);
-            var queryRequest = queryTask.executeForCount(queryParams, function (count) {
-                var queryDeferred = new Deferred();
+            var queryTask, queryRequest, queryDeferred;
+            queryTask = new QueryTask(layer);
+            queryRequest = queryTask.executeForCount(queryParams, function (count) {
+                queryDeferred = new Deferred();
                 queryDeferred.resolve(count);
                 return queryDeferred.promise;
             }, function (error) {
@@ -295,16 +294,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                     callbackParamName: "callback"
                 };
                 layersRequest = esriRequest(params);
-                defArray.push(layersRequest.then(lang.hitch(this,
-                        function (response) {
-                            var deferred = new Deferred();
-                            deferred.resolve(response);
-                            return deferred.promise;
-                        }
-                    ),
-                    function (error) {
-                        console.log("Error: ", error.message);
-                    }));
+                defArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
             }
             deferredList = new DeferredList(defArray);
             deferredList.then(lang.hitch(this, function (result) {
@@ -315,9 +305,20 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
             }));
         },
 
+        _getLayerDetail: function (response) {
+            var deferred = new Deferred();
+            deferred.resolve(response);
+            return deferred.promise;
+        },
+
+        _displayError: function (error) {
+            console.log("Error: ", error.message);
+        },
+
         _addFieldValue: function () {
-            var defArray = [], layerTempArray = [], params, layersRequest, deferredList, layerObject, i;
+            var defArray = [], layerTempArray = [], params, layer, layersRequest, deferredList, layerObject, i;
             for (layer in this._layerCollection) {
+                if (this._layerCollection.hasOwnProperty(layer)) {
                 if (this._layerCollection[layer].legend && this._layerCollection[layer].legend.length > 1) {
                     layerTempArray.push(layer);
                     params = {
@@ -327,16 +328,8 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
                         callbackParamName: "callback"
                     };
                     layersRequest = esriRequest(params);
-                    defArray.push(layersRequest.then(lang.hitch(this,
-                            function (response) {
-                                var deferred = new Deferred();
-                                deferred.resolve(response);
-                                return deferred.promise;
+                        defArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
                             }
-                        ),
-                        function (error) {
-                            console.log("Error: ", error.message);
-                        }));
                 }
             }
             deferredList = new DeferredList(defArray);
@@ -367,15 +360,14 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         },
 
         _createLegendList: function (layerList, mapServerUrl) {
-            var legendListWidth = [], i, j;
-            var workFlowUrls = [];
+            var legendListWidth = [], workFlowUrls = [], layerURL, i, j;
             for (i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; i++) {
                 if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL) {
                     workFlowUrls.push(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[i].QueryURL);
                 }
             }
             for (i = 0; i < layerList.layers.length; i++) {
-                var layerURL = mapServerUrl + '/' + layerList.layers[i].layerId;
+                layerURL = mapServerUrl + '/' + layerList.layers[i].layerId;
                 if (array.indexOf(workFlowUrls, layerURL) !== -1) {
                     this._layerCollection[layerURL] = layerList.layers[i];
                     for (j = 0; j < layerList.layers[i].legend.length; j++) {
@@ -396,7 +388,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
         _addlegendListWidth: function (legendListWidth) {
             var listWidth = legendListWidth, total = 0, j;
             for (j = 0; j < listWidth.length - 1; j++) {
-                total += listWidth[j] << 0;
+                total += listWidth[j];
             }
             domStyle.set(query(".divlegendContent")[0], "width", total + "px");
         },

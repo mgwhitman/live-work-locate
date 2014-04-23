@@ -18,30 +18,6 @@
 @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (-webkit-min-device-pixel-ratio: 2)
 {
 
-    .esriCTTdHeaderSearch
-    {
-        background-image: url("../images/search@2X.png") !important;
-    }
-
-    .esriCTHelpImg
-    {
-        background-image: url("../images/help@2X.png") !important;
-    }
-
-    .esriCTTdGeolocation
-    {
-        background-image: url("../images/geo-location@2x.png") !important;
-    }
-
-    .esriCTImgSocialMedia
-    {
-        background-image: url("../images/share@2X.png") !important;
-    }
-
-    .esriCTRouteImg
-    {
-        background-image: url("../images/get-route@2x.png") !important;
-    }
 
     .esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select, .esriCTHelpImg, .esriCTHelpImg
     {
@@ -339,4 +315,11 @@
         width: 100%;
     }
     .esriCTApplicationHeader{HEIGHT:61PX;}
+     .esriCTShareCursor, .facebook, .twitter, .email
+    {
+        height: 44px !important;
+        width: 44px !important;
+        padding: 8px 0 !important;
+        background-size: 44px;
+    }
 }

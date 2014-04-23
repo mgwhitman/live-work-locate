@@ -66,7 +66,29 @@ html, body
     background: #fff;
     border-bottom: 1px solid #c1c1c1;
 }
+.esriCTTdHeaderSearch
+{
+    background-image: url("../images/img24x24/search-24.png");
+}
+.esriCTHelpImg
+{
+    background-image: url("../images/img24x24/Help-24.png");
+}
 
+.esriCTTdGeolocation
+{
+    background-image: url("../images/img24x24/imgGeolocation-24.png");
+}
+
+.esriCTImgSocialMedia
+{
+    background-image: url("../images/img24x24/imgSocialMedia-24.png");
+}
+
+.esriCTExitImg
+{
+     background-image: url("../images/img24x24/exit-24.png");
+    }
 .esriCTApplicationHeaderIconTD
 {
     width: 80px;
@@ -94,118 +116,16 @@ html, body
     z-index: 1000;
     background-repeat: no-repeat;
 }
-
-.esriCTTdHeaderSearch
+.esriCTTdHeaderSearch,.esriCTTdHeaderSearch-select, .esriCTHelpImg, .esriCTTdGeolocation,.esriCTImgSocialMedia-select,.esriCTImgSocialMedia,.esriCTRouteImg,.esriCTRouteImg-select
 {
     margin: 12px 24px;
-    background-image: url("../images/locate.png");
     background-repeat: no-repeat;
     background-position: center;
     float: left;
-    height: 26px;
-    width: 26px;
+    height: 24px;
+    width: 24px;
     float: left;
     cursor: pointer;
-    background-size: 26px auto;
-}
-
-.esriCTHelpImg
-{
-    margin: 12px 24px;
-    background-image: url("../images/Help.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-.esriCTTdHeaderSearch-select
-{
-    margin: 12px 24px;
-    background-image: url("../images/locate-select.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-
-.esriCTTdGeolocation
-{
-    margin: 12px 24px;
-    background-image: url("../images/imgGeolocation.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-.esriCTImgSocialMedia-select
-{
-    margin: 12px 24px;
-    background-image: url("../images/imgSocialMedia-select.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-.esriCTImgSocialMedia
-{
-    margin: 12px 24px;
-    background-image: url("../images/imgSocialMedia.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-.Img
-{
-    padding: 12px 24px;
-    background-image: url("../images/get-route.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
-}
-
-.esriCTRouteImg-select
-{
-    margin: 12px 24px;
-    background-image: url("../images/get-route-select.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    float: left;
-    height: 26px;
-    width: 26px;
-    float: left;
-    cursor: pointer;
-    background-size: 26px auto;
 }
 
 .esriCTApplicationHeaderIcon
@@ -218,7 +138,6 @@ html, body
 }
 /* End of Application Header */
 /* Address container Styles */
-
 .esriCTAddressContent
 {
     min-height: 146px;
@@ -470,7 +389,6 @@ html, body
     width: 20px;
     float: left;
     cursor: pointer;
-    background-size:16px !important;
 }
 
 .clearInputNotApear
@@ -556,54 +474,15 @@ html, body
     margin: 0 auto;
     text-align: center;
 }
-
-.facebook
+.facebook,.twitter,.email,.embedding
 {
-    background-image: url("../images/img_facebook.png") !important;
     background-repeat: no-repeat;
     background-position: center;
-    height: 26px !important;
-    width: 26px;
+    height: 24px !important;
+    width: 24px;
     margin: 0 auto;
     cursor: pointer;
-    background-size: 26px;
-}
-
-.twitter
-{
-    background-image: url("../images/img_twitter.png") !important;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 26px !important;
-    width: 26px;
-    margin: 0 auto;
-    cursor: pointer;
-    background-size: 26px;
-}
-
-.email
-{
-    background-image: url("../images/img_email.png") !important;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 26px !important;
-    width: 26px;
-    margin: 0 auto;
-    cursor: pointer;
-    background-size: 26px;
-}
-
-.embedding
-{
-    background-image: url("../images/embedding.png") !important;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 26px !important;
-    width: 26px;
-    margin: 0 auto;
-    cursor: pointer;
-    background-size: 26px;
-}
+  }
 
 .esriCTShowEmbeddingContainer
 {
@@ -713,15 +592,13 @@ html, body
 .esriCTExitImg
 {
     margin: 12px 24px;
-    background-image: url("../images/exit.png");
     background-repeat: no-repeat;
     background-position: center;
     float: left;
-    height: 26px;
-    width: 26px;
+    height: 24px;
+    width: 24px;
     float: left;
     cursor: pointer;
-    background-size: 26px auto;
 }
 /* End of Exit */
 
@@ -834,6 +711,7 @@ html, body
     position: relative;
     margin-top: 10px;
     background: #FFF;
+    z-index:1007;
 }
 .divSplashInnerContainer {
     overflow: hidden;
@@ -1101,6 +979,16 @@ html, body
 /* End of CSS for Scroll Bar */
 
 /* CSS for Loading Indicator */
+.esriGovtLoadSpashScreen
+{
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1005;
+}
+
 .esriGovtLoadingIndicator
 {
     top: 0px;
@@ -1110,9 +998,9 @@ html, body
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 9999;
+    z-index: 1006;
     cursor: default;
-    behavior: url("esri_template/core_library/PIE.htc");
+    behavior: url("../..//core_library/PIE.htc");
 }
 /* End of CSS for Loading Indicator */
 
@@ -1197,7 +1085,7 @@ html, body
 
 .legendbox
 {
-    float: none; /* not needed, just for clarification */ /* the next props are meant to keep this block independent from the other floated one */
+    float: none;
     width: auto;
     overflow: hidden;
 }
@@ -1230,7 +1118,6 @@ html, body
 {
     float: left;
 }
-
 
 .legendrightbox
 {
@@ -1582,11 +1469,12 @@ html, body
     background: url("../images/close.png");
     background-repeat: no-repeat;
     background-position: center;
+    height: 20px !important;
+    width: 20px;
     cursor: pointer;
-    padding: 7px 14px;
     position: absolute;
-    right: 1px;
-    top: 10px;
+    right: 5px;
+    top: 6px;
 }
 .esriCTheadderPanel
 {
@@ -1668,26 +1556,26 @@ input
 {
     background-image: url("../images/car-select.png");
     background-repeat: no-repeat;
-    background-position: top;
+    background-position: top right;
     float: left;
     height: 30px;
     width: 30px;
-    margin: 1px 0px 0px 8px;
+    margin: 1px 0px 0px 9px;
     cursor: pointer;
-    background-size: 100%;
+    background-size: 90%;
 }
 
 .driveIcon
 {
     background-image: url("../images/car.png");
     background-repeat: no-repeat;
-    background-position: top;
+    background-position: top right;
     float: left;
     height: 30px;
     width: 30px;
-    margin: 1px 0px 0px 8px;
+    margin: 1px 0px 0px 9px;
     cursor: pointer;
-    background-size: 100%;
+    background-size: 90%;
 }
 
 .walkIcon
@@ -1697,7 +1585,7 @@ input
     float: right;
     height: 30px;
     width: 30px;
-    margin: 1px 0px 0px 1px;
+    margin: 0px 0px 0px 0px;
     cursor: pointer;
     background-size: 100%;
 }
@@ -1709,7 +1597,7 @@ input
     float: right;
     height: 30px;
     width: 30px;
-    margin: 1px 0px 0px 1px;
+    margin: 0px 0px 0px 0px;
     cursor: pointer;
     background-size: 100%;
 }
@@ -2046,7 +1934,7 @@ input
     font-weight: bold;
 }
 
-.esriCTSliderMessage1
+.nearbyMessage
 {
     padding: 11px 20px 5px 15px;
     float: left;
@@ -2227,4 +2115,14 @@ input
 .esriCTdivInfoFeatureCount
 {
     float: left;
+}
+.spanRouteLength
+{
+
+    padding: 5px 15px 5px 0px;
+    vertical-align: middle !important;
+    display: table-cell;
+    white-space: nowrap;
+    text-align: right !important;
+    cursor: pointer;
 }

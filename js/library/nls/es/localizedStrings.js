@@ -1,6 +1,7 @@
-﻿/*global */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,43 +17,38 @@
  | limitations under the License.
  */
 define({
-        showNullValue: "N/A",
-        titles: {
-            webpageDispalyText: "Copy/paste HTML into your web page",
-            NearbyText: "What's nearby?",
-            moreInfo: "Website",
-        },
-        errorMessages: {
-            invalidSearch: "No results found",
-            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
-            invalidLocation: "Current Location not found.",
-            invalidProjection: "Unable to plot current location on the map.",
-            widgetNotLoaded: "Fail to load widgets.",
-            shareLoadingFailed: "Unable to load share options.",
-            shareFailed: "Unable to share.",
-            noLegend: "No Legend",
-            invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
-        },
-        buttons: {
-            embedding: "Embedding",
-            email: "Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
-            facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
-            twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
-        },
-        tooltips: {
-            locate: "Locate",
-            share: "Share",
-            help: "Help",
-            clear: "Clear",
-            search: "Search",
-            exit: "Exit",
-            locateAddress: "LocateAddress",
-            driveTime: "DriveTime",
-            walkTime: "WalkTime",
-            expandResult: "Expand Result",
-            collapseResult: "Collapse Result",
-            loadingText: "Loading...",
-            previous: "Previous",
-            next: "Next"
-        }
+    showNullValue: "N/A",
+    titles: {
+        webpageDispalyText: "Copy/paste HTML into your web page",
+        moreInfo: "Website",
+        sliderDisplayText: "Show results within <b> ${defaultMinute} mins drive</b>"
+    },
+    errorMessages: {
+        invalidSearch: "No results found",
+        falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
+        invalidLocation: "Current Location not found.",
+        invalidProjection: "Unable to plot current location on the map.",
+        widgetNotLoaded: "Fail to load widgets.",
+        shareLoadingFailed: "Unable to load share options.",
+        shareFailed: "Unable to share.",
+        noLegend: "No Legend Available",
+        invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
+    },
+    buttons: {
+        embedding: "Embedding",//Shown next to icon for sharing the map embedding in website
+        email: "Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
+        facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
+        twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
+    },
+    tooltips: {
+        locate: "Locate",
+        share: "Share",
+        help: "Help",
+        clear: "Clear",
+        search: "Search",
+        locateAddress: "LocateAddress",
+        loadingText: "Loading...",
+        previous: "Previous",
+        next: "Next"
+    }
 });

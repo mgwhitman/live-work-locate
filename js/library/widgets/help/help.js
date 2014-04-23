@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -55,7 +56,7 @@ function (declare, domConstruct, on, topic, lang, _WidgetBase, sharedNls) {
         * @memberOf widgets/help/help
         */
         _showHelpPage: function () {
-            window.open();
+            window.open(dojo.configData.HelpURL);
         }
     });
 });

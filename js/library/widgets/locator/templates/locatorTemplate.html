@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div data-dojo-attach-point="SliderContainer" class="esriCTSlideresriCTSlider">
-                <span data-dojo-attach-point="sliderMessage" class="esriCTSliderMessage">${appNls.messages.sliderDisplayText}
+                <span data-dojo-attach-point="sliderMessage" class="esriCTSliderMessage">{sharedNls.titles.sliderDisplayText}
                 </span>
                 <div class="esriCTSlider">
                     <div data-dojo-attach-point="horizontalRuleContainer" class="esriCTHorizontalRuleContainer">
@@ -40,18 +40,18 @@
                     <div data-dojo-attach-point="horizontalSliderContainer" class="esriCTHorizontalSliderContainer"></div>
                 </div>
                 <div class="esriCTDrive" data-dojo-attach-point="esriCTDrive">
-                    <span class="driveIconSelected" data-dojo-attach-point="esriCTimgLocate" title="${sharedNls.tooltips.driveTime}"></span>
+                    <span class="driveIconSelected" data-dojo-attach-point="esriCTimgDrive"></span>
                 </div>
                 <div class="esriCTWalk" data-dojo-attach-point="esriCTWalk">
-                    <span class="walkIcon" data-dojo-attach-point="esriCTimgLocate" title="${sharedNls.tooltips.walkTime}"></span>
+                    <span class="walkIcon" data-dojo-attach-point="esriCTimgWalk"></span>
                 </div>
 
             </div>
 
             <div data-dojo-attach-point="divSelectedFeature" class="divSelectedFeature esriCTAddressHolderHeight">
                 <div data-dojo-attach-point="headerContainer" class="headerContainer">
-                    <div class="esriCTSliderMessage1">${sharedNls.titles.NearbyText}</div>
-                    <div class="toggleExpandCollapse collapse" title="${sharedNls.tooltips.expandResult}"></div>
+                    <div class="nearbyMessage"></div>
+                    <div class="toggleExpandCollapse collapse"></div>
                    </div>
                 <div data-dojo-attach-point="divSelectedFeatureContent" class="divSelectedFeatureContent">
                     <div data-dojo-attach-point="divSelectedFeatureList" style="text-align: left;"></div>
