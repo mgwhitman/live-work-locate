@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,console,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,6 +48,7 @@ define([
     "esri/geometry/Extent",
     "esri/dijit/HomeButton",
     "dojo/topic",
+    "esri/urlUtils",
     "esri/layers/ArcGISDynamicMapServiceLayer",
     "esri/tasks/servicearea",
     "esri/tasks/NATypes",
@@ -61,7 +63,7 @@ define([
     "widgets/infoWindow/infoWindow",
     "dojo/domReady!"
 ],
-     function (declare, domConstruct, domStyle, lang, esriUtils, on, dom, domAttr, query, Query, QueryTask, domClass, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, string, esriMap, ImageParameters, FeatureLayer, GraphicsLayer, ProjectParameters, Graphic, domUtils, Color, BaseMapGallery, Legends, GeometryExtent, HomeButton, topic, ArcGISDynamicMapServiceLayer, servicearea, NATypes, GeometryService, BufferParameters, SimpleFillSymbol, SimpleMarkerSymbol, array, DeferredList, Deferred, all, InfoWindow) {
+     function (declare, domConstruct, domStyle, lang, esriUtils, on, dom, domAttr, query, Query, QueryTask, domClass, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, string, esriMap, ImageParameters, FeatureLayer, GraphicsLayer, ProjectParameters, Graphic, domUtils, Color, BaseMapGallery, Legends, GeometryExtent, HomeButton, topic, urlUtils, ArcGISDynamicMapServiceLayer, servicearea, NATypes, GeometryService, BufferParameters, SimpleFillSymbol, SimpleMarkerSymbol, array, DeferredList, Deferred, all, InfoWindow) {
          //========================================================================================================================//
          return declare([_WidgetBase], {
              map: null,
@@ -84,8 +86,12 @@ define([
                  * set map extent to default extent specified in configuration file
                  * @param {string} dojo.configData.DefaultExtent Default extent of map specified in configuration file
                  */
+                 urlUtils.addProxyRule({
+                     urlPrefix: dojo.configData.ServiceAreaTask,
+                     proxyUrl: dojoConfig.baseURL + dojo.configData.ProxyUrl
+                 });
                  var graphicsLayer;
-                 this.logoContainer = query(".map .logo-sm") && query(".map .logo-sm")[0] || query(".map .logo-med") && query(".map .logo-med")[0];
+                 this.logoContainer = (query(".map .logo-sm") && query(".map .logo-sm")[0]) || (query(".map .logo-med") && query(".map .logo-med")[0]);
                  graphicsLayer = new GraphicsLayer();
                  graphicsLayer.id = this.tempGraphicsLayerId;
                  this.infoWindowPanel = new InfoWindow({ infoWindowWidth: dojo.configData.InfoPopupWidth, infoWindowHeight: dojo.configData.InfoPopupHeight });
@@ -113,7 +119,7 @@ define([
              },
 
              _updateMapOnSwitchWorkflow: function () {
-                 var extentPoints, graphicsLayer;
+                 var extentPoints, graphicsLayer, home, layer;
                  extentPoints = dojo.configData && dojo.configData.DefaultExtent && dojo.configData.DefaultExtent.split(",");
                  graphicsLayer = new GraphicsLayer();
                  graphicsLayer.id = this.tempGraphicsLayerId;
@@ -133,11 +139,11 @@ define([
                      var mapDefaultExtent, extent;
                      extent = this._getQueryString('extent');
                      if (extent === "") {
-                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                          this.map.setExtent(mapDefaultExtent);
                      } else {
                          mapDefaultExtent = extent.split(',');
-                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                          this.map.setExtent(mapDefaultExtent);
                      }
                      this.map.addLayer(graphicsLayer);
@@ -150,7 +156,7 @@ define([
                      this._activateMapEvents();
                      if (dojo.share && dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
                          this.shareDeferred = new Deferred();
-                         this.shareDeferred.then(lang.hitch(this, function (value) {
+                         this.shareDeferred.then(lang.hitch(this, function () {
                              this._addLayerLegend();
                          }));
                      } else {
@@ -177,13 +183,12 @@ define([
                          if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
                              topic.publish("updateLegends", evt.extent);
                          }
-                     }), 10000);
+                     }), 2000);
                  }));
              },
              _createServiceArea: function (defaultMinutes, addressLocation, drive) {
                  var _self, params, features, facilities, serviceAreaTask;
                  this.firstStop = addressLocation;
-                 esriConfig.defaults.io.alwaysUseProxy = true;
                  _self = this;
                  params = new esri.tasks.ServiceAreaParameters();
                  if (drive) {
@@ -270,7 +275,7 @@ define([
                                  for (res = 0; res < result.length; res++) {
                                      selectedFeatures.push({
                                          attribute: result[res].attributes,
-                                         name: result[res].getLayer().name,
+                                         name: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[settingsIndex].SearchDisplayTitle,
                                          geometry: result[res].geometry,
                                          layerId: result[res].getLayer().layerId,
                                          layerIndex: arrayIndex,
@@ -322,12 +327,12 @@ define([
              },
 
              _addOperationalLayer: function () {
-                 var operationalLayerIndex, featureLayer;
+                 var operationalLayerIndex, featureLayer, i;
                  this._clearSelectedFeature();
                  if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
                      this.map.getLayer("esriGraphicsLayerMapSettings").clear();
                  }
-                 var i = 0;
+                 i = 0;
                  while (i < this.map.graphicsLayerIds.length) {
                      if (this.map.graphicsLayerIds[i] && (this.map.graphicsLayerIds[i].match(/feature/g) || this.map.graphicsLayerIds[i].match(/EconomicDevelopment/g))) {
                          this.map.removeLayer(this.map.getLayer(this.map.graphicsLayerIds[i]));
@@ -406,15 +411,17 @@ define([
 
              _generateLayerURL: function () {
                  var str, layerId, i, searchSettings, index;
-                 for (i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
-                     if (dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL) {
-                         str = dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL.split('/');
-                         layerId = str[str.length - 1];
-                         searchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
-                         for (index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
-                             if (searchSettings[index].Title && searchSettings[index].QueryLayerId) {
-                                 if (layerId === searchSettings[index].QueryLayerId) {
-                                     searchSettings[index].QueryURL = str.join("/");
+                 if (!dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length === 0) {
+                     for (i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
+                         if (dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL) {
+                             str = dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL.split('/');
+                             layerId = str[str.length - 1];
+                             searchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
+                             for (index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
+                                 if (searchSettings[index].Title && searchSettings[index].QueryLayerId) {
+                                     if (layerId === searchSettings[index].QueryLayerId) {
+                                         searchSettings[index].QueryURL = str.join("/");
+                                     }
                                  }
                              }
                          }
@@ -562,14 +569,13 @@ define([
                  if (!_default) {
                      _default = "";
                  }
-                 key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                 key = key.replace(/[\[]/, "\\").replace(/[\]]/, "\\");
                  regex = new RegExp("[\\$&]" + key + "=([^&#]*)");
                  qs = regex.exec(window.location.href);
                  if (!qs) {
                      return _default;
-                 } else {
-                     return qs[1];
                  }
+                 return qs[1];
              },
 
              _initializeWebmap: function (graphicsLayer) {
@@ -587,16 +593,16 @@ define([
                          this.map = response.map;
                          this.map.onUpdateEnd = lang.hitch(this, function () {
                              topic.publish("hideLoadingIndicatorHandler");
-                             });
+                         });
                          this.map.addLayer(graphicsLayer);
                          this.operationalLayers = response.itemInfo.itemData.operationalLayers;
                          if (this.shareDeferred) {
                              this.shareDeferred.resolve();
-                             }
+                         }
                          extent = this._getQueryString('extent');
                          if (extent !== "") {
                              mapDefaultExtent = extent.split(',');
-                             mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                             mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                              this.map.setExtent(mapDefaultExtent);
                          }
                          this._addLogoUrl();
@@ -608,13 +614,15 @@ define([
                          home.startup();
                          this._activateMapEvents();
                          this._fetchWebMapData(response);
-                         if (this.basMapGallery) {
-                             this.basMapGallery._hideBaseMapGallery();
-                         }
+                         this._showBasMapGallery();
                          if (this.legendObject) {
-                             topic.publish("updateLegends", this.map.extent);
+                             setTimeout(lang.hitch(this, function () {
+                                 topic.publish("updateLegends", this.map.extent);
+                             }), 5000);
                          } else {
-                             this._addLayerLegend();
+                             setTimeout(lang.hitch(this, function () {
+                                 this._addLayerLegend();
+                             }), 5000);
                          }
                          topic.publish("locateAddressOnMap");
                      }));
@@ -625,9 +633,8 @@ define([
                  var searchSettings, str, webMapDetails, serviceTitle, layerIndex, operationalLayerId, lastIndex, layerInfo,
                               infowindowCurrentSettings, infowindowFeaturelayerSettings, i, k, l, lastSlashIndex, index, webmapLayerIndex,
                               operationalLayers, field, responseObject, idx, popupField;
-                 dojo.configData.Workflows[dojo.workFlowIndex].InfoWindowSettings = [];
-                 searchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
                  dojo.configData.Workflows[dojo.workFlowIndex].InfowindowSettings = [];
+                 searchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
                  webMapDetails = response.itemInfo.itemData;
                  serviceTitle = [];
                  layerIndex = 0;

@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,7 +40,7 @@ define([
         * @name widgets/baseMapGallery/baseMapGallery
         */
         postCreate: function () {
-            var i, basemapContainer,baseMapURL,baseMapURLCount;
+            var i, basemapContainer, baseMapURL, baseMapLayers, baseMapURLCount;
             baseMapURL = baseMapURLCount = 0;
             baseMapLayers = dojo.configData.BaseMapLayers;
             for (i = 0; i < baseMapLayers.length; i++) {
@@ -86,10 +87,18 @@ define([
 
         _changeBaseMap: function (spanControl) {
             var layer, basemap;
-            basemap = this.map.getLayer("esriCTbasemap");
+            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                basemap = this.map.getLayer("defaultBasemap");
+            } else {
+                basemap = this.map.getLayer("esriCTbasemap");
+            }
             this.map.removeLayer(basemap);
-            layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[spanControl].MapURL, { id: "esriCTbasemap", visible: true })
-            this.map.addLayer(layer);
+            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[spanControl].MapURL, { id: "defaultBasemap", visible: true });
+            } else {
+                layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[spanControl].MapURL, { id: "esriCTbasemap", visible: true });
+            }
+            this.map.addLayer(layer,0);
         },
 
         _hideMapLayers: function () {

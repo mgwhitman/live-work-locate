@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,location,parent,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,9 +36,10 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!application/js/library/nls/localizedStrings",
-    "dojo/topic"
+    "dojo/topic",
+    "esri/request"
 ],
-function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic) {
+function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest) {
 
     //========================================================================================================================//
 
@@ -56,7 +58,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
             * @param {string} widget Key of the newly opened widget
             */
             topic.subscribe("toggleWidget", lang.hitch(this, function (widgetID) {
-                if (widgetID != "share") {
+                if (widgetID !== "share") {
                     /**
                     * divAppContainer Sharing Options Container
                     * @member {div} divAppContainer
@@ -112,7 +114,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
         * @memberOf widgets/share/share
         */
         _shareLink: function () {
-            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords;
+            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords, encodedUri;
             /**
             * get current map extent to be shared
             */
@@ -148,16 +150,17 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                 /**
                 * call tinyurl service to generate share URL
                 */
-                url = string.substitute(dojo.configData.MapSharingOptions.TinyURLServiceURL, [urlStr]);
-                dojo.io.script.get({
-                    url: url,
-                    callbackParamName: "callback",
-                    load: lang.hitch(this, function (data) {
-                        var tinyUrl, attr, x, applicationHeaderDiv;
-                        tinyUrl = data;
-                        attr = dojo.configData.MapSharingOptions.TinyURLResponseAttribute.split(".");
-                        for (x = 0; x < attr.length; x++) {
-                            tinyUrl = tinyUrl[attr[x]];
+                encodedUri = encodeURIComponent(urlStr);
+                url = string.substitute(dojo.configData.MapSharingOptions.TinyURLServiceURL, [encodedUri]);
+                esriRequest({
+                    url: url
+                }, {
+                    useProxy: true
+                }).then(lang.hitch(this, function (response) {
+                    var tinyUrl, applicationHeaderDiv, tinyResponse;
+                    tinyResponse = response.data;
+                    if (tinyResponse) {
+                        tinyUrl = tinyResponse.url;
                         }
                         applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
                         applicationHeaderDiv.appendChild(this.divAppContainer);
@@ -168,8 +171,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                             domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
                             domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                             domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
-                        }
-                        else {
+                    } else {
                             /**
                             * when user clicks on share icon in header panel, open the sharing panel if it is closed
                             */
@@ -191,12 +193,12 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                         this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
                         this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
                         this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
-                    }),
-                    error: function (error) {
+
+                }), lang.hitch(this, function (error) {
                         domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
                         alert(sharedNls.errorMessages.shareLoadingFailed);
-                    }
-                });
+
+                }));
             }
             catch (err) {
                 alert(sharedNls.errorMessages.shareLoadingFailed);
@@ -257,6 +259,7 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                     break;
                 case "email":
                     parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
+                    break;
             }
         }
     });

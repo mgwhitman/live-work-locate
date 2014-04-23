@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
+﻿/*global define,dojo,dojoConfig,alert,esri,window,document,location,setTimeout,clearTimeout */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,16 +32,14 @@ define([
     "dojo/text!./templates/appHeaderTemplate.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin",
-    "dojo/i18n!application/nls/localizedStrings"
-],
-     function (declare, domConstruct, lang, array, domAttr, on, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, appNls) {
+    "dijit/_WidgetsInTemplateMixin"
+    ],
+     function (declare, domConstruct, lang, array, domAttr, on, dom, domClass, domStyle, topic, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin) {
 
          //========================================================================================================================//
 
          return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
              templateString: template,
-             appNls: appNls,
             /**
              * create header panel
              *
@@ -82,22 +81,23 @@ define([
                  * @memberOf widgets/appHeader/appHeader
                  */
                  for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                     workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: appNls.messages.switchWorkflows, class: "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
-                     on(workflowSpan, "click", lang.hitch(this, function (evt) {
-                         if (dojo.seletedWorkflow !== evt.currentTarget.innerHTML) {
-                             dojo.workFlowIndex = domAttr.get(evt.currentTarget, "index");
-                             dojo.seletedWorkflow = evt.currentTarget.innerHTML;
-                             this.workflows._selectWorkflow(dojo.seletedWorkflow);
-                             this.mapObject._generateLayerURL();
-                             this.mapObject._clearMapGraphics();
-                             if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
-                                 topic.publish("initializeWebmap");
-                                 topic.publish("loadingIndicatorHandler");
-                             } else {
-                                 topic.publish("loadBasemapToggleWidget");
-                             }
-                         }
-                     }));
+                     workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflows, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                     on(workflowSpan, "click", lang.hitch(this, "_setSelectedWorkflow"));
+                 }
+             },
+             _setSelectedWorkflow: function(evt){
+                 if (dojo.seletedWorkflow !== evt.currentTarget.innerHTML) {
+                     dojo.workFlowIndex = domAttr.get(evt.currentTarget, "index");
+                     dojo.seletedWorkflow = evt.currentTarget.innerHTML;
+                     this.workflows._selectWorkflow(dojo.seletedWorkflow);
+                     this.mapObject._generateLayerURL();
+                     this.mapObject._clearMapGraphics();
+                     if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                         topic.publish("initializeWebmap");
+                         topic.publish("loadingIndicatorHandler");
+                     } else {
+                         topic.publish("loadBasemapToggleWidget");
+                     }
                  }
              },
 
@@ -107,16 +107,18 @@ define([
              * @memberOf widgets/appHeader/appHeader
              */
              loadHeaderWidgets: function (widgets) {
-                 var i, workflow;
+                 var widgetPath, workflow;
                  /**
                  * applicationHeaderWidgetsContainer container for header panel widgets
                  * @member {div} applicationHeaderWidgetsContainer
                  * @private
                  * @memberOf widgets/appHeader/appHeader
                  */
-                 for (i in widgets) {
-                     if (widgets[i].domNode) {
-                         domConstruct.place(widgets[i].domNode, this.applicationHeaderWidgetsContainer);
+                 for (widgetPath in widgets) {
+                     if (widgets.hasOwnProperty(widgetPath)) {
+                         if (widgets[widgetPath].domNode) {
+                             domConstruct.place(widgets[widgetPath].domNode, this.applicationHeaderWidgetsContainer);
+                         }
                      }
                  }
                  if (location.hash) {
@@ -134,10 +136,10 @@ define([
              * @memberOf widgets/appHeader/appHeader
              */
              _loadApplicationHeaderIcon: function () {
-                 if (dojo.configData.ApplicationFavicon && lang.trim(dojo.configData.ApplicationFavicon).length != 0) {
+                 if (dojo.configData.ApplicationFavicon && lang.trim(dojo.configData.ApplicationFavicon).length !== 0) {
                      this._loadIcons("shortcut icon", dojo.configData.ApplicationFavicon);
                  }
-                 if (dojo.configData.ApplicationIcon && lang.trim(dojo.configData.ApplicationIcon).length != 0) {
+                 if (dojo.configData.ApplicationIcon && lang.trim(dojo.configData.ApplicationIcon).length !== 0) {
                      this._loadIcons("apple-touch-icon-precomposed", dojo.configData.ApplicationIcon);
                      this._loadIcons("apple-touch-icon", dojo.configData.ApplicationIcon);
                      this.applicationHeaderIcon.src = dojoConfig.baseURL + dojo.configData.ApplicationIcon;
