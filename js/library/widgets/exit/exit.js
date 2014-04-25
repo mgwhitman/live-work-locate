@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,25 +24,21 @@ define([
     "dojo/topic",
     "dojo/_base/lang",
     "dijit/_WidgetBase",
-    "dijit/_TemplatedMixin",
-    "dojo/i18n!application/js/library/nls/localizedStrings"
-
-],
-function (declare, domConstruct, on, topic, lang, _WidgetBase, _TemplatedMixin, sharedNls) {
+    "dijit/_TemplatedMixin"
+    ],
+function (declare, domConstruct, on, topic, lang, _WidgetBase, _TemplatedMixin) {
 
     //========================================================================================================================//
 
     return declare([_WidgetBase], {
-        sharedNls: sharedNls,
-        /**
+      /**
         * create exit widget
         *
         * @class
         * @name widgets/exit/exit
-
         */
         postCreate: function () {
-            this.domNode = domConstruct.create("div", { "title": sharedNls.tooltips.exit, "class": "esriCTExitImg" }, null);
+            this.domNode = domConstruct.create("div", { "title": dojo.configData.Exit, "class": "esriCTExitImg" }, null);
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
                 this._exitPage();
             })));

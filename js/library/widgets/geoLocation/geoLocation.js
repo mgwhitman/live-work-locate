@@ -1,6 +1,7 @@
-﻿/*global define,dojo,dojoConfig,alert,esri */
+﻿/*global define,dojo,dojoConfig,Modernizr,navigator,alert */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+/** @license
+ | Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -70,8 +71,8 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
         */
 
         _showCurrentLocation: function () {
-            var mapPoint, self = this, currentBaseMap, geometryServiceURL, geometryService;
-            geometryServiceURL = dojo.configData.GeometryService,
+            var mapPoint, newMapPoint, self = this, currentBaseMap, geometryServiceURL, geometryService;
+            geometryServiceURL = dojo.configData.GeometryService;
             geometryService = new GeometryService(geometryServiceURL);
 
             /**
@@ -101,9 +102,9 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
                             return;
                         }
                     }
-                    mapPoint = newPoint[0];
-                    self.map.centerAndZoom(mapPoint, dojo.configData.ZoomLevel);
-                    self._addGraphic(mapPoint);
+                    newMapPoint = newPoint[0];
+                    self.map.centerAndZoom(newMapPoint, dojo.configData.ZoomLevel);
+                    self._addGraphic(newMapPoint);
                 }, function () {
                     alert(sharedNls.errorMessages.invalidProjection);
                 });

@@ -1,6 +1,7 @@
-﻿/*global dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+/** @license
+| Version 10.2
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,8 +68,24 @@ define([], function () {
         // Set splash window content - Message that appears when the application starts
         SplashScreen: {
             // splash screen Message is set in locale file in nls dirctory
-            IsVisible: true
-           },
+            IsVisible: true,
+            SplashScreenContent: "Please select an app to continue"
+        },
+
+        Exit: "Exit",
+
+        DriveTime: "Drive Time",
+
+        WalkTime: "Walk Time",
+
+        ExpandResult: "Expand Result",
+
+        CollapseResult: "Collapse Result",
+
+        NearbyText: "What's nearby?",
+
+        SwitchWorkflows: "Click to switch workflows",
+
         //------------------------------------------------------------------------------------------------------------------------
         // Header Widget Settings
         //------------------------------------------------------------------------------------------------------------------------
@@ -94,25 +111,15 @@ define([], function () {
             MapInstanceRequired: true
         }],
 
-        // ------------------------------------------------------------------------------------------------------------------------
-        // BASEMAP SETTINGS
-        // ------------------------------------------------------------------------------------------------------------------------
-        // Set baseMap layers
-        // Please note: All base-maps need to use the same spatial reference. By default, on application start the first base-map will be loaded
+        GroupURL: "http://www.arcgis.com/sharing/rest/",
 
-        BaseMapLayers: [{
-            ThumbnailSource: "js/library/themes/images/Topographic.jpg",
-            Name: "Topographic Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"
-        }, {
-            ThumbnailSource: "js/library/themes/images/streets.png",
-            Name: "Street Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"
-        }, {
-            ThumbnailSource: "js/library/themes/images/imagery.png",
-            Name: "Imagery Map",
-            MapURL: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
-        }],
+        SearchURL: "http://www.arcgis.com/sharing/rest/search?q=group:",
+
+        BasemapGroupTitle: "EsriLocalGovernment",
+
+        BasemapGroupOwner: "sagarnair_cssl",
+
+        WebmapThumbnail: "js/library/themes/images/not-available.png",
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GEOMETRY SERVICE SETTINGS
@@ -124,6 +131,8 @@ define([], function () {
         RouteTask: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
         ServiceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
 
+        // Set proxy url
+        ProxyUrl: "/proxy/proxy.ashx",
 
         // Following zoom level will be set for the map upon searching an address
         ZoomLevel: 12,
@@ -162,29 +171,29 @@ define([], function () {
         // SplashscreenImage: Set image to be displayed in splashscreen for this workflow
         // ThemeColor: Set theme color
         // WebMapId: Choose if you want to use WebMap or Map Services for operational layers.
-        //              If using WebMap, specify WebMapId within quotes, otherwise leave this empty and configure operational layers
+        // If using WebMap, specify WebMapId within quotes, otherwise leave this empty and configure operational layers
         // OperationalLayers: Configure operational layers for each workflow. The order of displaying layers is reversed on map. The last configured layer is displayed on top.
-        //                    ServiceURL: URL of the layer.
-        //                     LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.
-        //                                        Supported service types are 'dynamic' or 'feature'.
+        // ServiceURL: URL of the layer.
+        // LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.
+        // Supported service types are 'dynamic' or 'feature'.
         // SearchSettings: Configure search settings for each workflow.
-        //                 Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
-        //                           it should be the name of Map/Feature Service.
-        //                 QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
-        //                 SearchDisplayTitle: This text is displayed in search results as the title to group results.
-        //                 SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
-        //                 SearchExpression: Configure the query expression to be used for search.
+        // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
+        // it should be the name of Map/Feature Service.
+        // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
+        // SearchDisplayTitle: This text is displayed in search results as the title to group results.
+        // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
+        // SearchExpression: Configure the query expression to be used for search.
         // InfowindowSettings: Configure info-popup settings. The Title and QueryLayerId fields should be the same as configured in "Title" and "QueryLayerId" fields in SearchSettings.
-        //                 Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
-        //                           it should be the name of Map/Feature Service.
-        //                 QueryLayerId: Layer index used for performing queries.
-        //                 InfoWindowHeader: Specify field for the info window header
-        //                 ShowAllFields: When set to true, infowindow will display all fields from layer and InfoWindowData section is ignored
-        //                                  When set to false, only fields configured in InfoWindowData section will be displayed
-        //                 InfoWindowData: Set the content to be displayed in the info-Popup. Define labels and field values.
-        //                                These fields should be present in the layer referenced by 'QueryLayerId' specified under section 'SearchSettings'
-        //                 DisplayText: Caption to be displayed instead of field alias names. Set this to empty string ("") if you wish to display field alias names as captions.
-        //                 FieldName: Field used for displaying the value
+        // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
+        // it should be the name of Map/Feature Service.
+        // QueryLayerId: Layer index used for performing queries.
+        // InfoWindowHeader: Specify field for the info window header
+        // ShowAllFields: When set to true, infowindow will display all fields from layer and InfoWindowData section is ignored
+        // When set to false, only fields configured in InfoWindowData section will be displayed
+        // InfoWindowData: Set the content to be displayed in the info-Popup. Define labels and field values.
+        // These fields should be present in the layer referenced by 'QueryLayerId' specified under section 'SearchSettings'
+        // DisplayText: Caption to be displayed instead of field alias names. Set this to empty string ("") if you wish to display field alias names as captions.
+        // FieldName: Field used for displaying the value
 
         Workflows: [{
             Name: "LIVE",
@@ -1555,7 +1564,7 @@ define([], function () {
                 }, {
                     DisplayText: "More Info Link URL:",
                     FieldName: "${more_info}"
-                }, ]
+                }]
             }, {
                 Title: "EconomicDevelopment",
                 QueryLayerId: "22",
@@ -1806,7 +1815,7 @@ define([], function () {
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/59",
                 LoadAsServiceType: "dynamic"
-            }, ],
+            }],
 
             SearchSettings: [{
                 Title: "HospitalsAndHealthcareFacilities",
@@ -2517,7 +2526,7 @@ define([], function () {
                 }, {
                     DisplayText: "More Information:",
                     FieldName: "${more_info}"
-                }, ]
+                }]
             }, {
                 Title: "EconomicDevelopment",
                 QueryLayerId: "22",
@@ -2992,6 +3001,9 @@ define([], function () {
             }]
         }],
 
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Customize LAYER REFRESH INTERVAL
+        // ------------------------------------------------------------------------------------------------------------------------
         // Time interval to refresh all layers on map
         LayersRefreshInterval: 5, // in minutes
 
@@ -3027,6 +3039,9 @@ define([], function () {
             MaxResults: 200
         },
 
+        // ------------------------------------------------------------------------------------------------------------------------
+        // TASK SERVICE URL
+        // ------------------------------------------------------------------------------------------------------------------------
         // TaskService: Services used for route task.
         TaskService: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
 
