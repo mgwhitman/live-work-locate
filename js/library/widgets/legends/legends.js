@@ -1,5 +1,5 @@
-﻿/*global define,dojo,dojoConfig,alert,esri,window,console,setTimeout,clearTimeout */
-/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+﻿/*global define,dojo,dojoConfig,esri,alert,console */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /** @license
  | Version 10.2
  | Copyright 2013 Esri
@@ -39,8 +39,7 @@ define([
     "esri/request",
     "esri/tasks/query",
     "esri/tasks/QueryTask"
-],
-function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom, domClass, template, topic, Deferred, DeferredList, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, esriRequest, Query, QueryTask) {
+], function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom, domClass, template, topic, Deferred, DeferredList, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, esriRequest, Query, QueryTask) {
     //========================================================================================================================//
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
@@ -79,7 +78,7 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
 
         _UpdatedLegend: function (geometry) {
             var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, resultListArray = [], legendListWidth = [],
-                        queryDefList, arryList = 0, boxWidth, i;
+                queryDefList, arryList = 0, boxWidth, i;
 
             this._resetLegendContainer();
             this._rendererArray.length = 0;
@@ -319,17 +318,17 @@ function (declare, domConstruct, domStyle, lang, array, query, domAttr, on, dom,
             var defArray = [], layerTempArray = [], params, layer, layersRequest, deferredList, layerObject, i;
             for (layer in this._layerCollection) {
                 if (this._layerCollection.hasOwnProperty(layer)) {
-                if (this._layerCollection[layer].legend && this._layerCollection[layer].legend.length > 1) {
-                    layerTempArray.push(layer);
-                    params = {
-                        url: layer,
-                        content: { f: "json" },
-                        handleAs: "json",
-                        callbackParamName: "callback"
-                    };
-                    layersRequest = esriRequest(params);
+                    if (this._layerCollection[layer].legend && this._layerCollection[layer].legend.length > 1) {
+                        layerTempArray.push(layer);
+                        params = {
+                            url: layer,
+                            content: { f: "json" },
+                            handleAs: "json",
+                            callbackParamName: "callback"
+                        };
+                        layersRequest = esriRequest(params);
                         defArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
-                            }
+                    }
                 }
             }
             deferredList = new DeferredList(defArray);

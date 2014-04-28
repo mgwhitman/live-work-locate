@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
+﻿/*global define,dojo,dojoConfig,esri */
 /*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
 /** @license
  | Version 10.2

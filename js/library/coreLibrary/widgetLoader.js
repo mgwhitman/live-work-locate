@@ -1,5 +1,5 @@
-﻿/*global define,dojo,require,alert,console */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+﻿/*global define,dojo,require,console,alert */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /** @license
  | Version 10.2
  | Copyright 2013 Esri
@@ -36,8 +36,7 @@ define([
     "dojo/dom-style",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dojo/domReady!"
-],
-function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, DeferredList, esriRequest, esriUtils, all, domClass, query, topic, domStyle, sharedNls) {
+], function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, DeferredList, esriRequest, esriUtils, all, domClass, query, topic, domStyle, sharedNls) {
 
     //========================================================================================================================//
 
@@ -75,8 +74,7 @@ function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Defer
                         }
                         splashScreen._hideSplashScreenDialog();
                         splashScreen.loadSelectedWorkflow(workflow, map);
-                    }
-                    else {
+                    } else {
                         splashScreen.showSplashScreenDialog(map);
                     }
                     topic.subscribe("showSplashScreen", function () {

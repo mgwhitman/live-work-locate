@@ -1,5 +1,5 @@
-﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,location,parent,clearTimeout */
-/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+﻿/*global define,dojo,dojoConfig,esri,alert */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /** @license
  | Version 10.2
  | Copyright 2013 Esri
@@ -38,8 +38,7 @@ define([
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dojo/topic",
     "esri/request"
-],
-function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest) {
+], function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest) {
 
     //========================================================================================================================//
 
@@ -138,12 +137,10 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                 } else {
                     urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$locationPoint=" + locGeom + "$sliderValue=" + dojo.sliderValue + "$driveType=" + dojo.driveTime;
                 }
-            }
-            else if (dojo.mapClickedPoint) {
+            } else if (dojo.mapClickedPoint) {
                 clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
                 urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent + "$mapClickPoint=" + clickCoords;
-            }
-            else {
+            } else {
                 urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent;
             }
             try {
@@ -161,46 +158,45 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
                     tinyResponse = response.data;
                     if (tinyResponse) {
                         tinyUrl = tinyResponse.url;
-                        }
-                        applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
-                        applicationHeaderDiv.appendChild(this.divAppContainer);
-                        if (html.coords(this.divAppContainer).h > 0) {
-                            /**
-                            * when user clicks on share icon in header panel, close the sharing panel if it is open
-                            */
-                            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
-                            domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
-                            domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
+                    }
+                    applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
+                    applicationHeaderDiv.appendChild(this.divAppContainer);
+                    if (html.coords(this.divAppContainer).h > 0) {
+                        /**
+                        * when user clicks on share icon in header panel, close the sharing panel if it is open
+                        */
+                        domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
+                        domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+                        domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
                     } else {
-                            /**
-                            * when user clicks on share icon in header panel, open the sharing panel if it is closed
-                            */
-                            domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
-                            domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
-                            domClass.replace(this.divAppContainer, "esriCTFullHeight", "esriCTZeroHeight");
-                        }
                         /**
-                        * remove event handlers from sharing options
+                        * when user clicks on share icon in header panel, open the sharing panel if it is closed
                         */
-                        if (this.facebookHandle) {
-                            this.facebookHandle.remove();
-                            this.twitterHandle.remove();
-                            this.emailHandle.remove();
-                        }
-                        /**
-                        * add event handlers to sharing options
-                        */
-                        this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
-                        this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
-                        this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
+                        domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
+                        domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
+                        domClass.replace(this.divAppContainer, "esriCTFullHeight", "esriCTZeroHeight");
+                    }
+                    /**
+                    * remove event handlers from sharing options
+                    */
+                    if (this.facebookHandle) {
+                        this.facebookHandle.remove();
+                        this.twitterHandle.remove();
+                        this.emailHandle.remove();
+                    }
+                    /**
+                    * add event handlers to sharing options
+                    */
+                    this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
+                    this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
+                    this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
 
                 }), lang.hitch(this, function (error) {
-                        domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
-                        alert(sharedNls.errorMessages.shareLoadingFailed);
+                    domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
+                    alert(sharedNls.errorMessages.shareLoadingFailed);
 
                 }));
-            }
-            catch (err) {
+            } catch (err) {
                 alert(sharedNls.errorMessages.shareLoadingFailed);
             }
         },
@@ -251,15 +247,15 @@ function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query,
         _shareOptions: function (site, url) {
             domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
             switch (site) {
-                case "facebook":
-                    window.open(string.substitute(dojo.configData.MapSharingOptions.FacebookShareURL, [url]));
-                    break;
-                case "twitter":
-                    window.open(string.substitute(dojo.configData.MapSharingOptions.TwitterShareURL, [url]));
-                    break;
-                case "email":
-                    parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
-                    break;
+            case "facebook":
+                window.open(string.substitute(dojo.configData.MapSharingOptions.FacebookShareURL, [url]));
+                break;
+            case "twitter":
+                window.open(string.substitute(dojo.configData.MapSharingOptions.TwitterShareURL, [url]));
+                break;
+            case "email":
+                parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
+                break;
             }
         }
     });

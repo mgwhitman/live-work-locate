@@ -1,5 +1,5 @@
-﻿/*global define,dojo,dojoConfig,alert,esri,window,setTimeout,clearTimeout */
-/*jslint sloppy:true,nomen:true,plusplus:true,unparam:true */
+﻿/*global define,dojo,dojoConfig,esri,alert */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /** @license
  | Version 10.2
  | Copyright 2013 Esri
@@ -98,7 +98,7 @@ define([
             } else {
                 layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[spanControl].MapURL, { id: "esriCTbasemap", visible: true });
             }
-            this.map.addLayer(layer,0);
+            this.map.addLayer(layer, 0);
         },
 
         _hideMapLayers: function () {
