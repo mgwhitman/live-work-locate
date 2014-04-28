@@ -1,7 +1,6 @@
 ﻿/*global define,dojo,dojoConfig,esri,alert */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
-/** @license
- | Version 10.2
+/*
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -208,7 +207,7 @@ define([
         */
         _getMapExtent: function () {
             var extents = Math.round(this.map.extent.xmin).toString() + "," + Math.round(this.map.extent.ymin).toString() + "," + Math.round(this.map.extent.xmax).toString() + "," + Math.round(this.map.extent.ymax).toString();
-            return (extents);
+            return extents;
         },
 
         /**
