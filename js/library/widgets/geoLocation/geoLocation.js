@@ -1,7 +1,6 @@
-﻿/*global define,dojo,dojoConfig,Modernizr,navigator,alert */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/** @license
- | Version 10.2
+﻿/*global define,dojo,dojoConfig,Modernizr,alert */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+/*
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,8 +29,7 @@ define([
     "esri/SpatialReference",
     "esri/graphic",
     "dojo/i18n!application/js/library/nls/localizedStrings"
-],
-function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, Point, PictureMarkerSymbol, SpatialReference, Graphic, sharedNls) {
+], function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, Point, PictureMarkerSymbol, SpatialReference, Graphic, sharedNls) {
 
     //========================================================================================================================//
 
@@ -120,8 +118,8 @@ function (declare, lang, domConstruct, on, topic, _WidgetBase, GeometryService, 
         */
         _addGraphic: function (mapPoint) {
             var geoLocationPushpin = dojoConfig.baseURL + dojo.configData.LocatorSettings.DefaultLocatorSymbol,
-            locatorMarkupSymbol = new PictureMarkerSymbol(geoLocationPushpin, "35", "35"),
-            graphic = new Graphic(mapPoint, locatorMarkupSymbol, null, null);
+                locatorMarkupSymbol = new PictureMarkerSymbol(geoLocationPushpin, "35", "35"),
+                graphic = new Graphic(mapPoint, locatorMarkupSymbol, null, null);
             this.map.getLayer("esriGraphicsLayerMapSettings").clear();
             this.map.getLayer("esriGraphicsLayerMapSettings").add(graphic);
         }

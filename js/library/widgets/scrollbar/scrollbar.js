@@ -1,7 +1,6 @@
-﻿/*global define,dojo,document,window,event,setTimeout,clearTimeout */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/** @license
- | Version 10.2
+﻿/*global define,dojo */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
+/*
  | Copyright 2013 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -276,8 +275,7 @@ define([
                 } // Limit vertical movement
                 this._scrollBarHandle.style.top = y + "px";
                 this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
-            }
-            else {
+            } else {
                 y = this._topPosition - 10;
                 if (y > this._yMax) {
                     y = this._yMax;
