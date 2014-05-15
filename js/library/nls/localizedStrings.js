@@ -24,6 +24,7 @@ define({
             sliderDisplayText: "Show results within <b> ${defaultMinute} mins drive</b>"
         },
         errorMessages: {
+            fieldNotFound: "field not found",
             invalidSearch: "No results found",
             falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
             invalidLocation: "Current Location not found.",

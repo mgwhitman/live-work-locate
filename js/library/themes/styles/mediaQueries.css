@@ -100,7 +100,7 @@
     {
         font-size: 15px !important;
     }
-    
+
     .esriCTShareCursor, .facebook, .twitter, .email
     {
         height: 44px !important;
@@ -196,17 +196,17 @@
     {
         padding-top: 4px;
     }
-    
+
     .esriCTApplicationHeaderIcon
     {
         padding: 15px 0 2px 15px !important;
     }
-    
+
     .esriCTshareContainer
     {
         width: 100%;
     }
-      .moveLeft
+    .moveLeft
     {
         left: -3px !important;
     }
@@ -288,7 +288,7 @@
     {
         width: 100%;
     }
-      .moveLeft
+    .moveLeft
     {
         left: -3px !important;
     }
@@ -297,7 +297,7 @@
 @media screen and (max-width: 680px)
 {
 
-    .esriCTApplicationHeaderTextTD,.esriCTApplicationHeaderIcon
+    .esriCTApplicationHeaderTextTD, .esriCTApplicationHeaderIcon
     {
         display: none;
     }
@@ -314,8 +314,11 @@
     {
         width: 100%;
     }
-    .esriCTApplicationHeader{HEIGHT:61PX;}
-     .esriCTShareCursor, .facebook, .twitter, .email
+    .esriCTApplicationHeader
+    {
+        height: 61PX;
+    }
+    .esriCTShareCursor, .facebook, .twitter, .email
     {
         height: 44px !important;
         width: 44px !important;

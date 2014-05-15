@@ -87,8 +87,8 @@ html, body
 
 .esriCTExitImg
 {
-     background-image: url("../images/img24x24/exit-24.png");
-    }
+    background-image: url("../images/img24x24/exit-24.png");
+}
 .esriCTApplicationHeaderIconTD
 {
     width: 80px;
@@ -116,7 +116,7 @@ html, body
     z-index: 1000;
     background-repeat: no-repeat;
 }
-.esriCTTdHeaderSearch,.esriCTTdHeaderSearch-select, .esriCTHelpImg, .esriCTTdGeolocation,.esriCTImgSocialMedia-select,.esriCTImgSocialMedia,.esriCTRouteImg,.esriCTRouteImg-select
+.esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTHelpImg, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select
 {
     margin: 12px 24px;
     background-repeat: no-repeat;
@@ -391,6 +391,16 @@ html, body
     cursor: pointer;
 }
 
+.esriNoResultFound
+{
+    width: 245px;
+    margin: 25px 10px 0px 19px;
+    font-weight: bold;
+    height: 25px;
+    padding-top: 10px;
+    display: none;
+    border-bottom: 1px solid #ccc;
+}
 .clearInputNotApear
 {
     background-repeat: no-repeat;
@@ -474,7 +484,7 @@ html, body
     margin: 0 auto;
     text-align: center;
 }
-.facebook,.twitter,.email,.embedding
+.facebook, .twitter, .email, .embedding
 {
     background-repeat: no-repeat;
     background-position: center;
@@ -482,7 +492,7 @@ html, body
     width: 24px;
     margin: 0 auto;
     cursor: pointer;
-  }
+}
 
 .esriCTShowEmbeddingContainer
 {
@@ -509,6 +519,7 @@ html, body
     border: #fff solid 0 !important;
     margin-top: 2px;
     background-color: rgba(102, 102, 102, 0.8);
+    z-index: 999 !important;
 }
 
 .esriSimpleSliderTL
@@ -711,14 +722,16 @@ html, body
     position: relative;
     margin-top: 10px;
     background: #FFF;
-    z-index:1007;
+    z-index: 1007;
 }
-.divSplashInnerContainer {
+.divSplashInnerContainer
+{
     overflow: hidden;
     float: left;
     width: 600px;
-    margin-left:65px;}
-    
+    margin-left: 65px;
+}
+
 .divSplashContent
 {
     padding-left: 10px;
@@ -757,7 +770,7 @@ html, body
 .esriNext
 {
     background: white;
-    RIGHT: 0;
+    right: 0;
     margin-top: 70px;
     position: absolute;
 }
@@ -1077,7 +1090,7 @@ html, body
 {
     height: 31px;
     position: fixed;
-    z-index: 998;
+    z-index: 1000;
     overflow: hidden;
     width: 100%;
     bottom: 0px;
@@ -1128,7 +1141,7 @@ html, body
 
 .legendrightboxTest
 {
-    width: 0px;
+    width: 0px !important;
 }
 
 .divlegendContent
@@ -1151,14 +1164,13 @@ html, body
 }
 .divlegendLoadingContainer
 {
-    margin-top:7px; 
-    float:left;
+    margin-top: 7px;
+    float: left;
 }
 .divNoLegendContainer
 {
-    width: 120px;
-    margin-top:7px; 
-    float:left;
+    margin-top: 7px;
+    float: left;
 }
 .divlegendList
 {
@@ -1179,19 +1191,19 @@ html, body
     position: absolute;
     height: 30px;
     width: 30px;
-    right: 288px;
+    right: 287px;
     overflow: hidden;
     cursor: pointer !important;
 }
 .divRightArrowRightMargin
 {
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    right: 0px;
-    overflow: hidden;
- }
+    right: 0px !important;
+}
 
+.rightBorderNone
+{
+    border-right: none !importatnt;
+}
 .esriCTArrow
 {
     height: 30px;
@@ -1238,9 +1250,8 @@ html, body
     padding: 2px;
 }
 
-.infoTiteArrow
+.infoTitleArrow
 {
-    background-image: url("../images/right-arrow-blue.png");
     background-position: right center;
     background-repeat: no-repeat;
     display: table-cell;
@@ -1248,9 +1259,8 @@ html, body
     width: 18px;
 }
 
-.infoBackTiteArrow
+.infoBackTitleArrow
 {
-    background-image: url("../images/blue-arrow.png");
     float: left;
     background-repeat: no-repeat;
     height: 18px;
@@ -1259,7 +1269,7 @@ html, body
     margin-left: -6px;
 }
 
-.infoBackTite
+.infoBackTitle
 {
     float: left;
     font-weight: normal;
@@ -1416,7 +1426,7 @@ html, body
     font-size: 11px !important;
     margin-left: 10px;
     float: left;
-    width: 30%;
+    width: 34%;
     word-wrap: break-word;
 }
 
@@ -1427,7 +1437,7 @@ html, body
     font-size: 11px !important;
     vertical-align: top;
     float: left;
-    width: 60%;
+    width: 56%;
     word-wrap: break-word;
 }
 
@@ -1499,9 +1509,9 @@ html, body
     overflow: hidden;
     position: absolute;
     width: 100%;
-    background-image: url("../images/bottomArrow.png");
     background-repeat: no-repeat;
 }
+
 .infopanel
 {
     clear: both;
@@ -1509,7 +1519,7 @@ html, body
     height: 87% !important;
     bottom: 0px;
 }
- 
+
 .esriCTFullHeightWidth
 {
     height: 100%;
@@ -1841,8 +1851,8 @@ input
     display: table-cell;
     vertical-align: middle;
     padding-right: 5px;
-    font-weight:bold;
-    width:238px;
+    font-weight: bold;
+    width: 238px;
 }
 
 .esriCTSearchGroupCell
@@ -1866,7 +1876,7 @@ input
 .esriCTResultColor
 {
     color: #007ac2;
-    padding:5px 0; 
+    padding: 5px 0;
 }
 
 .esriCTCursorPointer
@@ -1879,7 +1889,8 @@ input
     cursor: pointer;
 }
 
-.esriCTAddress {
+.esriCTAddress
+{
     font-weight: bold !important;
 }
 .esriCTExpandCollapse
@@ -1954,7 +1965,7 @@ input
     float: right;
     margin-right: 8px;
     margin-top: 2px;
-   }
+}
 
 .totalDistance
 {
@@ -1975,7 +1986,7 @@ input
     width: 90%;
 }
 
-.border_bottom
+.borderbottom
 {
     border-bottom: 1px solid #b4b4b4;
 }
@@ -2013,7 +2024,7 @@ input
     color: #6e6e6e !important;
     margin-right: 4px;
     width: 90%;
-    height:40px;
+    height: 40px;
 }
 
 .plusMinusFeatureTitle
@@ -2052,11 +2063,9 @@ input
     background-repeat: no-repeat;
     background-position: center;
     padding-right: 40px !important;
-    
 }
 .esriCTdivInfoRightArrow
 {
-    background-image: url('../images/right-arrow-blue.png') !important;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
@@ -2089,7 +2098,6 @@ input
 }
 .esriCTdivInfoLeftArrow
 {
-    background-image: url('../images/blue-arrow.png') !important;
     background-repeat: no-repeat;
     background-position: center;
     cursor: pointer;
@@ -2118,11 +2126,25 @@ input
 }
 .spanRouteLength
 {
-
     padding: 5px 15px 5px 0px;
     vertical-align: middle !important;
     display: table-cell;
     white-space: nowrap;
     text-align: right !important;
     cursor: pointer;
+}
+
+.rightBorderNone
+{
+    border-right: none !important;
+}
+
+.esriCTMapLogo
+{
+    position: absolute;
+    bottom: 35px;
+    left: 5px;
+    height: 35px;
+    z-index: 1000;
+    width: auto;
 }

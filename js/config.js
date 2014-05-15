@@ -41,11 +41,9 @@ define([], function () {
         // 17. Customize  DriveTimeSliderRulerSettings       - [ Tag(s) to look for: DriveTimeSliderRulerSettings ]
         // 18. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
         // 19. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
-        // 20. Customize  LayersRefreshInterval              - [ Tag(s) to look for: LayersRefreshInterval ]
-        // 21. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
-        // 22. Set URL for TaskService                       - [ Tag(s) to look for: TaskService ]
-        // 23. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
-        // 24. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
+        // 20. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
+        // 21. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
+        // 22. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GENERAL SETTINGS
@@ -66,24 +64,23 @@ define([], function () {
 
         // Set splash window content - Message that appears when the application starts
         SplashScreen: {
-            // splash screen Message is set in locale file in nls dirctory
-            IsVisible: true,
             SplashScreenContent: "Please select an app to continue"
         },
 
-        Exit: "Exit",
-
-        DriveTime: "Drive Time",
-
-        WalkTime: "Walk Time",
-
-        ExpandResult: "Expand Result",
-
-        CollapseResult: "Collapse Result",
-
-        NearbyText: "What's nearby?",
-
-        SwitchWorkflows: "Click to switch workflows",
+        //ExitButtonTooltip: Specify tooltip text for exit workflow button
+        ExitButtonTooltip: "Exit",
+        //DriveTimeButtonTooltip : Specify tooltip text for switch to drivetime button in distance slider
+        DriveTimeButtonTooltip: "Drive Time",
+        //WalkTimeButtonTooltip: Specify tooltip text for switch to walktime button in distance slider
+        WalkTimeButtonTooltip: "Walk Time",
+        //ExpandResultTooltip: Specify tooltip text for expand results button in results panel
+        ExpandResultTooltip: "Expand Result",
+        //CollapseResultTooltip: Specify tooltip text for collapse results button in results panel
+        CollapseResultTooltip: "Collapse Result",
+        //ResultsPanelTitleText: Specify label text for title of results panel
+        ResultsPanelTitleText: "What's nearby?",
+        //SwitchWorkflowsTooltip: Specify tooltip text for switch workflow buttons in header
+        SwitchWorkflowsTooltip: "Click to switch workflows",
 
         //------------------------------------------------------------------------------------------------------------------------
         // Header Widget Settings
@@ -110,15 +107,22 @@ define([], function () {
             MapInstanceRequired: true
         }],
 
-        GroupURL: "http://www.arcgis.com/sharing/rest/",
+        // ------------------------------------------------------------------------------------------------------------------------
+        // BASEMAP SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Set options for basemap
+        // Please note: All base-maps need to use the same spatial reference.
 
-        SearchURL: "http://www.arcgis.com/sharing/rest/search?q=group:",
-
+        // Specify URL to ArcGIS Portal REST API
+        PortalAPIURL: "http://www.arcgis.com/sharing/rest/",
+        // Specify the title of group that contains basemaps
         BasemapGroupTitle: "EsriLocalGovernment",
-
+        // Specify the user name of owner of the group that contains basemaps
         BasemapGroupOwner: "sagarnair_cssl",
-
-        WebmapThumbnail: "js/library/themes/images/not-available.png",
+        // Specify spatial reference for basemaps, since all basemaps need to use the same spatial reference
+        BasemapSpatialReferenceWKID: 102100,
+        // Specify path to image used to display the thumbnail for a basemap when portal does not provide it
+        NoThumbnail: "js/library/themes/images/not-available.png",
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GEOMETRY SERVICE SETTINGS
@@ -332,7 +336,7 @@ define([], function () {
                 QueryLayerId: "29",
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "ArtsAndCulturalCenters",
                 QueryLayerId: "32",
@@ -340,7 +344,7 @@ define([], function () {
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
-                Title: "Music Venues",
+                Title: "MusicVenues",
                 QueryLayerId: "34",
                 SearchDisplayTitle: "Music Venues",
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
@@ -388,7 +392,7 @@ define([], function () {
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
-                Title: "Childrens Activities",
+                Title: "ChildrensActivities",
                 QueryLayerId: "42",
                 SearchDisplayTitle: "Childrens Activities",
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
@@ -1150,10 +1154,10 @@ define([], function () {
             Name: "WORK",
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
-            WebMapId: "6bae0ff12ae64291a9a5903aab8d3537",
+            WebMapId: "",
             FeatureHighlightColor: "#1C86EE",
             OperationalLayers: [{
-                ServiceURL: " http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/5",
+                ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/5",
                 LoadAsServiceType: "dynamic"
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/14",
@@ -1166,9 +1170,6 @@ define([], function () {
                 LoadAsServiceType: "dynamic"
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/19",
-                LoadAsServiceType: "dynamic"
-            }, {
-                ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/20",
                 LoadAsServiceType: "dynamic"
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/20",
@@ -1233,12 +1234,6 @@ define([], function () {
                 SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
-                Title: "TopBioscienceEmployers",
-                QueryLayerId: "20",
-                SearchDisplayTitle: "Top Bioscience Employers",
-                SearchDisplayFields: "${sitename} / ${city}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-            }, {
                 Title: "TopPrivatelyHeldEmployers",
                 QueryLayerId: "21",
                 SearchDisplayTitle: "Top Privately Held Employers",
@@ -1255,13 +1250,13 @@ define([], function () {
                 QueryLayerId: "29",
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "Employment",
                 QueryLayerId: "30",
                 SearchDisplayTitle: "Employment",
                 SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "MassTransitStations",
                 QueryLayerId: "56",
@@ -1285,7 +1280,7 @@ define([], function () {
             InfowindowSettings: [{
                 Title: "EconomicDevelopment",
                 QueryLayerId: "5",
-                InfoWindowHeaderField: "${sitename}",
+                InfoWindowHeaderField: "${Name}",
                 ShowAllFields: "false",
                 InfoWindowData: [{
                     DisplayText: "Address1 :",
@@ -1298,16 +1293,16 @@ define([], function () {
                     FieldName: "${Telephone}"
                 }, {
                     DisplayText: "Agency:",
-                    FieldName: "${streetaddress}"
+                    FieldName: "${Agency}"
                 }, {
                     DisplayText: "City:",
-                    FieldName: "${city}"
+                    FieldName: "${City}"
                 }, {
                     DisplayText: "County:",
-                    FieldName: "${county}"
+                    FieldName: "${County}"
                 }, {
                     DisplayText: "Website :",
-                    FieldName: "${Website }"
+                    FieldName: "${Website}"
                 }, {
                     DisplayText: "Name:",
                     FieldName: "${Name}"
@@ -1322,7 +1317,7 @@ define([], function () {
                     FieldName: "${USProcurement2010}"
                 }, {
                     DisplayText: "MDProcurement2010 :",
-                    FieldName: "${MDProcurement2010 }"
+                    FieldName: "${MDProcurement2010}"
                 }]
             }, {
                 Title: "EconomicDevelopment",
@@ -1461,39 +1456,6 @@ define([], function () {
                 }, {
                     DisplayText: "Street Address:",
                     FieldName: "${streetaddress}"
-                }, {
-                    DisplayText: "More Info Link URL:",
-                    FieldName: "${more_info}"
-                }]
-            }, {
-                Title: "EconomicDevelopment",
-                QueryLayerId: "20",
-                InfoWindowHeaderField: "${sitename}",
-                ShowAllFields: "false",
-                InfoWindowData: [{
-                    DisplayText: "Name:",
-                    FieldName: "${sitename}"
-                }, {
-                    DisplayText: "Description:",
-                    FieldName: "${sitedesc}"
-                }, {
-                    DisplayText: "County:",
-                    FieldName: "${county}"
-                }, {
-                    DisplayText: "Street Address:",
-                    FieldName: "${streetaddress}"
-                }, {
-                    DisplayText: "City:",
-                    FieldName: "${city}"
-                }, {
-                    DisplayText: "Phone:",
-                    FieldName: "${phonenumber}"
-                }, {
-                    DisplayText: "Website URL:",
-                    FieldName: "${website}"
-                }, {
-                    DisplayText: "Zip Code:",
-                    FieldName: "${zip}"
                 }, {
                     DisplayText: "More Info Link URL:",
                     FieldName: "${more_info}"
@@ -1725,7 +1687,7 @@ define([], function () {
             Name: "LOCATE",
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/purpleTheme.css",
-            WebMapId: "60a6d49d15db41ec8a6839543d9e8219",
+            WebMapId: "",
             FeatureHighlightColor: "#1C86EE",
             OperationalLayers: [{
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/4",
@@ -1767,12 +1729,6 @@ define([], function () {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/20",
                 LoadAsServiceType: "dynamic"
             }, {
-                ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
-                LoadAsServiceType: "dynamic"
-            }, {
-                ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/20",
-                LoadAsServiceType: "dynamic"
-            }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/21",
                 LoadAsServiceType: "dynamic"
             }, {
@@ -1780,6 +1736,9 @@ define([], function () {
                 LoadAsServiceType: "dynamic"
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/26",
+                LoadAsServiceType: "dynamic"
+            }, {
+                ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/27",
                 LoadAsServiceType: "dynamic"
             }, {
                 ServiceURL: "http://50.18.115.76:6080/arcgis/rest/services/EconomicDevelopment/MapServer/29",
@@ -1819,13 +1778,13 @@ define([], function () {
             SearchSettings: [{
                 Title: "HospitalsAndHealthcareFacilities",
                 QueryLayerId: "4",
-                SearchDisplayTitle: "Hospitals And Healthcare Facilities ",
+                SearchDisplayTitle: "Hospitals And Healthcare Facilities",
                 SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%') OR UPPER(orgname) LIKE UPPER('${0}')"
             }, {
                 Title: "FederalFacilities",
                 QueryLayerId: "5",
-                SearchDisplayTitle: " Federal Facilities",
+                SearchDisplayTitle: "Federal Facilities",
                 SearchDisplayFields: "${Agency} / ${City}/Phone: ${Telephone}",
                 SearchExpression: "UPPER(Agency) LIKE UPPER('${0}%') OR UPPER(City) LIKE UPPER('${0}%') OR UPPER(County) LIKE UPPER('${0}%')"
             }, {
@@ -1895,18 +1854,6 @@ define([], function () {
                 SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
-                Title: "RealPropertyTaxRate",
-                QueryLayerId: "27",
-                SearchDisplayTitle: "Real Property Tax Rate",
-                SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-            }, {
-                Title: "TopBioscienceEmployers",
-                QueryLayerId: "20",
-                SearchDisplayTitle: "Top Bioscience Employers",
-                SearchDisplayFields: "${sitename} / ${city}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-            }, {
                 Title: "TopPrivatelyHeldEmployers",
                 QueryLayerId: "21",
                 SearchDisplayTitle: "Top Privately Held Employers",
@@ -1923,19 +1870,25 @@ define([], function () {
                 QueryLayerId: "26",
                 SearchDisplayTitle: "Business Personal Property Tax Rate",
                 SearchDisplayFields: "${sitename} / ${value}",
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
+            }, {
+                Title: "RealPropertyTaxRate",
+                QueryLayerId: "27",
+                SearchDisplayTitle: "Real Property Tax Rate",
+                SearchDisplayFields: "${sitename} / ${value}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "LaborForce",
                 QueryLayerId: "29",
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "Employment",
                 QueryLayerId: "30",
                 SearchDisplayTitle: "Employment",
                 SearchDisplayFields: "${sitename} / ${value}",
-                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%')n OR UPPER(county) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 Title: "HigherEducationFourYearIndependent",
                 QueryLayerId: "50",
@@ -1961,7 +1914,7 @@ define([], function () {
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
-                Title: "Higher Education TwoYearPublic",
+                Title: "HigherEducationTwoYearPublic",
                 QueryLayerId: "54",
                 SearchDisplayTitle: "Higher Edu 2-Year Public",
                 SearchDisplayFields: "${sitename}, ${city}, Phone: ${phonenumber}",
@@ -2028,7 +1981,7 @@ define([], function () {
             }, {
                 Title: "EconomicDevelopment",
                 QueryLayerId: "5",
-                InfoWindowHeaderField: "${sitename}",
+                InfoWindowHeaderField: "${Name}",
                 ShowAllFields: "false",
                 InfoWindowData: [{
                     DisplayText: "Address1 :",
@@ -2041,16 +1994,16 @@ define([], function () {
                     FieldName: "${Telephone}"
                 }, {
                     DisplayText: "Agency:",
-                    FieldName: "${streetaddress}"
+                    FieldName: "${Agency}"
                 }, {
                     DisplayText: "City:",
-                    FieldName: "${city}"
+                    FieldName: "${City}"
                 }, {
                     DisplayText: "County:",
-                    FieldName: "${county}"
+                    FieldName: "${County}"
                 }, {
                     DisplayText: "Website :",
-                    FieldName: "${Website }"
+                    FieldName: "${Website}"
                 }, {
                     DisplayText: "Name:",
                     FieldName: "${Name}"
@@ -2058,14 +2011,14 @@ define([], function () {
                     DisplayText: "USProcurement2009:",
                     FieldName: "${USProcurement2009}"
                 }, {
-                    DisplayText: "MDProcurement2009 :",
+                    DisplayText: "MDProcurement2009:",
                     FieldName: "${MDProcurement2009}"
                 }, {
                     DisplayText: "USProcurement2010 :",
                     FieldName: "${USProcurement2010}"
                 }, {
                     DisplayText: "MDProcurement2010 :",
-                    FieldName: "${MDProcurement2010 }"
+                    FieldName: "${MDProcurement2010}"
                 }]
             }, {
                 Title: "EconomicDevelopment",
@@ -2429,72 +2382,6 @@ define([], function () {
                 }]
             }, {
                 Title: "EconomicDevelopment",
-                QueryLayerId: "27",
-                InfoWindowHeaderField: "${sitename}",
-                ShowAllFields: "false",
-                InfoWindowData: [{
-                    DisplayText: "Name:",
-                    FieldName: "${sitename}"
-                }, {
-                    DisplayText: "Description:",
-                    FieldName: "${sitedesc}"
-                }, {
-                    DisplayText: "Street Address:",
-                    FieldName: "${streetaddress}"
-                }, {
-                    DisplayText: "City:",
-                    FieldName: "${city}"
-                }, {
-                    DisplayText: "County:",
-                    FieldName: "${county}"
-                }, {
-                    DisplayText: "Zip Code:",
-                    FieldName: "${zip}"
-                }, {
-                    DisplayText: "Phone:",
-                    FieldName: "${phonenumber}"
-                }, {
-                    DisplayText: "Website URL:",
-                    FieldName: "${website}"
-                }, {
-                    DisplayText: "More Information:",
-                    FieldName: "${more_info}"
-                }]
-            }, {
-                Title: "EconomicDevelopment",
-                QueryLayerId: "20",
-                InfoWindowHeaderField: "${sitename}",
-                ShowAllFields: "false",
-                InfoWindowData: [{
-                    DisplayText: "Name:",
-                    FieldName: "${sitename}"
-                }, {
-                    DisplayText: "Description:",
-                    FieldName: "${sitedesc}"
-                }, {
-                    DisplayText: "County:",
-                    FieldName: "${county}"
-                }, {
-                    DisplayText: "Street Address:",
-                    FieldName: "${streetaddress}"
-                }, {
-                    DisplayText: "City:",
-                    FieldName: "${city}"
-                }, {
-                    DisplayText: "Phone:",
-                    FieldName: "${phonenumber}"
-                }, {
-                    DisplayText: "Website URL:",
-                    FieldName: "${website}"
-                }, {
-                    DisplayText: "Zip Code:",
-                    FieldName: "${zip}"
-                }, {
-                    DisplayText: "More Information:",
-                    FieldName: "${more_info}"
-                }]
-            }, {
-                Title: "EconomicDevelopment",
                 QueryLayerId: "21",
                 InfoWindowHeaderField: "${sitename}",
                 ShowAllFields: "false",
@@ -2588,6 +2475,42 @@ define([], function () {
                 }]
             }, {
                 Title: "EconomicDevelopment",
+                QueryLayerId: "27",
+                InfoWindowHeaderField: "${sitename}",
+                ShowAllFields: "false",
+                InfoWindowData: [{
+                    DisplayText: "Name:",
+                    FieldName: "${sitename}"
+                }, {
+                    DisplayText: "Description:",
+                    FieldName: "${sitedesc}"
+                }, {
+                    DisplayText: "Street Address:",
+                    FieldName: "${streetaddress}"
+                }, {
+                    DisplayText: "City:",
+                    FieldName: "${city}"
+                }, {
+                    DisplayText: "County:",
+                    FieldName: "${county}"
+                }, {
+                    DisplayText: "Zip Code:",
+                    FieldName: "${zip}"
+                }, {
+                    DisplayText: "Phone:",
+                    FieldName: "${phonenumber}"
+                }, {
+                    DisplayText: "Website URL:",
+                    FieldName: "${website}"
+                }, {
+                    DisplayText: "More Information:",
+                    FieldName: "${more_info}"
+                }, {
+                    DisplayText: "Website URL:",
+                    FieldName: "${value}"
+                }]
+            }, {
+                Title: "EconomicDevelopment",
                 QueryLayerId: "29",
                 InfoWindowHeaderField: "${sitename}",
                 ShowAllFields: "false",
@@ -2618,6 +2541,9 @@ define([], function () {
                 }, {
                     DisplayText: "More Information:",
                     FieldName: "${more_info}"
+                }, {
+                    DisplayText: "Website URL:",
+                    FieldName: "${value}"
                 }]
             }, {
                 Title: "EconomicDevelopment",
@@ -3001,12 +2927,6 @@ define([], function () {
         }],
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // Customize LAYER REFRESH INTERVAL
-        // ------------------------------------------------------------------------------------------------------------------------
-        // Time interval to refresh all layers on map
-        LayersRefreshInterval: 5, // in minutes
-
-        // ------------------------------------------------------------------------------------------------------------------------
         // ADDRESS SEARCH SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Set locator settings such as locator symbol, size, display fields, match score
@@ -3039,12 +2959,6 @@ define([], function () {
         },
 
         // ------------------------------------------------------------------------------------------------------------------------
-        // TASK SERVICE URL
-        // ------------------------------------------------------------------------------------------------------------------------
-        // TaskService: Services used for route task.
-        TaskService: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
-
-        // ------------------------------------------------------------------------------------------------------------------------
         // DRIVE TIME SYMBOLOGY SETTING
         // ------------------------------------------------------------------------------------------------------------------------
         // DriveTimePolygonSymbology: It shows symbology for polygon.
@@ -3054,10 +2968,10 @@ define([], function () {
         // LineSymbolTransparency: it shows transparency for line.
 
         DriveTimePolygonSymbology: {
-            FillSymbolColor: "0,0,255",
-            FillSymbolTransparency: "0.10",
-            LineSymbolColor: "0,0,255",
-            LineSymbolTransparency: "0.30"
+            FillSymbolColor: "255,255,102",
+            FillSymbolTransparency: "0.4",
+            LineSymbolColor: "255,255,102",
+            LineSymbolTransparency: "1"
         },
 
         // ------------------------------------------------------------------------------------------------------------------------
@@ -3066,14 +2980,12 @@ define([], function () {
         // Set URL for TinyURL service, and URLs for social media
         // MapSharingOptions: Allow user to share map using social media.
         // TinyURLServiceURL: Set URL for TinyURL service.
-        // TinyURLResponseAttribute: Set URL for TinyURL service.
         // FacebookShareURL:  Allow user to share application using facebook.
         // TwitterShareURL:  Allow user to share application using twitter.
         // ShareByMailLink:  Allow user to share application using mail.
 
         MapSharingOptions: {
-            TinyURLServiceURL: "http://api.bit.ly/v3/shorten?login=esri&apiKey=R_65fd9891cd882e2a96b99d4bda1be00e&uri=${0}&format=json",
-            TinyURLResponseAttribute: "data.url",
+            TinyURLServiceURL: "https://api-ssl.bitly.com/v3/shorten?longUrl=${0}",
             FacebookShareURL: "http://www.facebook.com/sharer.php?u=${0}&t=Live%20Work%20Locate",
             TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=Live%20Work%20Locate ${0}",
             ShareByMailLink: "mailto:%20?subject=Check%20out%20this%20map!&body=${0}"

@@ -123,7 +123,7 @@ define([
             domAttr.set(this.esriCTDivshareCodeContainer, "innerHTML", sharedNls.titles.webpageDispalyText);
             mapExtent = this._getMapExtent();
             url = esri.urlToObject(window.location.toString());
-            splitUrl = url.path.split("#")[0] + "?app=" + url.query.app;
+            splitUrl = url.path.split("#")[0] + "?app=" + dojo.layerKey;
             if (dojo.addresslocation) {
                 locGeom = dojo.addresslocation.x + "," + dojo.addresslocation.y;
                 if (dojo.infoWindowIsShowing) {
@@ -142,6 +142,9 @@ define([
             } else {
                 urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent;
             }
+            if (dojo.selectedBasemapIndex !== null) {
+                urlStr += "$selectedBasemapIndex=" + dojo.selectedBasemapIndex;
+            }
             try {
                 /**
                 * call tinyurl service to generate share URL
@@ -153,53 +156,64 @@ define([
                 }, {
                     useProxy: true
                 }).then(lang.hitch(this, function (response) {
-                    var tinyUrl, applicationHeaderDiv, tinyResponse;
+                    var tinyUrl, tinyResponse;
                     tinyResponse = response.data;
                     if (tinyResponse) {
                         tinyUrl = tinyResponse.url;
                     }
-                    applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
-                    applicationHeaderDiv.appendChild(this.divAppContainer);
-                    if (html.coords(this.divAppContainer).h > 0) {
-                        /**
-                        * when user clicks on share icon in header panel, close the sharing panel if it is open
-                        */
-                        domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
-                        domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
-                        domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
-                    } else {
-                        /**
-                        * when user clicks on share icon in header panel, open the sharing panel if it is closed
-                        */
-                        domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
-                        domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
-                        domClass.replace(this.divAppContainer, "esriCTFullHeight", "esriCTZeroHeight");
-                    }
-                    /**
-                    * remove event handlers from sharing options
-                    */
-                    if (this.facebookHandle) {
-                        this.facebookHandle.remove();
-                        this.twitterHandle.remove();
-                        this.emailHandle.remove();
-                    }
-                    /**
-                    * add event handlers to sharing options
-                    */
-                    this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
-                    this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
-                    this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
-
+                    this._displayShareContainer(tinyUrl, urlStr);
                 }), lang.hitch(this, function (error) {
-                    domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
                     alert(sharedNls.errorMessages.shareLoadingFailed);
-
+                    this._displayShareContainer(null, urlStr);
                 }));
             } catch (err) {
                 alert(sharedNls.errorMessages.shareLoadingFailed);
+                this._displayShareContainer(null, urlStr);
             }
         },
 
+        /**
+        * return display share container
+        * @return {string} urlStr shared full url
+        * @return {string} tinyUrl shared bitly url
+        * @memberOf widgets/share/share
+        */
+
+        _displayShareContainer: function (tinyUrl, urlStr) {
+            var applicationHeaderDiv;
+            applicationHeaderDiv = domConstruct.create("div", { "class": "esriCTApplicationShareicon" }, dom.byId("esriCTParentDivContainer"));
+            applicationHeaderDiv.appendChild(this.divAppContainer);
+            if (html.coords(this.divAppContainer).h > 0) {
+                /**
+                * when user clicks on share icon in header panel, close the sharing panel if it is open
+                */
+                domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMedia-select");
+                domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+                domClass.replace(this.divAppContainer, "esriCTZeroHeight", "esriCTFullHeight");
+            } else {
+                /**
+                * when user clicks on share icon in header panel, open the sharing panel if it is closed
+                */
+                domClass.replace(this.domNode, "esriCTImgSocialMedia-select", "esriCTImgSocialMedia");
+                domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
+                domClass.replace(this.divAppContainer, "esriCTFullHeight", "esriCTZeroHeight");
+            }
+            /**
+            * remove event handlers from sharing options
+            */
+            if (this.facebookHandle) {
+                this.facebookHandle.remove();
+                this.twitterHandle.remove();
+                this.emailHandle.remove();
+            }
+            /**
+            * add event handlers to sharing options
+            */
+            this.facebookHandle = on(this.tdFacebook, "click", lang.hitch(this, function () { this._Share("facebook", tinyUrl, urlStr); }));
+            this.twitterHandle = on(this.tdTwitter, "click", lang.hitch(this, function () { this._Share("twitter", tinyUrl, urlStr); }));
+            this.emailHandle = on(this.tdMail, "click", lang.hitch(this, function () { this._Share("email", tinyUrl, urlStr); }));
+
+        },
         /**
         * return current map extent
         * @return {string} Current map extent

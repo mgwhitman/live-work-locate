@@ -175,19 +175,19 @@
 }
 .infoTitleArrow
 {
-    background-image: url("../images/right-arrow-blue-purple.png");
+    background-image: url("../images/right-purple-arrow.png");
 }
-.infoBackTiteArrow
+.infoBackTitleArrow
 {
-    background-image: url("../images/blue-arrow-purple.png");
+    background-image: url("../images/purple-arrow.png");
 }
 .esriCTdivInfoRightArrow
 {
-    background: url("../images/right-arrow-blue-purple.png");
+    background: url("../images/right-purple-arrow.png");
 }
 .esriCTdivInfoLeftArrow
 {
-    background: url("../images/blue-arrow-purple.png");
+    background: url("../images/purple-arrow.png");
 }
 .esriCTRightArrow
 {
@@ -450,6 +450,12 @@
 .spanRouteLength
 {
     color: #5C2E6F;
+}
+
+/* infowindow anchor*/
+.esriCTdivTriangle
+{
+    background-image: url("../images/bottomArrow-purple.png");
 }
 /*legends */
 
