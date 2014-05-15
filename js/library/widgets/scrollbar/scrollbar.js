@@ -61,24 +61,40 @@ define([
             this._scrollBarContent.style.height = this._containerHeight + "px";
         },
 
+        /**
+        * set content of scrollbar conatiner
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         setContent: function (content) {
             this._scrollableContent = content;
             if (this._containerWidth > 0) {
-                this._scrollableContent.style.width = (this._containerWidth - 1) + "px";
+                this._scrollableContent.style.width = (this._containerWidth - 15) + "px";
             }
             this._scrollBarContent.appendChild(content);
         },
 
+        /**
+        * remove content of scrollbar conatiner
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         removeContent: function () {
             dojo.destroy(this._scrollableContent);
         },
 
+        /**
+        * reset scrollbar conatiner
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         resetScrollBar: function (duration) {
             setTimeout(dojo.hitch(this, function () {
                 this._registerScrollbar();
             }), duration);
         },
 
+        /**
+        * reset position of scrollbar
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         rePositionScrollBar: function (duration) {
             if (this._scrollableContent) {
                 var coords = dojo.coords(this.domNode);
@@ -94,14 +110,22 @@ define([
             }
         },
 
+        /**
+        * remove scrollbar
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         removeScrollBar: function () {
             if (this._scrollBarTrack) {
-                this._currentTop = dojo.coords(this._scrollBarHandle).t;
+                this._currentTop = domGeom.getMarginBox(this._scrollBarHandle).t;
                 dojo.destroy(this._scrollBarTrack);
                 dojo.destroy(this._scrollBarContainer);
             }
         },
 
+        /**
+        * create scrollbar
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         createScrollBar: function (duration) {
             setTimeout(dojo.hitch(this, function () {
                 this._scrollBarTrack = dojo.create("div", { "class": "scrollbar_track" }, this._scrollBarContent);
@@ -112,6 +136,11 @@ define([
             }), duration);
         },
 
+
+        /**
+        * register scrollbar
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _registerScrollbar: function () {
             if (this._scrollBarContent.scrollHeight <= this._scrollBarContent.offsetHeight) {
                 this._scrollBarHandle.style.display = "none";
@@ -137,10 +166,18 @@ define([
             }
         },
 
+        /**
+        * start scrolling on touch
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onTouchStart: function (evt) {
             this._touchStartPosition = evt.touches[0].pageY;
         },
 
+        /**
+        * set scrollbar position on touch move
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onTouchMove: function (evt) {
             var touch, y;
             touch = evt.touches[0];
@@ -170,10 +207,18 @@ define([
             this._isScrolling = true;
         },
 
+        /**
+        * set timer on touch end
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onTouchEnd: function () {
             this._scrollingTimer = setTimeout(dojo.hitch(this, function () { clearTimeout(this._scrollingTimer); this._isScrolling = false; }), 100);
         },
 
+        /**
+        * set scroll position
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _setScroll: function (evt) {
             var offsetY, coords, y;
             if (!this._dragStart) {
@@ -210,12 +255,20 @@ define([
             this._dragStart = false;
         },
 
+        /**
+        * handle scrolling on drag end
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onDragEnd: function () {
             document.body.onselectstart = null;
             document.onmousemove = null;
             dojo.disconnect(this._documentMouseMoveHandle);
         },
 
+        /**
+        * handle scrolling on drag start
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onDragStart: function (evt) {
             this._dragStart = true;
             evt = evt || event;
@@ -235,6 +288,10 @@ define([
             document.onmousemove = dojo.hitch(this, "_onDocumentMouseMove");
         },
 
+        /**
+        * handle scrolling on mouse move
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _onDocumentMouseMove: function (evt) {
             evt = evt || event;
             evt.cancelBubble = true;
@@ -253,6 +310,10 @@ define([
             this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
         },
 
+        /**
+        * set scrollcontent position on scrolling
+        * @memberOf widgets/scrollbar/scrollbar
+        */
         _scrollContent: function (evt) {
             var delta, y;
             //code stop propogation of event while wheel Scrolling in Container

@@ -39,6 +39,12 @@ define([
         InfoShow: null,
         sharedNls: sharedNls,
 
+        /**
+        * create infoWindow widget
+        *
+        * @class
+        * @name widgets/infoWindow/infoWindow
+        */
         postCreate: function () {
             if (!this.infoWindowWidth) {
                 this.infoWindowWidth = "100px";
@@ -62,6 +68,11 @@ define([
             })));
         },
 
+        /**
+        * show infowindow
+        * @param {object} screenPoint to show infowindow
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         show: function (detailsTab, screenPoint) {
             var scrollContentHeight;
             this.InfoShow = false;
@@ -84,6 +95,10 @@ define([
             this.infoContainerScrollbar.createScrollBar();
         },
 
+        /**
+        * resize infowindow
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         resize: function (width, height) {
             this.infoWindowWidth = width;
             this.infoWindowHeight = height;
@@ -93,6 +108,10 @@ define([
             });
         },
 
+        /**
+        * set title of infowindow
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         setTitle: function (str) {
             var infoTitle, len = 30;
             infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
@@ -105,6 +124,10 @@ define([
             }
         },
 
+        /**
+        * set location of infowindow
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         setLocation: function (location) {
             if (location.spatialReference) {
                 location = this.map.toScreen(location);
@@ -119,12 +142,20 @@ define([
             this.isShowing = true;
         },
 
+        /**
+        * hide infowindow
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         hide: function () {
             this.isShowing = false;
             this.onHide();
             domUtils.hide(this.domNode);
         },
 
+        /**
+        * hide infowindow container
+        * @memberOf widgets/infoWindow/infoWindow
+        */
         _hideInfoContainer: function () {
             this.own(on(this.esriCTclosediv, "click", lang.hitch(this, function () {
                 domUtils.hide(this.domNode);

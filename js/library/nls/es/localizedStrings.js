@@ -23,6 +23,8 @@ define({
         sliderDisplayText: "Show results within <b> ${defaultMinute} mins drive</b>"
     },
     errorMessages: {
+        noSearchSettingAvailable: "No search setting is available",
+        fieldNotFound: "field not found",
         invalidSearch: "No results found",
         falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
         invalidLocation: "Current Location not found.",
@@ -34,7 +36,7 @@ define({
         invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
     },
     buttons: {
-        embedding: "Embedding",//Shown next to icon for sharing the map embedding in website
+        embedding: "Embedding", //Shown next to icon for sharing the map embedding in website
         email: "Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
         facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
         twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip

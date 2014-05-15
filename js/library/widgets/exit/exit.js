@@ -36,12 +36,16 @@ define([
         * @name widgets/exit/exit
         */
         postCreate: function () {
-            this.domNode = domConstruct.create("div", { "title": dojo.configData.Exit, "class": "esriCTExitImg" }, null);
+            this.domNode = domConstruct.create("div", { "title": dojo.configData.ExitButtonTooltip, "class": "esriCTExitImg" }, null);
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
                 this._exitPage();
             })));
         },
 
+        /**
+        * exit from workflow and show splash screen
+        * @memberOf widgets/exit/exit
+        */
         _exitPage: function () {
             topic.publish("showSplashScreen");
         }

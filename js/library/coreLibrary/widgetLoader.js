@@ -59,9 +59,9 @@ define([
                     alert(sharedNls.errorMessages.noBasemap);
                     return;
                 }
-                dojo.configData.BaseMapLayers = baseMapLayers.sort();
+                dojo.configData.BaseMapLayers = baseMapLayers;
                 map = new Map();
-                if (dojo.configData.SplashScreen && dojo.configData.SplashScreen.IsVisible) {
+                if (dojo.configData.SplashScreen) {
                     splashScreen = new SplashScreen();
                     appUrl = window.location.toString();
                     if (appUrl.search("app") > 0) {
@@ -136,8 +136,11 @@ define([
 
         _fetchBasemapCollection: function (basemapDeferred) {
             var dListResult, groupUrl, searchUrl, webmapRequest, groupRequest, deferred, thumbnailSrc, baseMapArray = [], deferredArray = [];
+            /**
+            * If group owner & title are configured, create request to fetch the group id
+            */
             if (dojo.configData.BasemapGroupTitle && dojo.configData.BasemapGroupOwner) {
-                groupUrl = dojo.configData.GroupURL + "community/groups?q=title:\"" + dojo.configData.BasemapGroupTitle + "\" AND owner:" + dojo.configData.BasemapGroupOwner + "&f=json";
+                groupUrl = dojo.configData.PortalAPIURL + "community/groups?q=title:\"" + dojo.configData.BasemapGroupTitle + "\" AND owner:" + dojo.configData.BasemapGroupOwner + "&f=json";
                 groupRequest = esriRequest({
                     url: groupUrl,
                     callbackParamName: "callback"
@@ -147,21 +150,33 @@ define([
                         alert(sharedNls.errorMessages.invalidBasemapQuery);
                         return;
                     }
-                    searchUrl = dojo.configData.SearchURL + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
+                    /**
+                    * Create request using group id to fetch all the items from that group
+                    */
+                    searchUrl = dojo.configData.PortalAPIURL + 'search?q=group:' + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
                     webmapRequest = esriRequest({
                         url: searchUrl,
                         callbackParamName: "callback"
                     });
                     webmapRequest.then(function (groupInfo) {
                         var pushWebmap = false;
+                        /**
+                        * Loop for each item in the group
+                        */
                         array.forEach(groupInfo.results, lang.hitch(this, function (info, index) {
+                            /*
+                            * If type is "Map Service", create the object and push it into "baseMapArray"
+                            */
                             if (info.type === "Map Service") {
-                                thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? dojo.configData.webmapThumbnail : dojo.configData.GroupURL + "content/items/" + info.id + "/info/" + info.thumbnail;
+                                thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? dojo.configData.webmapThumbnail : dojo.configData.PortalAPIURL + "content/items/" + info.id + "/info/" + info.thumbnail;
                                 baseMapArray.push({
                                     ThumbnailSource: thumbnailSrc,
                                     Name: info.title,
                                     MapURL: info.url
                                 });
+                                /*
+                                * If type is "Web Map", create requests to fetch all the items of the webmap (asynchronous request)
+                                */
                             } else if (info.type === "Web Map") {
                                 var mapDeferred = esriUtils.getItem(info.id);
                                 mapDeferred.then(lang.hitch(this, function () {
@@ -181,7 +196,7 @@ define([
                                 if (innerIdx === 0) {
                                     array.forEach(data[1].itemData.baseMap.baseMapLayers, function (baseMapLayer, idx) {
                                         if (baseMapLayer.url) {
-                                            thumbnailSrc = (data[1].item.thumbnail === null) ? dojo.configData.WebmapThumbnail : dojo.configData.GroupURL + "content/items/" + data[1].item.id + "/info/" + data[1].item.thumbnail;
+                                            thumbnailSrc = (data[1].item.thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + data[1].item.id + "/info/" + data[1].item.thumbnail;
                                             baseMapArray.push({
                                                 ThumbnailSource: thumbnailSrc,
                                                 Name: data[1].itemData.baseMap.title,
@@ -190,7 +205,12 @@ define([
                                         }
                                     });
                                 } else {
+                                    /**
+                                    * If group owner & title are not configured, fetch the basemap collections from AGOL using BasemapGallery widget
+                                    */
                                     array.forEach(data[1].itemData.baseMap.baseMapLayers, function (baseMapLayer, idx) {
+                                        /**If basemap layer is already present in the "baseMapArray", skip it
+                                        */
                                         array.forEach(baseMapArray, function (arrayBasemap) {
                                             if (baseMapLayer.url && arrayBasemap.MapURL === baseMapLayer.url) {
                                                 pushWebmap = false;
@@ -199,7 +219,7 @@ define([
                                             }
                                         });
                                         if (pushWebmap) {
-                                            thumbnailSrc = (data[1].item.thumbnail === null) ? dojo.configData.WebmapThumbnail : dojo.configData.GroupURL + "content/items/" + data[1].item.id + "/info/" + data[1].item.thumbnail;
+                                            thumbnailSrc = (data[1].item.thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + data[1].item.id + "/info/" + data[1].item.thumbnail;
                                             baseMapArray.push({
                                                 ThumbnailSource: thumbnailSrc,
                                                 Name: data[1].itemData.baseMap.title,

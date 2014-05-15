@@ -89,11 +89,7 @@ define([
                 * @param {object} newPoint Map point of device location in spatialReference of map
                 */
                 geometryService.project([mapPoint], self.map.spatialReference).then(function (newPoint) {
-                    if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
-                        currentBaseMap = self.map.getLayer("defaultBasemap");
-                    } else {
-                        currentBaseMap = self.map.getLayer("esriCTbasemap");
-                    }
+                    currentBaseMap = self.map.getLayer("defaultBasemap");
                     if (currentBaseMap.visible) {
                         if (!currentBaseMap.fullExtent.contains(newPoint[0])) {
                             alert(sharedNls.errorMessages.invalidLocation);

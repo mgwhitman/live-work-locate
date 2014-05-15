@@ -39,13 +39,13 @@ define([
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         /**
-         * create header panel
-         *
-         * @param {string} dojo.configData.ApplicationName Applicaton name specified in configuration file
-         *
-         * @class
-         * @name widgets/appHeader/appHeader
-         */
+        * create header panel
+        *
+        * @param {string} dojo.configData.ApplicationName Applicaton name specified in configuration file
+        *
+        * @class
+        * @name widgets/appHeader/appHeader
+        */
         postCreate: function () {
             var applicationHeaderDiv, i, workflowSpan, applicationName = "";
             topic.subscribe("loadingIndicatorHandler", (lang.hitch(this, function () {
@@ -79,7 +79,7 @@ define([
             * @memberOf widgets/appHeader/appHeader
             */
             for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflows, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflowsTooltip, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
                 on(workflowSpan, "click", lang.hitch(this, "_setSelectedWorkflow"));
             }
         },
@@ -127,6 +127,11 @@ define([
                 }
             } else if (dojo.share) {
                 domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex) + 1], "esriCTApplicationHeaderTextSelected");
+            }
+            if (dojo.workFlowIndex) {
+                if (query(".esriCTExitImg")[0]) {
+                    domStyle.set(query(".esriCTExitImg")[0], "display", "none");
+                }
             }
         },
         /**
