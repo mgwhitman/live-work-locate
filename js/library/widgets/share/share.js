@@ -123,7 +123,7 @@ define([
             domAttr.set(this.esriCTDivshareCodeContainer, "innerHTML", sharedNls.titles.webpageDispalyText);
             mapExtent = this._getMapExtent();
             url = esri.urlToObject(window.location.toString());
-            splitUrl = url.path.split("#")[0] + "?app=" + dojo.layerKey;
+            splitUrl = url.path.split("#")[0] + "?app=" + dojo.seletedWorkflow;
             if (dojo.addresslocation) {
                 locGeom = dojo.addresslocation.x + "," + dojo.addresslocation.y;
                 if (dojo.infoWindowIsShowing) {

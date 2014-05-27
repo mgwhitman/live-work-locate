@@ -202,6 +202,11 @@
         padding: 15px 0 2px 15px !important;
     }
 
+    .esriCTAppHeader
+    {
+        line-height: 40px !important;
+    }
+
     .esriCTshareContainer
     {
         width: 100%;

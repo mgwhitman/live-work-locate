@@ -46,8 +46,7 @@ define([
         * @name widgets/splashScreen/splashScreen
         */
         postCreate: function () {
-            var _self, holder, i, innercontainer, slideWidth, workflowContainer, imgcontainerdiv;
-            _self = this;
+            var holder, i, innercontainer, workflowContainer;
             this.showSplashScreenDialog();
             on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function () {
                 if (dojo.workFlowIndex && dojo.seletedWorkflow) {
@@ -69,10 +68,11 @@ define([
             holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
             for (i = 0; i < dojo.configData.Workflows.length; i++) {
                 workflowContainer = domConstruct.create("div", { "class": "workflowContainer" }, holder);
-                innercontainer = domConstruct.create("div", { "class": "innerSlide esriWorkflow" + dojo.configData.Workflows[i].Name, innerHTML: dojo.configData.Workflows[i].Name, "index": i, "key": dojo.configData.Workflows[i].Name }, workflowContainer);
-                imgcontainerdiv = domConstruct.create("div", { "class": "workflowContainerImg" }, innercontainer);
-                domConstruct.create("img", { "class": "innerSlideimg", src: dojo.configData.Workflows[i].SplashscreenImage }, imgcontainerdiv);
-                this.own(on(innercontainer, "click", lang.hitch(this, "_setWorkflow", _self)));
+                innercontainer = domConstruct.create("div", { "class": "innerSlide", "index": i, "key": dojo.configData.Workflows[i].Name }, workflowContainer);
+                domConstruct.create("div", { "innerHTML": dojo.configData.Workflows[i].Name, "class": "esriCTWorkflowText" }, innercontainer);
+                domStyle.set(innercontainer, "backgroundColor", dojo.configData.Workflows[i].BgColor);
+                domStyle.set(innercontainer, "backgroundImage", 'url(' + dojo.configData.Workflows[i].SplashscreenImage + ')');
+                this.own(on(innercontainer, "click", lang.hitch(this, "_setWorkflowParameter")));
             }
             this.own(on(this.splashscreenPreviousPage, "click", lang.hitch(this, function () {
                 if (!domClass.contains(this.splashscreenPreviousPage, "esriPrevDisabled")) {
@@ -86,34 +86,54 @@ define([
                 }
             })));
 
-            if (query('.workflowContainer')[0]) {
-                slideWidth = domStyle.get(query('.workflowContainer')[0], "width") * i;
-                domStyle.set(holder, "width", slideWidth + 'px');
-            }
+            this._setSplashContainerWidth();
             if (i <= 3) {
                 domClass.add(this.splashscreenNextPage, "esriNextDisabled");
             }
         },
 
         /**
-        * load selected workflow
+        * set parameters for selected workflow
         * @memberOf widgets/splashScreen/splashScreen
         */
-        _setWorkflow: function (_self, evt) {
+        _setWorkflowParameter: function (evt) {
             var key, currentWorkflow;
             key = domAttr.get(evt.currentTarget, "key");
             currentWorkflow = domAttr.get(evt.currentTarget, "index");
-            if (dojo.layerKey === key && dojo.workFlowIndex === currentWorkflow) {
-                _self._hideSplashScreenDialog();
+            this._setWorkflow(key, currentWorkflow);
+        },
+
+        /**
+        * set splashContainer width
+        * @memberOf widgets/splashScreen/splashScreen
+        */
+        _setSplashContainerWidth: function () {
+            var slideWidth, outerSplashContainerWidth;
+            if (query('.workflowContainer')[0]) {
+                slideWidth = domStyle.get(query('.workflowContainer')[0], "width") * dojo.configData.Workflows.length;
+                domStyle.set(dom.byId("splashscreenUList"), "width", slideWidth + 'px');
+            }
+            if (dojo.configData.Workflows.length < 3) {
+                domStyle.set(this.splashScreenScrollBarContainer, "width", slideWidth + 'px');
+                outerSplashContainerWidth = slideWidth + 2 * domStyle.get(query('.esriPrevious')[0], "width") + 10;
+                domStyle.set(this.splashScreenDialogContainer, "width", outerSplashContainerWidth + 'px');
+            }
+        },
+        /**
+        * load selected workflow
+        * @memberOf widgets/splashScreen/splashScreen
+        */
+        _setWorkflow: function (key, currentWorkflow) {
+            if (dojo.seletedWorkflow === key && dojo.workFlowIndex === currentWorkflow) {
+                this._hideSplashScreenDialog();
                 return;
             }
-            dojo.layerKey = key;
             dojo.workFlowIndex = currentWorkflow;
             dojo.seletedWorkflow = key;
-            _self._selectWorkflow(key);
-            _self.mapObject._generateLayerURL();
-            _self._hideSplashScreenDialog();
-            _self.mapObject._clearMapGraphics();
+            this._selectWorkflow(key);
+            this.mapObject._generateLayerURL();
+            this._hideSplashScreenDialog();
+            this.mapObject._clearMapGraphics();
             if (dojo.configData.Workflows[currentWorkflow].WebMapId && lang.trim(dojo.configData.Workflows[currentWorkflow].WebMapId).length !== 0) {
                 topic.publish("initializeWebmap");
                 topic.publish("loadingIndicatorHandler");
@@ -167,13 +187,12 @@ define([
         * load selected workfow from app url
         * @memberOf widgets/splashScreen/splashScreen
         */
-        loadSelectedWorkflow: function (Workflows, map) {
+        _loadSelectedWorkflow: function (Workflows, map) {
             var i;
             this.mapObject = map;
-            dojo.layerKey = Workflows;
             dojo.seletedWorkflow = Workflows;
             for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                if (dojo.configData.Workflows[i].Name === Workflows) {
+                if (dojo.configData.Workflows[i].Name.toUpperCase() === Workflows.toUpperCase()) {
                     dojo.workFlowIndex = i.toString();
                     break;
                 }

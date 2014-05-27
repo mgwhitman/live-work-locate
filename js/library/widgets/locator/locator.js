@@ -98,6 +98,9 @@ define([
                 if (widget !== "locator") {
                     if (domGeom.getMarginBox(this.divAddressHolder).h > 0) {
                         domClass.replace(this.domNode, "esriCTTdHeaderSearch", "esriCTTdHeaderSearch-select");
+                        if (query('.esriCTdivLegendbox')[0]) {
+                            domStyle.set(query('.esriCTdivLegendbox')[0], "zIndex", "1000");
+                        }
                         domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                         domClass.replace(this.divAddressHolder, "esriCTZeroHeight", "esriCTAddressContainerHeight");
                     }
@@ -132,13 +135,15 @@ define([
                 this._shareAddress();
             }));
             window.onresize = lang.hitch(this, function () {
-                if (domStyle.get(this.divSelectedFeature, "display") === "block") {
-                    if (query('.esriCTdivLegendbox')[0]) {
-                        domStyle.set(query('.esriCTdivLegendbox')[0], "zIndex", "998");
+                if (domClass.contains(this.divAddressHolder, "esriCTShowContainerHeight")) {
+                    if (domStyle.get(this.divSelectedFeature, "display") === "block") {
+                        if (query('.esriCTdivLegendbox')[0]) {
+                            domStyle.set(query('.esriCTdivLegendbox')[0], "zIndex", "998");
+                        }
+                        this._createFeatureList(this.selectedFeatureList);
+                        domClass.replace(query(".toggleExpandCollapse")[0], "collapse", "expand");
+                        domAttr.set(query(".toggleExpandCollapse")[0], "title", dojo.configData.ExpandResultTooltip);
                     }
-                    this._createFeatureList(this.selectedFeatureList);
-                    domClass.replace(query(".toggleExpandCollapse")[0], "collapse", "expand");
-                    domAttr.set(query(".toggleExpandCollapse")[0], "title", dojo.configData.ExpandResultTooltip);
                 }
             });
 
@@ -362,6 +367,8 @@ define([
                         }
                     } else {
                         this.lastSearchString = lang.trim(this.txtAddress.value);
+
+                        domStyle.set(this.divSelectedFeature, "display", "none");
                         domStyle.set(this.imgSearchLoader, "display", "none");
                         domStyle.set(this.close, "display", "block");
                         domAttr.set(this.close, "title", "");
@@ -378,6 +385,14 @@ define([
         _locateAddress: function () {
             domConstruct.empty(this.divAddressResults);
             if (lang.trim(this.txtAddress.value) === '') {
+                this.resetShareParameters();
+                topic.publish("clearFeatureList");
+                domStyle.set(this.divSelectedFeature, "display", "none");
+                domStyle.set(this.divAddressScrollContainer, "display", "none");
+                if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
+                    this.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                }
+                topic.publish("setMaxLegendLength");
                 domStyle.set(this.imgSearchLoader, "display", "none");
                 domStyle.set(this.close, "display", "block");
                 this._locatorErrBack();
@@ -453,23 +468,25 @@ define([
                         for (num = 0; num < result.length; num++) {
                             if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num]) {
                                 key = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayTitle;
-                                nameArray[key] = [];
-                                if (result[num][1].features) {
-                                    for (order = 0; order < result[num][1].features.length; order++) {
-                                        for (i in result[num][1].features[order].attributes) {
-                                            if (result[num][1].features[order].attributes.hasOwnProperty(i)) {
-                                                if (!result[num][1].features[order].attributes[i]) {
-                                                    result[num][1].features[order].attributes[i] = sharedNls.showNullValue;
+                                if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].UnifiedSearch === "true") {
+                                    nameArray[key] = [];
+                                    if (result[num][1].features) {
+                                        for (order = 0; order < result[num][1].features.length; order++) {
+                                            for (i in result[num][1].features[order].attributes) {
+                                                if (result[num][1].features[order].attributes.hasOwnProperty(i)) {
+                                                    if (!result[num][1].features[order].attributes[i]) {
+                                                        result[num][1].features[order].attributes[i] = sharedNls.showNullValue;
+                                                    }
                                                 }
                                             }
-                                        }
-                                        if (nameArray[key].length < dojo.configData.LocatorSettings.MaxResults) {
-                                            nameArray[key].push({
-                                                name: string.substitute(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayFields, result[num][1].features[order].attributes),
-                                                attributes: result[num][1].features[order].attributes,
-                                                layer: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num],
-                                                geometry: result[num][1].features[order].geometry
-                                            });
+                                            if (nameArray[key].length < dojo.configData.LocatorSettings.MaxResults) {
+                                                nameArray[key].push({
+                                                    name: string.substitute(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayFields, result[num][1].features[order].attributes),
+                                                    attributes: result[num][1].features[order].attributes,
+                                                    layer: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num],
+                                                    geometry: result[num][1].features[order].geometry
+                                                });
+                                            }
                                         }
                                     }
                                 }
@@ -520,7 +537,7 @@ define([
                     }), 100);
                 }
             } else {
-                this.addressLocation = null;
+                this.resetShareParameters();
                 this._locatorErrBack();
                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
                     topic.publish("updateLegends", this.map.extent);
@@ -585,6 +602,7 @@ define([
             domConstruct.empty(this.divAddressResults);
             if (lang.trim(this.txtAddress.value) === "") {
                 this.txtAddress.focus();
+                domStyle.set(this.divSelectedFeature, "display", "none");
                 domConstruct.empty(this.divAddressResults);
                 this.locatorScrollbar = new ScrollBar({ domNode: this.divAddressScrollContent });
                 this.locatorScrollbar.setContent(this.divAddressResults);
@@ -996,6 +1014,7 @@ define([
                         dojo.mapClickedPoint = false;
                         setTimeout(lang.hitch(this, function () {
                             if (feature.geometry.type === "point") {
+                                this._removeHighlightingFeature(feature);
                                 this._createInfoWindowContent(feature.geometry, feature.attribute, feature.fields, feature.layerIndex, null, null, this.map);
                                 this.map.centerAndZoom(feature.geometry, dojo.configData.ZoomLevel);
                             } else if (feature.geometry.type === "polygon") {
@@ -1248,7 +1267,16 @@ define([
             topic.publish("setMaxLegendLength");
             this.txtAddress.blur();
         },
-
+        /**
+        * remove highlighting from earlier selected feature
+        * @memberOf widgets/locator/locator
+        */
+        _removeHighlightingFeature: function (feature) {
+            var gLayer = this.map.getLayer("esriGraphicsLayerMapSettings");
+            if (this.selectedPolygon) {
+                gLayer.remove(this.selectedPolygon);
+            }
+        },
         /**
         * highlight selected feature
         * @memberOf widgets/locator/locator
@@ -1256,6 +1284,7 @@ define([
         _highlightFeature: function (feature) {
             var gLayer, symbolColor, outlineColor, customPolygon;
             gLayer = this.map.getLayer("esriGraphicsLayerMapSettings");
+            this._removeHighlightingFeature(this.selectedPolygon);
             symbolColor = outlineColor = new dojo.Color(dojo.configData.Workflows[dojo.workFlowIndex].FeatureHighlightColor);
             symbolColor.a = 0.6;
             customPolygon = {
@@ -1308,7 +1337,7 @@ define([
         },
 
         /**
-        * reset shared paremeters
+        * reset shared parameters
         * @memberOf widgets/locator/locator
         */
         resetShareParameters: function () {

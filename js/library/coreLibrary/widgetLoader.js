@@ -51,6 +51,7 @@ define([
         startup: function () {
             var widgets, deferredArray, basemapDeferred, map, splashScreen, appUrl, workflow, mapInstance;
             widgets = {};
+            dojo.share = false;
             deferredArray = [];
             basemapDeferred = new Deferred();
             this._fetchBasemapCollection(basemapDeferred);
@@ -72,9 +73,17 @@ define([
                             workflow = (appUrl.slice(appUrl.indexOf("=") + 1)).toUpperCase();
                         }
                         splashScreen._hideSplashScreenDialog();
-                        splashScreen.loadSelectedWorkflow(workflow, map);
+                        splashScreen._loadSelectedWorkflow(workflow, map);
                     } else {
-                        splashScreen.showSplashScreenDialog(map);
+                        if (dojo.configData.SplashScreen.IsVisible && dojo.configData.Workflows.length > 1) {
+                            splashScreen.showSplashScreenDialog(map);
+                        } else {
+                            if (dojo.configData.Workflows.length > 0) {
+                                location.hash = "?app=" + dojo.configData.Workflows[0].Name;
+                                splashScreen._hideSplashScreenDialog();
+                                splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
+                            }
+                        }
                     }
                     topic.subscribe("showSplashScreen", function () {
                         splashScreen.showSplashScreenDialog(map);
