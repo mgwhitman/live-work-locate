@@ -62,7 +62,7 @@ define([
         },
 
         /**
-        * set content of scrollbar conatiner
+        * set content of scrollbar container
         * @memberOf widgets/scrollbar/scrollbar
         */
         setContent: function (content) {
@@ -74,7 +74,7 @@ define([
         },
 
         /**
-        * remove content of scrollbar conatiner
+        * remove content of scrollbar container
         * @memberOf widgets/scrollbar/scrollbar
         */
         removeContent: function () {
@@ -82,7 +82,7 @@ define([
         },
 
         /**
-        * reset scrollbar conatiner
+        * reset scrollbar container
         * @memberOf widgets/scrollbar/scrollbar
         */
         resetScrollBar: function (duration) {
@@ -193,7 +193,7 @@ define([
             } else {
                 y = this._topPosition - 10;
             }
-            //setting scrollbar handel
+            //setting scrollbar handle
             if (y > this._yMax) {
                 y = this._yMax;
             } // Limit vertical movement
@@ -316,7 +316,7 @@ define([
         */
         _scrollContent: function (evt) {
             var delta, y;
-            //code stop propogation of event while wheel Scrolling in Container
+            // code to stop propagation of event while wheel Scrolling in Container
             evt = evt || event;
             evt.cancelBubble = true;
             if (evt.stopPropagation) {

@@ -41,7 +41,7 @@ define([
         /**
         * create header panel
         *
-        * @param {string} dojo.configData.ApplicationName Applicaton name specified in configuration file
+        * @param {string} dojo.configData.ApplicationName Application name specified in configuration file
         *
         * @class
         * @name widgets/appHeader/appHeader
@@ -69,6 +69,7 @@ define([
             document.title = applicationName;
             applicationHeaderDiv = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
             domConstruct.place(this.applicationHeaderParentContainer, applicationHeaderDiv);
+            this._setApplicationTitle();
             this._loadApplicationHeaderIcon();
             /**
             * set browser header and application header to application name
@@ -81,6 +82,17 @@ define([
             for (i = 0; i < dojo.configData.Workflows.length; i++) {
                 workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflowsTooltip, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
                 on(workflowSpan, "click", lang.hitch(this, "_setSelectedWorkflow"));
+            }
+        },
+
+        /**
+        * set application name
+        * @memberOf widgets/appHeader/appHeader
+        */
+        _setApplicationTitle: function () {
+
+            if (lang.trim(dojo.configData.ApplicationName) !== "") {
+                domAttr.set(this.applicationHeaderName, "innerHTML", dojo.configData.ApplicationName);
             }
         },
         _setSelectedWorkflow: function (evt) {
@@ -125,8 +137,8 @@ define([
                 if (query(".esriCTExitImg")[0]) {
                     domStyle.set(query(".esriCTExitImg")[0], "display", "none");
                 }
-            } else if (dojo.share) {
-                domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex) + 1], "esriCTApplicationHeaderTextSelected");
+            } else if (dojo.share || window.location.toString().search("app") > 0) {
+                domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
             }
             if (dojo.workFlowIndex) {
                 if (query(".esriCTExitImg")[0]) {

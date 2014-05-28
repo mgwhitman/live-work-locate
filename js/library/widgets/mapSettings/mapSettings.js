@@ -272,7 +272,7 @@ define([
         },
 
         /**
-        * find feautures on selection
+        * find features on selection
         * @memberOf widgets/mapSettings/mapSettings
         */
         _selectFeatures: function (bufferGeometry) {
@@ -335,12 +335,13 @@ define([
             }));
             deferredListFeatureResult = new DeferredList(deferredArray);
             deferredListFeatureResult.then(lang.hitch(this, function () {
-                topic.publish("hideLoadingIndicatorHandler");
                 if (selectedFeaturesGroup.length === 0) {
+                    topic.publish("hideLoadingIndicatorHandler");
                     return;
                 }
                 topic.publish("_createList", selectedFeaturesGroup);
                 topic.publish("updateLegends", this.serviceAreaGraphic.geometry);
+                topic.publish("hideLoadingIndicatorHandler");
             }));
         },
 
@@ -503,7 +504,7 @@ define([
         },
 
         /**
-        * intialize legend
+         * initialize legend
         * @memberOf widgets/mapSettings/mapSettings
         */
         _addLegendBox: function () {
@@ -536,7 +537,7 @@ define([
         },
 
         /**
-        * clear grapphics from map
+        * clear graphics from map
         * @memberOf widgets/mapSettings/mapSettings
         */
         _clearMapGraphics: function () {
@@ -573,7 +574,7 @@ define([
         },
 
         /**
-        * initialize webamp
+        * initialize webmap
         * @memberOf widgets/mapSettings/mapSettings
         */
         _initializeWebmap: function (graphicsLayer) {
@@ -599,6 +600,7 @@ define([
                         }
                     }
                     this.map.onUpdateEnd = lang.hitch(this, function () {
+                        this.map.onUpdateEnd = null;
                         topic.publish("hideLoadingIndicatorHandler");
                     });
                     this.map.addLayer(graphicsLayer);
@@ -781,12 +783,15 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _executeQueryTask: function (index, mapPoint, onMapFeaturArray) {
-            var esriQuery, queryTask, queryOnRouteTask;
-            queryTask = new esri.tasks.QueryTask(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[index].QueryURL);
-            esriQuery = new esri.tasks.Query();
-            esriQuery.outSpatialReference = this.map.spatialReference;
+            var esriQuery, queryTask, queryOnRouteTask, currentTime;
+            queryTask = new QueryTask(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[index].QueryURL);
+            esriQuery = new Query();
+            currentTime = new Date();
+            esriQuery.where = currentTime.getTime().toString() + "=" + currentTime.getTime().toString();
             esriQuery.returnGeometry = true;
             esriQuery.geometry = this._extentFromPoint(mapPoint);
+            esriQuery.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
+            esriQuery.outSpatialReference = this.map.spatialReference;
             esriQuery.outFields = ["*"];
             queryOnRouteTask = queryTask.execute(esriQuery, lang.hitch(this, function (results) {
                 var deferred = new Deferred();
@@ -813,7 +818,7 @@ define([
         },
 
         /**
-        * featch infowindow data from query task result
+        * fetch infowindow data from query task result
         * @memberOf widgets/mapSettings/mapSettings
         */
         _fetchQueryResults: function (featureArray, map, mapPoint) {

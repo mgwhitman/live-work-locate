@@ -25,6 +25,7 @@ html, body
     font-size: 11px !important;
     font-family: Verdana !important;
     visibility: visible !important;
+    top: 0px !important;
 }
 
 .esriCTFullHeightWidth
@@ -425,7 +426,7 @@ html, body
 .esriCTDivAppContainer
 {
     position: absolute;
-    z-index: 1000;
+    z-index: 995;
     top: 48px;
     right: 0px;
     width: 287px;
@@ -672,6 +673,11 @@ html, body
     top: 25%;
     right: 40%;
 }
+.esriCTWorkflowText
+{
+    vertical-align: bottom;
+    margin-top: 103px;
+}
 
 .innerSlide
 {
@@ -681,6 +687,8 @@ html, body
     padding: 10PX;
     height: 130px;
     cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .workflowContainer
@@ -842,6 +850,15 @@ html, body
     cursor: pointer;
 }
 
+.esriCTAppHeader
+{
+    color: #9b9b9b;
+    float: left;
+    font-size: 15px;
+    padding: 10px 5px;
+    line-height: 25px;
+}
+
 .esriCTApplicationHeaderTextSelected
 {
     font-size: 22px !important;
@@ -849,7 +866,7 @@ html, body
 }
 /* End of splash Screen */
 
-/*Loding Indicatior*/
+/*Loading Indicator*/
 .esriCTLoadingIndicator
 {
     height: 100%;
@@ -893,7 +910,7 @@ html, body
 {
     display: block;
 }
-/*End of the Loding Indicatior */
+/*End of the Loading Indicator */
 
 /* CSS for styling corners*/
 .esriCTRoundedCorner
@@ -1017,7 +1034,7 @@ html, body
 }
 /* End of CSS for Loading Indicator */
 
-/*Styles for base-map container*/
+/*Styles for basemap container*/
 .esriCTDivLayerContainer
 {
     position: absolute;
@@ -1082,7 +1099,7 @@ html, body
     filter: progid:DXImageTransform.Microsoft.Glow(color='#8EAE21', Strength='4');
     behavior: url("PIE.htc");
 }
-/* End of base-map container */
+/* End of basemap container */
 
 /*legends */
 
@@ -1139,9 +1156,16 @@ html, body
     background: transparent;
 }
 
-.legendrightboxTest
+.esriCTLegendRightBoxShift
 {
     width: 0px !important;
+}
+
+.esriCTLegendRightBox
+{
+    width: 288px;
+    float: right;
+    background: transparent;
 }
 
 .divlegendContent
@@ -1171,6 +1195,7 @@ html, body
 {
     margin-top: 7px;
     float: left;
+    width: 150px;
 }
 .divlegendList
 {
@@ -1195,9 +1220,13 @@ html, body
     overflow: hidden;
     cursor: pointer !important;
 }
-.divRightArrowRightMargin
+.esriCTRightArrowShift
 {
-    right: 0px !important;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    right: 0px;
+    overflow: hidden;
 }
 
 .rightBorderNone
@@ -1804,7 +1833,7 @@ input
     float: left;
     text-align: left;
 }
-/*esri MAp Logo*/
+/* ESRI Map Logo*/
 .mapLogo
 {
     position: relative !important;
@@ -1877,11 +1906,6 @@ input
 {
     color: #007ac2;
     padding: 5px 0;
-}
-
-.esriCTCursorPointer
-{
-    cursor: pointer;
 }
 
 .esriAddressCounty
@@ -2042,7 +2066,7 @@ input
     max-width: 175px;
 }
 
-/*code for scrollbarcontainer*/
+/*scrollbarcontainer*/
 .divInfoScrollContainer
 {
     overflow: hidden;
