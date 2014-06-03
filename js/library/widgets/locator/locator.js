@@ -101,6 +101,7 @@ define([
                         if (query('.esriCTdivLegendbox')[0]) {
                             domStyle.set(query('.esriCTdivLegendbox')[0], "zIndex", "1000");
                         }
+                        topic.publish("setMaxLegendLength");
                         domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
                         domClass.replace(this.divAddressHolder, "esriCTZeroHeight", "esriCTAddressContainerHeight");
                     }

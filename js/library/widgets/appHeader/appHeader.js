@@ -117,7 +117,7 @@ define([
         * @memberOf widgets/appHeader/appHeader
         */
         loadHeaderWidgets: function (widgets) {
-            var widgetPath, workflow;
+            var widgetPath;
             /**
             * applicationHeaderWidgetsContainer container for header panel widgets
             * @member {div} applicationHeaderWidgetsContainer
@@ -132,8 +132,7 @@ define([
                 }
             }
             if (location.hash) {
-                workflow = (location.hash.split("#")[1].split("?app=")[1]).toUpperCase();
-                domClass.add(query("." + workflow)[0], "esriCTApplicationHeaderTextSelected");
+                domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
                 if (query(".esriCTExitImg")[0]) {
                     domStyle.set(query(".esriCTExitImg")[0], "display", "none");
                 }

@@ -294,7 +294,7 @@ define([
                     featureLayer = featureLayer.layerObject;
                 }
                 featureLayerResult = featureLayer.selectFeatures(queryFeature, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
-                    var deferred, cloneArray, displayField, settingsIndex, res;
+                    var deferred, cloneArray, displayField, settingsIndex, res, index;
                     deferred = new Deferred();
                     deferred.resolve(result);
                     try {
@@ -305,7 +305,15 @@ define([
                             }
                         }
                         if (result.length) {
+
                             for (res = 0; res < result.length; res++) {
+                                for (index in result[res].attributes) {
+                                    if (result[res].attributes.hasOwnProperty(index)) {
+                                        if (!result[res].attributes[index]) {
+                                            result[res].attributes[index] = dojo.configData.ShowNullValueAs;
+                                        }
+                                    }
+                                }
                                 selectedFeatures.push({
                                     attribute: result[res].attributes,
                                     name: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[settingsIndex].SearchDisplayTitle,
@@ -600,7 +608,6 @@ define([
                         }
                     }
                     this.map.onUpdateEnd = lang.hitch(this, function () {
-                        this.map.onUpdateEnd = null;
                         topic.publish("hideLoadingIndicatorHandler");
                     });
                     this.map.addLayer(graphicsLayer);
@@ -643,7 +650,7 @@ define([
         */
         _fetchWebMapData: function (response) {
             var str, webMapDetails, serviceTitle, operationalLayerId, lastIndex,
-                infowindowCurrentSettings = [], i, lastSlashIndex, idx, popupField, webmapSearchSettings = [];
+                infowindowCurrentSettings = [], i, j, lastSlashIndex, idx, popupField, layerSearchSetting, webmapSearchSettings = [];
             webMapDetails = response.itemInfo.itemData;
             serviceTitle = [];
             for (i = 0; i < webMapDetails.operationalLayers.length; i++) {
@@ -661,46 +668,48 @@ define([
                     serviceTitle[operationalLayerId] = webMapDetails.operationalLayers[i].url.substring(0, lastSlashIndex + 1);
                 }
             }
-
-            for (i = 0; i < webMapDetails.operationalLayers.length; i++) {
+            i = 0;
+            this.operationalLayers = [];
+            for (j = 0; j < webMapDetails.operationalLayers.length; j++) {
                 str = webMapDetails.operationalLayers[i].url.split('/');
                 lastIndex = str[str.length - 1];
-                webmapSearchSettings[i] = this._getConfigSearchSetting(lastIndex);
-                if (!webmapSearchSettings[i]) {
-                    delete this.operationalLayers[i];
-                } else {
-                    webmapSearchSettings[i].QueryURL = webMapDetails.operationalLayers[i].url;
-                    if (webMapDetails.operationalLayers[i].popupInfo) {
+                layerSearchSetting = this._getConfigSearchSetting(lastIndex);
+                if (layerSearchSetting) {
+                    webmapSearchSettings[i] = layerSearchSetting;
+                    this.operationalLayers[i] = webMapDetails.operationalLayers[j];
+                    webmapSearchSettings[i].QueryURL = this.operationalLayers[i].url;
+                    if (this.operationalLayers[i].popupInfo) {
                         infowindowCurrentSettings[i] = this._getConfigInfoData(webmapSearchSettings[i].QueryLayerId);
                         if (!infowindowCurrentSettings[i]) {
                             infowindowCurrentSettings[i] = {};
                             infowindowCurrentSettings[i].QueryLayerId = webmapSearchSettings[i].QueryLayerId;
                         }
-                        infowindowCurrentSettings[i].InfoQueryURL = webMapDetails.operationalLayers[i].url;
-                        if (webMapDetails.operationalLayers[i].popupInfo.title.split("{").length > 1) {
-                            infowindowCurrentSettings[i].InfoWindowHeaderField = dojo.string.trim(webMapDetails.operationalLayers[i].popupInfo.title.split("{")[0]);
-                            for (idx = 1; idx < webMapDetails.operationalLayers[i].popupInfo.title.split("{").length; idx++) {
-                                infowindowCurrentSettings[i].InfoWindowHeaderField += " ${" + dojo.string.trim(webMapDetails.operationalLayers[i].popupInfo.title.split("{")[idx]);
+                        infowindowCurrentSettings[i].InfoQueryURL = this.operationalLayers[i].url;
+                        if (this.operationalLayers[i].popupInfo.title.split("{").length > 1) {
+                            infowindowCurrentSettings[i].InfoWindowHeaderField = dojo.string.trim(this.operationalLayers[i].popupInfo.title.split("{")[0]);
+                            for (idx = 1; idx < this.operationalLayers[i].popupInfo.title.split("{").length; idx++) {
+                                infowindowCurrentSettings[i].InfoWindowHeaderField += " ${" + dojo.string.trim(this.operationalLayers[i].popupInfo.title.split("{")[idx]);
                             }
                         } else {
-                            if (dojo.string.trim(webMapDetails.operationalLayers[i].popupInfo.title) !== "") {
-                                infowindowCurrentSettings[i].InfoWindowHeaderField = dojo.string.trim(webMapDetails.operationalLayers[i].popupInfo.title);
+                            if (dojo.string.trim(this.operationalLayers[i].popupInfo.title) !== "") {
+                                infowindowCurrentSettings[i].InfoWindowHeaderField = dojo.string.trim(this.operationalLayers[i].popupInfo.title);
                             } else {
                                 infowindowCurrentSettings[i].InfoWindowHeaderField = dojo.configData.ShowNullValueAs;
                             }
                         }
                         infowindowCurrentSettings[i].InfoWindowData = [];
-                        for (popupField in webMapDetails.operationalLayers[i].popupInfo.fieldInfos) {
-                            if (webMapDetails.operationalLayers[i].popupInfo.fieldInfos.hasOwnProperty(popupField)) {
-                                if (webMapDetails.operationalLayers[i].popupInfo.fieldInfos[popupField].visible) {
+                        for (popupField in this.operationalLayers[i].popupInfo.fieldInfos) {
+                            if (this.operationalLayers[i].popupInfo.fieldInfos.hasOwnProperty(popupField)) {
+                                if (this.operationalLayers[i].popupInfo.fieldInfos[popupField].visible) {
                                     infowindowCurrentSettings[i].InfoWindowData.push({
-                                        "DisplayText": webMapDetails.operationalLayers[i].popupInfo.fieldInfos[popupField].label + ":",
-                                        "FieldName": "${" + webMapDetails.operationalLayers[i].popupInfo.fieldInfos[popupField].fieldName + "}"
+                                        "DisplayText": this.operationalLayers[i].popupInfo.fieldInfos[popupField].label + ":",
+                                        "FieldName": "${" + this.operationalLayers[i].popupInfo.fieldInfos[popupField].fieldName + "}"
                                     });
                                 }
                             }
                         }
                     }
+                    i++;
                 }
             }
 
@@ -742,7 +751,7 @@ define([
         },
 
         /**
-        * show infowwindow on map
+        * show infowindow on map
         * @param{object} mapPoint is location on map to show infowindow
         * @memberOf widgets/mapSettings/mapSettings
         */
@@ -784,7 +793,7 @@ define([
         */
         _executeQueryTask: function (index, mapPoint, onMapFeaturArray) {
             var esriQuery, queryTask, queryOnRouteTask, currentTime;
-            queryTask = new QueryTask(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[index].QueryURL);
+            queryTask = new QueryTask(this.operationalLayers[index].url);
             esriQuery = new Query();
             currentTime = new Date();
             esriQuery.where = currentTime.getTime().toString() + "=" + currentTime.getTime().toString();
@@ -808,7 +817,7 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _extentFromPoint: function (point) {
-            var screenPoint, sourcePoint, destinationPoint, sourceMapPoint, destinationMapPoint, tolerance = 3;
+            var screenPoint, sourcePoint, destinationPoint, sourceMapPoint, destinationMapPoint, tolerance = 15;
             screenPoint = this.map.toScreen(point);
             sourcePoint = new esri.geometry.Point(screenPoint.x - tolerance, screenPoint.y + tolerance);
             destinationPoint = new esri.geometry.Point(screenPoint.x + tolerance, screenPoint.y - tolerance);

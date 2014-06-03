@@ -30,7 +30,7 @@ define({
             invalidLocation: "Current Location not found.",
             invalidProjection: "Unable to plot current location on the map.",
             widgetNotLoaded: "Fail to load widgets.",
-            shareLoadingFailed: "Unable to load share options.",
+            shareLoadingFailed: "Unable to shorten URL, Bit.ly failed to load.",
             shareFailed: "Unable to share.",
             noLegend: "No Legend Available",
             invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."

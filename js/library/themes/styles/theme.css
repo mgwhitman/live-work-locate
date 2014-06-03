@@ -755,11 +755,12 @@ html, body
     border: none;
     color: #083C88;
     height: 20px !important;
-    margin: 15PX AUTO;
+    margin: 15px AUTO;
     float: left;
-    margin-left: 239px;
     font-size: 15px;
     vertical-align: middle;
+    text-align: center;
+    width: 100%;
 }
 
 .holder
@@ -1424,7 +1425,7 @@ html, body
 
 .esriCTinfoWindow
 {
-    z-index: 998 !important;
+    z-index: 1001 !important;
     background: #FFF;
     height: 300px;
     width: 350px;
