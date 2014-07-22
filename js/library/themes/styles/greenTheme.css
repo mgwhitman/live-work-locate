@@ -23,7 +23,7 @@
         background-image: url("../images/img2X/share@2X.png") !important;
     }
 
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img2X/share-select@2X-green.png") !important;
     }
@@ -73,7 +73,7 @@
     {
         background-image: url("../images/img44x44/imgSocialMedia.png") !important;
     }
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img44x44/imgSocialMedia-select-green.png") !important;
     }
@@ -127,7 +127,7 @@
 {
     background-image: url("../images/img24x24/imgGeolocation-24.png");
 }
-.esriCTImgSocialMedia-select
+.esriCTImgSocialMediaSelect
 {
     background-image: url("../images/img24x24/imgSocialMedia_green-24.png");
 }

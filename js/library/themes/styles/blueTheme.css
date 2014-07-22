@@ -21,7 +21,7 @@
         background-image: url("../images/img2X/geo-location@2x.png") !important;
     }
 
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img2X/share-select@2X.png") !important;
     }
@@ -85,7 +85,7 @@
     {
         background-image: url("../images/img44x44/imgSocialMedia.png") !important;
     }
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img44x44/imgSocialMedia-select.png") !important;
     }
@@ -139,7 +139,7 @@
 {
     background-image: url("../images/img24x24/imgGeolocation-24.png");
 }
-.esriCTImgSocialMedia-select
+.esriCTImgSocialMediaSelect
 {
     background-image: url("../images/img24x24/imgSocialMedia-select-24.png");
 }

@@ -29,21 +29,22 @@ define([], function () {
         // 5.  Set URL for logo                              - [ Tag(s) to look for: LogoURL ]
         // 6.  Set settings  for splash screen               - [ Tag(s) to look for: SplashScreen ]
         // 7.  Specify header widget settings                - [ Tag(s) to look for: AppHeaderWidgets ]
-        // 8.  Specify URLs for base maps                    - [ Tag(s) to look for: BaseMapLayers ]
+        // 8.  Set setting for base maps gallery             - [ Tag(s) to look for: BaseMapLayers ]
         // 9.  Geometry service setting                      - [ Tag(s) to look for: GeometryService ]
         // 10. RouteTask setting                             - [ Tag(s) to look for: RouteTask ]
         // 11. ServiceAreaTask setting                       - [ Tag(s) to look for: ServiceAreaTask ]
-        // 12. Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
-        // 13. Customize InfoPopupHeight                     - [ Tag(s) to look for: InfoPopupHeight ]
-        // 14. Customize InfoPopupWidth                      - [ Tag(s) to look for: InfoPopupWidth ]
-        // 15. Specify ShowNullValueAs                       - [ Tag(s) to look for: ShowNullValueAs ]
-        // 16. Customize DriveTimeSliderSettings             - [ Tag(s) to look for: DriveTimeSliderSettings ]
-        // 17. Customize  DriveTimeSliderRulerSettings       - [ Tag(s) to look for: DriveTimeSliderRulerSettings ]
-        // 18. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
-        // 19. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
-        // 20. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
-        // 21. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
-        // 22. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
+        // 12. set proxy url                                 - [ Tag(s) to look for: ProxyUrl ]
+        // 13. Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
+        // 14. Customize InfoPopupHeight                     - [ Tag(s) to look for: InfoPopupHeight ]
+        // 15. Customize InfoPopupWidth                      - [ Tag(s) to look for: InfoPopupWidth ]
+        // 16. Specify ShowNullValueAs                       - [ Tag(s) to look for: ShowNullValueAs ]
+        // 17. Customize DriveTimeSliderSettings             - [ Tag(s) to look for: DriveTimeSliderSettings ]
+        // 18. set Legend visibility                         - [ Tag(s) to look for: ShowLegend ]
+        // 19. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
+        // 20. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
+        // 21. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
+        // 22. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
+        // 23. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GENERAL SETTINGS
@@ -68,6 +69,31 @@ define([], function () {
             SplashScreenContent: "Please select an app to continue"
         },
 
+        //-------------------------------------------------------------------------------------------------------------------
+        // Header Widget Settings
+        //-------------------------------------------------------------------------------------------------------------------
+        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
+        // Title: Name of the widget, will displayed as title of widget in header panel
+        // WidgetPath: path of the widget respective to the widgets package.
+        // MapInstanceRequired: true if widget is dependent on the map instance.
+
+        AppHeaderWidgets: [{
+            WidgetPath: "widgets/locator/locator",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/geoLocation/geoLocation",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/share/share",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/help/help",
+            MapInstanceRequired: false
+        }, {
+            WidgetPath: "widgets/exit/exit",
+            MapInstanceRequired: true
+        }],
+
         //ExitButtonTooltip: Specify tooltip text for exit workflow button
         ExitButtonTooltip: "Exit",
         //DriveTimeButtonTooltip : Specify tooltip text for switch to drivetime button in distance slider
@@ -83,7 +109,7 @@ define([], function () {
         //SwitchWorkflowsTooltip: Specify tooltip text for switch workflow buttons in header
         SwitchWorkflowsTooltip: "Click to switch workflows",
 
-        
+        // ------------------------------------------------------------------------------------------------------------------------
         // BASEMAP SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Set options for basemap
@@ -100,14 +126,25 @@ define([], function () {
         // Specify path to image used to display the thumbnail for a basemap when portal does not provide it
         NoThumbnail: "js/library/themes/images/not-available.png",
 
+
+
         // ------------------------------------------------------------------------------------------------------------------------
         // GEOMETRY SERVICE SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
 
         // Set geometry service URL
         GeometryService: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+
         // ------------------------------------------------------------------------------------------------------------------------
+        //  ROUTE TASK SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Set route task service URL
         RouteTask: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        //  SERVICE SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Set Service Area Task  URL
         ServiceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
 
         // Set proxy url
@@ -125,6 +162,9 @@ define([], function () {
         // Set string value to be shown for null or blank values
         ShowNullValueAs: "N/A",
 
+        // ------------------------------------------------------------------------------------------------------------------------
+        // DRIVE TIME SLIDER SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
         // Specify drive/walk time slider settings
         DriveTimeSliderSettings: {
             defaultMinutes: 10,
@@ -134,14 +174,14 @@ define([], function () {
             showButtons: false
         },
 
-        DriveTimeSliderRulerSettings: {
-            SliderRulerContainer: "topDecoration"
-        },
+        //set legend panel visibility
+        ShowLegend: true,
 
         // Initial map extent. Use comma (,) to separate values and dont delete the last comma
         // The coordinates must be specified in the basemap's coordinate system, usually WKID:102100, unless a custom basemap is used
         DefaultExtent: "-9412951.815477943,4480918.013545, -7742344.125277582,5077738.330395495",
 
+        // ------------------------------------------------------------------------------------------------------------------------
         // WORKFLOW SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Configure workflows
@@ -176,6 +216,7 @@ define([], function () {
 
         Workflows: [{
             Name: "LIVE",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
             WebMapId: "",
@@ -727,26 +768,27 @@ define([], function () {
                     FieldName: "${TAXRTE}"
                 }]
             }, {
-            Title: "Live",
-            QueryLayerId: "14",
-            InfoWindowHeaderField: "${SITENAME}",
-            ShowAllFields: "false",
-            InfoWindowData: [{
-                DisplayText: "Name:",
-                FieldName: "${SITENAME}"
-            }, {
-                DisplayText: "More Information:",
-                FieldName: "${INFO}"
-            }, {
-                DisplayText: "County:",
-                FieldName: "${COUNTY}"
-            }, {
-                DisplayText: "Median Home Sale Price:",
-                FieldName: "${MEDSALEPC}"
+                Title: "Live",
+                QueryLayerId: "14",
+                InfoWindowHeaderField: "${SITENAME}",
+                ShowAllFields: "false",
+                InfoWindowData: [{
+                    DisplayText: "Name:",
+                    FieldName: "${SITENAME}"
+                }, {
+                    DisplayText: "More Information:",
+                    FieldName: "${INFO}"
+                }, {
+                    DisplayText: "County:",
+                    FieldName: "${COUNTY}"
+                }, {
+                    DisplayText: "Median Home Sale Price:",
+                    FieldName: "${MEDSALEPC}"
+                }]
             }]
-          }]
         }, {
             Name: "WORK",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
             WebMapId: "",
@@ -1181,6 +1223,7 @@ define([], function () {
             }]
         }, {
             Name: "LOCATE",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/orangeTheme.css",
             WebMapId: "",
@@ -1709,7 +1752,7 @@ define([], function () {
                     DisplayText: "Labor Value:",
                     FieldName: "${LABORVALUE}"
                 }]
-            },  {
+            }, {
                 Title: "Locate",
                 QueryLayerId: "11",
                 InfoWindowHeaderField: "${SITENAME}",
@@ -1720,7 +1763,7 @@ define([], function () {
                 }, {
                     DisplayText: "Organization Name:",
                     FieldName: "${ORGNAME}"
-                },{
+                }, {
                     DisplayText: "County:",
                     FieldName: "${COUNTY}"
                 }, {
@@ -1906,32 +1949,6 @@ define([], function () {
             LineSymbolColor: "255,255,102",
             LineSymbolTransparency: "1"
         },
-        //-------------------------------------------------------------------------------------------------------------------
-        // Header Widget Settings
-        //-------------------------------------------------------------------------------------------------------------------
-        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
-        // Title: Name of the widget, will displayed as title of widget in header panel
-        // WidgetPath: path of the widget respective to the widgets package.
-        // MapInstanceRequired: true if widget is dependent on the map instance.
-
-        AppHeaderWidgets: [{
-            WidgetPath: "widgets/locator/locator",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/geoLocation/geoLocation",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/share/share",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/help/help",
-            MapInstanceRequired: false
-        }, {
-            WidgetPath: "widgets/exit/exit",
-            MapInstanceRequired: true
-        }],
-
-        // ------------------------------------------------------------------------------------------------------------------------
 
         // ------------------------------------------------------------------------------------------------------------------------
         // SETTINGS FOR MAP SHARING

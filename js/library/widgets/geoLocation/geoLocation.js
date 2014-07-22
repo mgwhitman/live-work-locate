@@ -58,7 +58,9 @@ define([
                 })));
             }
             topic.subscribe("setMap", lang.hitch(this, function (map) {
-                this.map = map;
+                if (this.map) {
+                    this.map = map;
+                }
             }));
         },
 
@@ -90,7 +92,11 @@ define([
                 */
                 geometryService.project([mapPoint], self.map.spatialReference).then(function (newPoint) {
                     currentBaseMap = self.map.getLayer("defaultBasemap");
-                    if (currentBaseMap.visible) {
+                    if (!currentBaseMap) {
+                        currentBaseMap = self.map.getLayer("defaultBasemap0");
+                    }
+
+                    if (currentBaseMap && currentBaseMap.visible) {
                         if (!currentBaseMap.fullExtent.contains(newPoint[0])) {
                             alert(sharedNls.errorMessages.invalidLocation);
                             return;
@@ -118,6 +124,8 @@ define([
                 graphic = new Graphic(mapPoint, locatorMarkupSymbol, null, null);
             this.map.getLayer("esriGraphicsLayerMapSettings").clear();
             this.map.getLayer("esriGraphicsLayerMapSettings").add(graphic);
+            dojo.addressLocation = graphic;
+            topic.publish("SliderChange");
         }
 
     });

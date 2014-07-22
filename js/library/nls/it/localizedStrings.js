@@ -33,7 +33,9 @@ define({
         shareLoadingFailed: "Unable to shorten URL, Bit.ly failed to load.",
         shareFailed: "Unable to share.",
         noLegend: "No Legend Available",
-        invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap."
+        invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
+        invalidBasemapQuery: "Invalid BasemapQuery",
+        noBasemap: "No Basemap Found"
     },
     buttons: {
         embedding: "Embedding", //Shown next to icon for sharing the map embedding in website
