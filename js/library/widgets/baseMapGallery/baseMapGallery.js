@@ -19,6 +19,7 @@
 define([
     "dojo/_base/declare",
     "dojo/dom-construct",
+    "dojo/_base/array",
     "dojo/_base/lang",
     "dojo/on",
     "dojo/dom",
@@ -26,13 +27,15 @@ define([
     "dojo/text!./templates/baseMapGalleryTemplate.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin"
-], function (declare, domConstruct, lang, on, dom, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin) {
+    "dijit/_WidgetsInTemplateMixin",
+    "esri/layers/ArcGISTiledMapServiceLayer"
+], function (declare, domConstruct, array, lang, on, dom, query, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, ArcGISTiledMapServiceLayer) {
 
     //========================================================================================================================//
 
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
+        enableToggling: true,
         /**
         * create baseMapGallery widget
         *
@@ -40,40 +43,37 @@ define([
         * @name widgets/baseMapGallery/baseMapGallery
         */
         postCreate: function () {
-            var i, basemapContainer, baseMapURL, baseMapLayers, baseMapURLCount;
-            baseMapURL = baseMapURLCount = 0;
-            baseMapLayers = dojo.configData.BaseMapLayers;
-            for (i = 0; i < baseMapLayers.length; i++) {
-                if (baseMapLayers[i].MapURL) {
-                    if (baseMapURLCount === 0) {
-                        baseMapURL = i;
-                    }
-                    baseMapURLCount++;
-                }
+            if (dojo.configData.BaseMapLayers) {
+                dom.byId("esriCTParentDivContainer").appendChild(this.esriCTDivLayerContainer);
+                this.layerList.appendChild(this._createBaseMapElement());
+                this._loadSharedBasemap();
             }
-            basemapContainer = domConstruct.create("div", {}, dom.byId("esriCTParentDivContainer"));
-            basemapContainer.appendChild(this.esriCTDivLayerContainer);
-            this.layerList.appendChild(this._createBaseMapElement(baseMapURL, baseMapURLCount));
-            this._loadSharedBasemap();
         },
 
         /**
-        * create basemap layer
-        * @param {string} layerURL {string} layerId evt
+        * create UI for basemap toggle widget
         * @memberOf widgets/baseMapGallery/baseMapGallery
         */
-        _createBaseMapLayer: function (layerURL, layerId) {
-            var layer = new esri.layers.ArcGISTiledMapServiceLayer(layerURL, { id: layerId, visible: false });
-            return layer;
-        },
+        _createBaseMapElement: function () {
+            var divContainer, imgThumbnail, thumbnailPath, basemap;
+            if (dojo.selectedBasemapIndex === dojo.configData.BaseMapLayers.length - 1) {
+                basemap = dojo.configData.BaseMapLayers[0];
+            } else {
+                basemap = dojo.configData.BaseMapLayers[dojo.selectedBasemapIndex + 1];
+            }
 
-        _createBaseMapElement: function (baseMapURL, baseMapURLCount) {
-            var divContainer, imgThumbnail;
+            if (basemap.length) {
+                thumbnailPath = basemap[0].ThumbnailSource;
+            } else {
+                thumbnailPath = basemap.ThumbnailSource;
+            }
             divContainer = domConstruct.create("div", { "class": "esriCTbaseMapContainerNode" });
-            imgThumbnail = domConstruct.create("img", { "class": "basemapThumbnail", "src": dojo.configData.BaseMapLayers[baseMapURL + 1].ThumbnailSource }, null);
+            imgThumbnail = domConstruct.create("img", { "class": "basemapThumbnail", "src": thumbnailPath }, null);
             on(imgThumbnail, "click", lang.hitch(this, function () {
-                dojo.selectedBasemapIndex++;
-                this._changeBasemapThumbnail();
+                if (this.enableToggling) {
+                    dojo.selectedBasemapIndex++;
+                    this._changeBasemapThumbnail();
+                }
             }));
             divContainer.appendChild(imgThumbnail);
             return divContainer;
@@ -83,17 +83,51 @@ define([
         * change basemap layer
         * @memberOf widgets/baseMapGallery/baseMapGallery
         */
-        _changeBaseMap: function () {
-            var layer, basemap;
-            basemap = this.map.getLayer("defaultBasemap");
-            if (basemap) {
-                this.map.removeLayer(basemap);
-            }
-            setTimeout(lang.hitch(this, function () {
-                layer = new esri.layers.ArcGISTiledMapServiceLayer(dojo.configData.BaseMapLayers[dojo.selectedBasemapIndex].MapURL, { id: "defaultBasemap", visible: true });
-                this.map.addLayer(layer, 0);
-            }), 200);
+        _changeBaseMap: function (preLayerIndex) {
+            var basemap, basemapLayers, basemapLayerId = "defaultBasemap";
+            basemapLayers = dojo.configData.BaseMapLayers[preLayerIndex];
+            this.map.onLayerRemove = lang.hitch(this, function (layer) {
+                this._addBasemapLayerOnMap(basemapLayerId);
+            });
 
+            if (basemapLayers.length) {
+                array.forEach(basemapLayers, lang.hitch(this, function (layer, index) {
+                    basemap = this.map.getLayer(basemapLayerId + index);
+                    if (basemap) {
+                        this.enableToggling = false;
+                        this.map.removeLayer(basemap);
+                    }
+                }));
+            } else {
+                basemap = this.map.getLayer(basemapLayerId);
+                if (basemap) {
+                    this.enableToggling = false;
+                    this.map.removeLayer(basemap);
+                }
+            }
+        },
+
+        /**
+        * get shared basemap
+        * @memberOf widgets/baseMapGallery/baseMapGallery
+        */
+        _addBasemapLayerOnMap: function (basemapLayerId) {
+            var layer, basemapLayers = dojo.configData.BaseMapLayers[dojo.selectedBasemapIndex];
+            if (basemapLayers.length) {
+                array.forEach(basemapLayers, lang.hitch(this, function (basemap, index) {
+                    this.enableToggling = false;
+                    layer = new ArcGISTiledMapServiceLayer(basemap.MapURL, { id: basemapLayerId + index, visible: true });
+                    this.map.addLayer(layer, index);
+                }));
+            } else {
+                this.enableToggling = false;
+                layer = new ArcGISTiledMapServiceLayer(basemapLayers.MapURL, { id: basemapLayerId, visible: true });
+                this.map.addLayer(layer, 0);
+            }
+
+            this.map.onLayerAdd = lang.hitch(this, function (layer) {
+                this.enableToggling = true;
+            });
         },
 
         /**
@@ -103,7 +137,8 @@ define([
         _loadSharedBasemap: function () {
             if (window.location.toString().split("$selectedBasemapIndex=").length > 1) {
                 dojo.selectedBasemapIndex = parseInt(window.location.toString().split("$selectedBasemapIndex=")[1].split("$")[0], 10);
-                this._changeBasemapThumbnail();
+                var preLayerIndex = dojo.configData.BaseMapLayers.length - 1;
+                this._changeBasemapThumbnail(preLayerIndex);
             }
         },
 
@@ -111,41 +146,34 @@ define([
         * change basemap thumbnail
         * @memberOf widgets/baseMapGallery/baseMapGallery
         */
-        _changeBasemapThumbnail: function () {
-            var baseMapURLCount, presentThumbNail;
+        _changeBasemapThumbnail: function (preIndex) {
+            var baseMapURLCount, presentThumbNail, preLayerIndex, thumbnailPath;
             baseMapURLCount = dojo.configData.BaseMapLayers.length;
+            preLayerIndex = dojo.selectedBasemapIndex - 1;
+
             if (dojo.selectedBasemapIndex === baseMapURLCount) {
                 dojo.selectedBasemapIndex = 0;
+            }
+            if (dojo.selectedBasemapIndex === 0) {
+                preLayerIndex = baseMapURLCount - 1;
             }
             presentThumbNail = dojo.selectedBasemapIndex + 1;
             if (dojo.selectedBasemapIndex === baseMapURLCount - 1) {
                 presentThumbNail = 0;
             }
-            this._changeBaseMap();
-            query('.basemapThumbnail')[0].src = dojo.configData.BaseMapLayers[presentThumbNail].ThumbnailSource;
-        },
-
-        /**
-        * hide basemap layer
-        * @memberOf widgets/baseMapGallery/baseMapGallery
-        */
-        _hideMapLayers: function () {
-            var i, layer;
-            for (i = 0; i < dojo.configData.BaseMapLayers.length; i++) {
-                if (dojo.configData.BaseMapLayers[i].MapURL) {
-                    layer = this.map.getLayer(dojo.configData.BaseMapLayers[i].Key);
-                    if (layer) {
-                        layer.hide();
-                    }
-                }
+            if (preIndex) {
+                preLayerIndex = preIndex;
             }
-        },
-        /**
-        * hide basemap gallery
-        * @memberOf widgets/baseMapGallery/baseMapGallery
-        */
-        _hideBaseMapGallery: function () {
-            this.esriCTDivLayerContainer.style.display = "none";
+            this._changeBaseMap(preLayerIndex);
+            if (dojo.configData.BaseMapLayers[presentThumbNail].length) {
+                thumbnailPath = dojo.configData.BaseMapLayers[presentThumbNail][0].ThumbnailSource;
+            } else {
+                thumbnailPath = dojo.configData.BaseMapLayers[presentThumbNail].ThumbnailSource;
+
+            }
+            query('.basemapThumbnail')[0].src = thumbnailPath;
         }
+
+
     });
 });

@@ -62,9 +62,20 @@ define([
                 } else {
                     this.InfoShow = false;
                 }
+                dojo.mapClickedPoint = null;
                 domUtils.hide(this.domNode);
                 dojo.infoWindowIsShowing = false;
                 topic.publish("clearSelectedFeature");
+            })));
+
+            topic.subscribe("setMap", lang.hitch(this, function (map) {
+                this.map = map;
+            }));
+            this.own(on(window, "resize", lang.hitch(this, function () {
+                topic.publish("_setInfoWindowLocation");
+            })));
+            this.own(on(window, "orientationchange", lang.hitch(this, function () {
+                topic.publish("_setInfoWindowLocation");
             })));
         },
 
@@ -81,18 +92,22 @@ define([
                     this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
                 }
             }
-            scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
-            domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
-            this.setLocation(screenPoint);
             if (this.infoContainerScrollbar) {
                 this.infoContainerScrollbar.removeScrollBar();
             }
+
+            scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
+            domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
+            this.setLocation(screenPoint);
             this.divInfoDetailsScroll.appendChild(detailsTab);
             this.infoContainerScrollbar = new ScrollBar({
                 domNode: this.divInfoScrollContent
             });
             this.infoContainerScrollbar.setContent(this.divInfoDetailsScroll);
             this.infoContainerScrollbar.createScrollBar();
+            while (this.infoContainerScrollbar.domNode.children.length > 1) {
+                this.infoContainerScrollbar.domNode.removeChild(this.infoContainerScrollbar.domNode.firstChild);
+            }
         },
 
         /**
