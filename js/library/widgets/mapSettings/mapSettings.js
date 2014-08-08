@@ -110,8 +110,8 @@ define([
             topic.subscribe("loadBasemapToggleWidget", lang.hitch(this, function () {
                 this._updateMapOnSwitchWorkflow();
             }));
-            topic.subscribe("showInfoWindowOnMap", lang.hitch(this, function (point, map) {
-                this._showInfoWindowOnMap(point, map);
+            topic.subscribe("showInfoWindowOnMap", lang.hitch(this, function (point) {
+                this._showInfoWindowOnMap(point);
             }));
             topic.subscribe("setMapTipPosition", lang.hitch(this, function () {
                 this._onSetMapTipPosition();
@@ -185,7 +185,7 @@ define([
                 dojo.mapClickedPoint = evt.mapPoint;
                 if (evt.graphic) {
                     topic.publish("loadingIndicatorHandler");
-                    this._showInfoWindowOnMap(evt.mapPoint, this.map);
+                    this._showInfoWindowOnMap(evt.mapPoint);
                 }
             }));
             this.map.on("extent-change", lang.hitch(this, function (evt) {
@@ -243,7 +243,9 @@ define([
                     _self.serviceAreaGraphic = serviceArea;
                     serviceArea.geometry.spatialReference = _self.map.spatialReference;
                     serviceArea.setSymbol(polygonSymbol);
-                    _self._updateBufferGeometry(serviceArea);
+                    _self.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                    _self.map.getLayer("esriGraphicsLayerMapSettings").add(serviceArea);
+                    _self.map.getLayer("esriGraphicsLayerMapSettings").add(dojo.addressLocation);
                     _self._selectFeatures(serviceArea);
                     dojo.bufferArea = true;
                 });
@@ -251,21 +253,6 @@ define([
                 console.log(err);
                 topic.publish("hideLoadingIndicatorHandler");
             });
-        },
-
-        /**
-        * update service/buffer area geometry
-        * @memberOf widgets/mapSettings/mapSettings
-        */
-        _updateBufferGeometry: function (serviceArea) {
-            var i, graphicsArray = this.map.getLayer("esriGraphicsLayerMapSettings").graphics;
-            for (i = 0; i < graphicsArray.length; i++) {
-                if (graphicsArray[i].geometry.type !== "point") {
-                    this.map.getLayer("esriGraphicsLayerMapSettings").remove(graphicsArray[i]);
-                    i--;
-                }
-            }
-            this.map.getLayer("esriGraphicsLayerMapSettings").add(serviceArea);
         },
 
         /**
@@ -341,12 +328,16 @@ define([
             }));
             deferredListFeatureResult = new DeferredList(deferredArray);
             deferredListFeatureResult.then(lang.hitch(this, function () {
-                if (query(".esriCTAddressHolder")[0]) {
+                if (query(".esriCTAddressHolder")[0] && selectedFeaturesGroup.length > 0) {
+                    if (query(".esriCTTdHeaderSearch")[0]) {
+                        domClass.replace(query(".esriCTTdHeaderSearch")[0], "esriCTTdHeaderSearch-select", "esriCTTdHeaderSearch");
+                    }
+                    domClass.replace(query(".esriCTAddressHolder")[0], "esriCTShowContainerHeight", "esriCTHideContainerHeight");
                     domClass.replace(query(".esriCTAddressHolder")[0], "esriCTFullHeight", "esriCTAddressContentHeight");
                 }
                 setTimeout(function () {
                     topic.publish("_createList", selectedFeaturesGroup);
-                }, 500);
+                }, 6000);
                 topic.publish("updateLegends", this.serviceAreaGraphic.geometry);
 
             }));
@@ -429,6 +420,7 @@ define([
             domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "visible");
             this.infoWindowPanel.show(divInfoDetailsTab, screenPoint);
             dojo.infoWindowIsShowing = true;
+            this._onSetMapTipPosition(screenPoint);
         },
 
         /**
@@ -469,6 +461,9 @@ define([
                 }
                 if (!query('.esriCTMapLogo')[0]) {
                     domConstruct.create("img", { "src": imgSource, "class": "esriCTMapLogo" }, dom.byId("esriCTParentDivContainer"));
+                }
+                if (!dojo.configData.ShowLegend) {
+                    domStyle.set(query('.esriCTMapLogo')[0], "bottom", "5px");
                 }
             }
         },
@@ -645,13 +640,17 @@ define([
         },
 
         _createWebmapLegendLayerList: function (layers) {
-            var i, webMapLayers = [], webmapLayerList = [];
+            var i, webMapLayers = [], webmapLayerList = {}, hasLayers = false;
             for (i = 0; i < layers.length; i++) {
                 if (layers[i].layerDefinition && layers[i].layerDefinition.drawingInfo) {
                     webmapLayerList[layers[i].url] = layers[i];
+                    hasLayers = true;
                 } else {
                     webMapLayers.push(layers[i]);
                 }
+            }
+            if (!hasLayers) {
+                webmapLayerList = null;
             }
             this._addLayerLegendWebmap(webMapLayers, webmapLayerList);
         },
@@ -700,13 +699,11 @@ define([
         */
         _setBasemapId: function (basmap, defaultId) {
             var layerIndex;
-            if (basmap.id !== defaultId) {
-                this.map.getLayer(basmap.id).id = defaultId;
-                this.map._layers[defaultId] = this.map.getLayer(basmap.id);
-                layerIndex = array.indexOf(this.map.layerIds, basmap.id);
-                delete this.map._layers[basmap.id];
-                this.map.layerIds[layerIndex] = defaultId;
-            }
+            this.map.getLayer(basmap.id).id = defaultId;
+            this.map._layers[defaultId] = this.map.getLayer(basmap.id);
+            layerIndex = array.indexOf(this.map.layerIds, basmap.id);
+            delete this.map._layers[basmap.id];
+            this.map.layerIds[layerIndex] = defaultId;
         },
         /**
         * fetch webmap operational layers and generate settings
@@ -728,7 +725,7 @@ define([
                         serviceTitle[operationalLayerId] = webMapDetails.operationalLayers[i].url + "/";
                     }
                 } else {
-                    lastSlashIndex = array.indexOf(webMapDetails.operationalLayers[i].url, "/");
+                    lastSlashIndex = array.lastIndexOf(webMapDetails.operationalLayers[i].url, "/");
                     serviceTitle[operationalLayerId] = webMapDetails.operationalLayers[i].url.substring(0, lastSlashIndex + 1);
                 }
             }
@@ -827,7 +824,7 @@ define([
         * @param{object} mapPoint is location on map to show infowindow
         * @memberOf widgets/mapSettings/mapSettings
         */
-        _showInfoWindowOnMap: function (mapPoint, map) {
+        _showInfoWindowOnMap: function (mapPoint) {
             this.counter = 0;
             var onMapFeaturArray, index, deferredListResult, featureArray, j, i;
             onMapFeaturArray = [];
@@ -852,7 +849,7 @@ define([
                         }
                     }
 
-                    this._fetchQueryResults(featureArray, map, mapPoint);
+                    this._fetchQueryResults(featureArray, mapPoint);
                 }
             }), function (err) {
                 alert(err.message);
@@ -872,7 +869,7 @@ define([
             esriQuery.where = currentTime.getTime() + index.toString() + "=" + currentTime.getTime() + index.toString();
             esriQuery.returnGeometry = true;
             esriQuery.geometry = this._extentFromPoint(mapPoint);
-            esriQuery.spatialRelationship = Query.SPATIAL_REL_CONTAINS;
+            esriQuery.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
             esriQuery.outSpatialReference = this.map.spatialReference;
             esriQuery.outFields = ["*"];
             queryOnRouteTask = queryTask.execute(esriQuery, lang.hitch(this, function (results) {
@@ -903,38 +900,38 @@ define([
         * fetch infowindow data from query task result
         * @memberOf widgets/mapSettings/mapSettings
         */
-        _fetchQueryResults: function (featureArray, map, mapPoint) {
+        _fetchQueryResults: function (featureArray, mapPoint) {
             var point, _this, featurePoint;
             if (featureArray.length > 0) {
                 if (featureArray.length === 1) {
                     domClass.remove(query(".esriCTdivInfoRightArrow")[0], "esriCTShowInfoRightArrow");
                     if (featureArray[0].attr.geometry.type === "polygon") {
-                        featurePoint = featureArray[0].attr.geometry.getCentroid();
+                        featurePoint = mapPoint;
                     } else {
                         featurePoint = featureArray[0].attr.geometry;
                     }
-                    topic.publish("showInfoWindow", featurePoint, featureArray, 0, map, false);
+                    topic.publish("showInfoWindow", featurePoint, featureArray, 0, false);
                 } else {
                     this.count = 0;
                     domAttr.set(query(".esriCTdivInfoTotalFeatureCount")[0], "innerHTML", '/' + featureArray.length);
                     if (featureArray[this.count].attr.geometry.type === "polyline") {
                         point = featureArray[this.count].attr.geometry.getPoint(0, 0);
-                        topic.publish("showInfoWindow", point, featureArray, this.count, map, false);
+                        topic.publish("showInfoWindow", point, featureArray, this.count, false);
                     } else {
                         if (featureArray[0].attr.geometry.type === "polygon") {
                             point = mapPoint;
                         } else {
                             point = featureArray[0].attr.geometry;
                         }
-                        topic.publish("showInfoWindow", point, featureArray, this.count, map, false);
+                        topic.publish("showInfoWindow", point, featureArray, this.count, false);
                     }
                     topic.publish("hideLoadingIndicatorHandler");
                     _this = this;
                     query(".esriCTdivInfoRightArrow")[0].onclick = function () {
-                        _this._nextInfoContent(featureArray, map, point);
+                        _this._nextInfoContent(featureArray, point);
                     };
                     query(".esriCTdivInfoLeftArrow")[0].onclick = function () {
-                        _this._previousInfoContent(featureArray, map, point);
+                        _this._previousInfoContent(featureArray, point);
                     };
                 }
             } else {
@@ -958,14 +955,14 @@ define([
         * display next page of infowindow on clicking of next arrow
         * @memberOf widgets/mapSettings/mapSettings
         */
-        _nextInfoContent: function (featureArray, map, point) {
+        _nextInfoContent: function (featureArray, point) {
             if (!domClass.contains(query(".esriCTdivInfoRightArrow")[0], "disableArrow")) {
                 if (this.count < featureArray.length) {
                     this.count++;
                 }
                 if (featureArray[this.count]) {
                     domClass.add(query(".esriCTdivInfoRightArrow")[0], "disableArrow");
-                    topic.publish("showInfoWindow", point, featureArray, this.count, map, true);
+                    topic.publish("showInfoWindow", point, featureArray, this.count, true);
                 }
             }
         },
@@ -974,14 +971,14 @@ define([
         * display previous page of infowindow on clicking of previous arrow
         * @memberOf widgets/mapSettings/mapSettings
         */
-        _previousInfoContent: function (featureArray, map, point) {
+        _previousInfoContent: function (featureArray, point) {
             if (!domClass.contains(query(".esriCTdivInfoLeftArrow")[0], "disableArrow")) {
                 if (this.count !== 0 && this.count < featureArray.length) {
                     this.count--;
                 }
                 if (featureArray[this.count]) {
                     domClass.add(query(".esriCTdivInfoLeftArrow")[0], "disableArrow");
-                    topic.publish("showInfoWindow", point, featureArray, this.count, map, true);
+                    topic.publish("showInfoWindow", point, featureArray, this.count, true);
                 }
             }
         }

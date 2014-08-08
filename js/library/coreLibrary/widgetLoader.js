@@ -289,6 +289,8 @@ define([
             if (this._isUniqueBasemap(baseMapArray, bmLayerData, isWorkFlowBasemap)) {
                 if (isWorkFlowBasemap) {
                     dojo.selectedBasemapIndex = baseMapArray.length;
+                } else if (bmLayerData[0].visibility) {
+                    dojo.selectedBasemapIndex = baseMapArray.length;
                 }
                 if (bmLayerData.length === 1) {
                     this._setBasemapAttribute(baseMapArray, bmLayerData[0], bmLayers, isWorkFlowBasemap);
@@ -324,12 +326,12 @@ define([
             for (i = 0; i < baseMapArray.length; i++) {
                 if (!baseMapArray[i].length) {
                     if (bmLayerData[0].url === baseMapArray[i].MapURL) {
-                        if (bmLayerData[0].length > 1) {
+                        if (bmLayerData.length > 1) {
                             pushBasemap = true;
                         } else {
                             pushBasemap = false;
                         }
-                        if (bmLayerData.visibility) {
+                        if (bmLayerData[0].visibility) {
                             dojo.selectedBasemapIndex = i;
                         }
                         break;
@@ -342,12 +344,15 @@ define([
                                     count++;
                                 }
                             }
-                            if (bmLayerData.visibility) {
+                            if (bmLayerData[0].visibility) {
                                 dojo.selectedBasemapIndex = i;
                             }
                             break;
                         }
 
+                    }
+
+                    if (i === baseMapArray.length - 1) {
                         if (count === baseMapArray[i].length) {
                             pushBasemap = false;
                         } else {

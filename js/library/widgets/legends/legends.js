@@ -54,7 +54,6 @@ define([
         _layerCollection: {},
         webmapUpdatedRenderer: null,
         hostedLayersJSON: null,
-        _rendererArray: [],
         newLeft: 0,
         total: 0,
         legendListWidth: [],
@@ -89,12 +88,15 @@ define([
         * @memberOf widgets/legends/legends
         */
         _UpdatedLegend: function (geometry) {
-            var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, resultListArray = [],
-                queryDefList, i, currentTime;
+            var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, rendererArray = [], resultListArray = [],
+                queryDefList, i, currentTime, layerUrl;
             currentTime = new Date();
 
             this._resetLegendContainer();
-            this._rendererArray.length = 0;
+            domConstruct.empty(this.divlegendContainer);
+            domStyle.set(this.divRightArrow, "display", "none");
+            domStyle.set(query(".esriCTLeftArrow")[0], "display", "none");
+            domConstruct.create("span", { innerHTML: sharedNls.tooltips.loadingText, "class": "divlegendLoadingContainer" }, this.divlegendContainer);
             if (!geometry) {
                 domConstruct.empty(this.divlegendContainer);
                 domConstruct.create("span", { innerHTML: sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
@@ -103,13 +105,17 @@ define([
             }
             for (layer in this._layerCollection) {
                 if (this._layerCollection.hasOwnProperty(layer)) {
-                    if (this._checkLayerVisibility(layer)) {
+                    layerUrl = layer;
+                    if (this._layerCollection[layer].featureLayerUrl) {
+                        layerUrl = this._layerCollection[layer].featureLayerUrl;
+                    }
+                    if (this._checkLayerVisibility(layerUrl)) {
                         layerObject = this._layerCollection[layer];
                         rendererObject = this._layerCollection[layer].legend;
                         if (rendererObject && rendererObject.length) {
                             for (index = 0; index < rendererObject.length; index++) {
                                 rendererObject[index].layerUrl = layer;
-                                this._rendererArray.push(rendererObject[index]);
+                                rendererArray.push(rendererObject[index]);
                                 queryResult = this._fireQueryOnExtentChange(geometry);
                                 if (layerObject.rendererType === "uniqueValue") {
                                     if (rendererObject[index].values) {
@@ -128,21 +134,16 @@ define([
                     }
                 }
             }
-            resultListArray = [];
             this.legendListWidth = [];
-            domConstruct.empty(this.divlegendContainer);
-            domStyle.set(this.divRightArrow, "display", "none");
-            domStyle.set(query(".esriCTLeftArrow")[0], "display", "none");
-            domConstruct.create("span", { innerHTML: sharedNls.tooltips.loadingText, "class": "divlegendLoadingContainer" }, this.divlegendContainer);
             if (defQueryArray.length > 0) {
                 queryDefList = new DeferredList(defQueryArray);
                 queryDefList.then(lang.hitch(this, function (result) {
                     domConstruct.empty(this.divlegendContainer);
+                    this.legendListWidth = [];
                     for (i = 0; i < result.length; i++) {
                         if (result[i][0] && result[i][1] > 0) {
                             resultListArray.push(result[i][1]);
-                            this._addLegendSymbol(this._rendererArray[i], this._layerCollection[this._rendererArray[i].layerUrl].layerName);
-                            this.legendListWidth.push(this.divLegendlist.offsetWidth);
+                            this._addLegendSymbol(rendererArray[i], this._layerCollection[rendererArray[i].layerUrl].layerName);
                         }
                     }
 
@@ -198,7 +199,6 @@ define([
         * @memberOf widgets/legends/legends
         */
         _setMaxLegendLengthResult: function () {
-            this._resetLegendContainer();
             domClass.add(this.logoContainer, "mapLogoUrl");
             if (this.legendrightbox) {
                 if (query('.legenboxInner')[0]) {
@@ -209,7 +209,6 @@ define([
             if (this.divRightArrow) {
                 domClass.add(this.divRightArrow, "esriCTRightArrowShift");
             }
-            this._addlegendListWidth(this.legendListWidth);
         },
 
         /**
@@ -217,7 +216,6 @@ define([
         * @memberOf widgets/legends/legends
         */
         _setMinLegendLengthResult: function () {
-            this._resetLegendContainer();
             domClass.remove(this.logoContainer, "mapLogoUrl");
             if (this.legendrightbox) {
                 if (query('.legenboxInner')[0]) {
@@ -228,7 +226,7 @@ define([
             if (this.divRightArrow) {
                 domClass.replace(this.divRightArrow, "esriCTRightArrow", "esriCTRightArrowShift");
             }
-            this._addlegendListWidth(this.legendListWidth);
+
         },
 
         /**
@@ -357,10 +355,11 @@ define([
         * @memberOf widgets/legends/legends
         */
         startup: function (layerArray, updatedRendererArray) {
-            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i;
+            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i, featureLayerUrl;
             this.mapServerArray = [];
             this.featureServerArray = [];
-            this.hostedLayersJSON = {};
+            this.hostedLayersJSON = null;
+            this.legendListWidth = [];
             this.webmapUpdatedRenderer = updatedRendererArray;
             hostedLayers = this._filterHostedFeatureServices(layerArray);
             for (i = 0; i < hostedLayers.length; i++) {
@@ -376,28 +375,37 @@ define([
             if (hostedDefArray.length > 0) {
                 hostedDeferredList = new DeferredList(hostedDefArray);
                 hostedDeferredList.then(lang.hitch(this, function (result) {
+                    if (result.length === 0) {
+                        this.hostedLayersJSON = null;
+                    } else {
+                        this.hostedLayersJSON = {};
+                        if (this.webmapUpdatedRenderer === null && this._layerCollection === null) {
+                            domConstruct.empty(this.divlegendContainer);
+                        }
+                    }
                     for (i = 0; i < result.length; i++) {
                         this.hostedLayersJSON[hostedLayers[i]] = result[i][1];
                     }
-                    if (result.length === 0) {
-                        this.hostedLayersJSON = null;
-                    }
                     this._displayHostedLayerRenderer();
+                    this._addlegendListWidth(this.legendListWidth);
                 }));
             }
             for (index = 0; index < layerArray.length; index++) {
-                if (array.indexOf(layerArray[index], "/FeatureServer") !== -1) {
+                if (layerArray[index].match("/FeatureServer")) {
+                    featureLayerUrl = layerArray[index];
                     layerArray[index] = layerArray[index].replace("/FeatureServer", "/MapServer");
+                } else {
+                    featureLayerUrl = null;
                 }
                 mapServerURL = layerArray[index].split("/");
                 mapServerURL.pop();
                 mapServerURL = mapServerURL.join("/");
-                this.mapServerArray.push(mapServerURL);
+                this.mapServerArray.push({ "url": mapServerURL, "featureLayerUrl": featureLayerUrl });
             }
             this.mapServerArray = this._removeDuplicate(this.mapServerArray);
             for (index = 0; index < this.mapServerArray.length; index++) {
                 params = {
-                    url: this.mapServerArray[index] + "/legend",
+                    url: this.mapServerArray[index].url + "/legend",
                     content: { f: "json" },
                     handleAs: "json",
                     callbackParamName: "callback"
@@ -407,11 +415,15 @@ define([
             }
             deferredList = new DeferredList(defArray);
             deferredList.then(lang.hitch(this, function (result) {
+                this._layerCollection = null;
                 for (index = 0; index < result.length; index++) {
-                    this._createLegendList(result[index][1], this.mapServerArray[index]);
+                    if (result[index][1]) {
+                        this._createLegendList(result[index][1], this.mapServerArray[index]);
+                    }
                 }
             }));
             this._displayWebmapRenderer();
+            this._addlegendListWidth(this.legendListWidth);
         },
 
         /*
@@ -445,7 +457,7 @@ define([
         * @memberOf widgets/legends/legends
         */
         _createLegendSymbol: function (layerData, layerTitle) {
-            var renderer, divLegendImage, divLegendLabel, image, rendererObject, i;
+            var renderer, divLegendImage, divLegendLabel, image, rendererObject, i, legendWidth;
             if (layerData) {
                 renderer = layerData.renderer;
                 if (renderer.label) {
@@ -492,6 +504,12 @@ define([
                     this.divLegendlist.appendChild(divLegendImage);
                     divLegendLabel = dojo.create("div", { "class": "legendlbl" }, null);
                     this.divLegendlist.appendChild(divLegendLabel);
+                    if (image && image.offsetWidth) {
+                        legendWidth = this.divLegendlist.offsetWidth;
+                    } else {
+                        legendWidth = this.divLegendlist.offsetWidth + 20;
+                    }
+                    this.legendListWidth.push(legendWidth);
                 }
             }
         },
@@ -501,7 +519,7 @@ define([
         * @memberOf widgets/legends/legends
         */
         _createSymbol: function (symbolType, url, color, width, height, imageData, label) {
-            var bgColor, divLegendLabel, divLegendImage, divSymbol, image;
+            var bgColor, divLegendLabel, divLegendImage, divSymbol, image, legendWidth;
             this.divLegendlist = domConstruct.create("div", { "class": "divLegendlist" }, this.divlegendContainer);
             divLegendImage = domConstruct.create("div", { "class": "legend" }, null);
             if (symbolType === "picturemarkersymbol" && url) {
@@ -533,7 +551,12 @@ define([
             divLegendLabel = dojo.create("div", { "class": "legendlbl" }, null);
             domAttr.set(divLegendLabel, "innerHTML", label);
             this.divLegendlist.appendChild(divLegendLabel);
-            this.legendListWidth.push(this.divLegendlist.offsetWidth);
+            if (image && image.offsetWidth) {
+                legendWidth = this.divLegendlist.offsetWidth;
+            } else {
+                legendWidth = this.divLegendlist.offsetWidth + 20;
+            }
+            this.legendListWidth.push(legendWidth);
         },
 
         /*
@@ -631,14 +654,15 @@ define([
         */
         _createLegendList: function (layerList, mapServerUrl) {
             var layerURL, i, j;
-            this.legendListWidth = [];
-            if (layerList) {
+
+            if (layerList && layerList.layers && layerList.layers.length > 0) {
+                this._layerCollection = {};
                 for (i = 0; i < layerList.layers.length; i++) {
-                    layerURL = mapServerUrl + '/' + layerList.layers[i].layerId;
+                    layerList.layers[i].featureLayerUrl = mapServerUrl.featureLayerUrl;
+                    layerURL = mapServerUrl.url + '/' + layerList.layers[i].layerId;
                     this._layerCollection[layerURL] = layerList.layers[i];
                     for (j = 0; j < layerList.layers[i].legend.length; j++) {
                         this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
-                        this.legendListWidth.push(this.divLegendlist.offsetWidth);
                     }
                 }
             }
@@ -658,7 +682,7 @@ define([
         _addlegendListWidth: function (legendListWidth) {
             var listWidth = legendListWidth, total = 0, j, boxWidth;
             for (j = 0; j < listWidth.length; j++) {
-                total += listWidth[j] + 20;
+                total += listWidth[j];
             }
 
             domStyle.set(this.divlegendContainer, "width", (total + 5) + "px");
@@ -677,6 +701,7 @@ define([
             } else {
                 domStyle.set(this.divRightArrow, "display", "block");
             }
+            this._resetSlideControls();
         },
 
         /**
@@ -684,7 +709,7 @@ define([
         * @memberOf widgets/legends/legends
         */
         _addLegendSymbol: function (legend, layerName) {
-            var divLegendImage, image, divLegendLabel;
+            var divLegendImage, image, divLegendLabel, legendWidth;
             if (legend) {
                 this.divLegendlist = domConstruct.create("div", { "class": "divLegendlist" }, this.divlegendContainer);
                 divLegendImage = domConstruct.create("div", { "class": "legend" }, null);
@@ -697,6 +722,12 @@ define([
                     divLegendLabel = domConstruct.create("div", { "class": "legendlbl", "innerHTML": layerName }, null);
                 }
                 this.divLegendlist.appendChild(divLegendLabel);
+                if (image && image.offsetWidth) {
+                    legendWidth = this.divLegendlist.offsetWidth;
+                } else {
+                    legendWidth = this.divLegendlist.offsetWidth + 20;
+                }
+                this.legendListWidth.push(legendWidth);
             }
         },
 
