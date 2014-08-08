@@ -118,6 +118,7 @@ define([
                 outerSplashContainerWidth = slideWidth + 2 * domStyle.get(query('.esriPrevious')[0], "width") + 10;
                 domStyle.set(this.splashScreenDialogContainer, "width", outerSplashContainerWidth + 'px');
             }
+            domStyle.set(this.splashScreenLableDiv, "width", slideWidth + 'px');
         },
         /**
         * load selected workflow

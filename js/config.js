@@ -143,7 +143,7 @@ define([], function () {
         //  SERVICE SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Set Service Area Task  URL
-        ServiceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
+        ServiceAreaTask: "http://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
 
         // Set proxy url
         ProxyUrl: "/proxy/proxy.ashx",
@@ -164,6 +164,9 @@ define([], function () {
         // DRIVE TIME SLIDER SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Specify drive/walk time slider settings
+        // Possible Values for defaultMinutes should be between 0 to 60 and should be greater than minMinute and less than maxMinute
+        // Possible Values for minMinute should be between 0 to 60 and less than maxMinute
+        // Possible Values for maxMinute should be between 0 to 60 and greater than minMinute
         DriveTimeSliderSettings: {
             defaultMinutes: 10,
             minMinutes: 5,
@@ -189,6 +192,8 @@ define([], function () {
         // ThemeColor: Set theme color
         // WebMapId: Choose if you want to use WebMap or Map Services for operational layers.
         // If using WebMap, specify WebMapId within quotes, otherwise leave this empty and configure operational layers
+        // BgColor: Background color of workflow thumbnail in splashscreen
+        // FeatureHighlightColor: To highlight selected polygon feature on map, when selected from proximity results
         // OperationalLayers: Configure operational layers for each workflow. The order of displaying layers is reversed on map. The last configured layer is displayed on top.
         // ServiceURL: URL of the layer.
         // LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.

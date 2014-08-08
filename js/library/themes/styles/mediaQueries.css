@@ -200,6 +200,8 @@
 	.esriCTAppHeader
 	{
 		line-height: 40px !important;
+		max-width: 45%;
+		padding: 10px 5px;
 	}
 
 	.esriCTshareContainer
@@ -253,6 +255,8 @@
 	.esriCTAppHeader
 	{
 		line-height: 40px;
+		padding: 10px 5px;
+		max-width: 40%;
 	}
 
 	.esriCTAddressHolder, .esriCTDivAppContainer
@@ -323,6 +327,7 @@
 	.esriCTAppHeader
 	{
 		line-height: 40px;
+		padding: 10px 5px;
 	}
 	.esriCTAddressHolder, .esriCTDivAppContainer
 	{
@@ -334,5 +339,15 @@
 		width: 44px !important;
 		padding: 8px 0 !important;
 		background-size: 44px;
+	}
+}
+
+@media screen and (max-width: 800px)
+{
+	.esriCTAppHeader
+	{
+		line-height: 40px !important;
+		max-width: 40%;
+		padding: 10px 5px;
 	}
 }

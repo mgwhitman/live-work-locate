@@ -28,10 +28,10 @@ html, body
     top: 0px !important;
 }
 
-.esriCTWorkflowOptions{
-
-    float:left;
-
+.esriCTWorkflowOptions
+{
+    float: left;
+    padding: 5px;
 }
 .esriCTFullHeightWidth
 {
@@ -680,6 +680,9 @@ html, body
 {
     vertical-align: bottom;
     margin-top: 103px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .innerSlide
@@ -758,12 +761,16 @@ html, body
     border: none;
     color: #083C88;
     height: 20px !important;
+    width: 600px;
     margin: 15px AUTO;
     float: left;
+    margin-left: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 15px;
     vertical-align: middle;
     text-align: center;
-    width: 100%;
 }
 
 .holder
@@ -849,7 +856,7 @@ html, body
     color: #9b9b9b;
     float: left;
     font-size: 15px;
-    padding: 10px 5px;
+    padding: 3px 5px;
     line-height: 25px;
     cursor: pointer;
 }
@@ -858,8 +865,12 @@ html, body
 {
     color: #9b9b9b;
     float: left;
+    text-overflow: ellipsis;
     font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
     padding: 10px 5px;
+    max-width: 60%;
     line-height: 25px;
 }
 
@@ -1579,7 +1590,7 @@ input
 .esriControlsBR
 {
     bottom: 5px !important;
-    z-index: 1001;
+    z-index: 1000;
 }
 
 
@@ -1974,6 +1985,10 @@ input
     display: inline-block;
     font-weight: bold;
     color: gray;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    max-width:200px;
 }
 
 .toggleExpandCollapse
@@ -2062,6 +2077,7 @@ input
     vertical-align: middle;
     padding: 5px 10px 5px 0px;
     max-width: 175px;
+    word-break: break-word;
 }
 
 /*scrollbarcontainer*/
