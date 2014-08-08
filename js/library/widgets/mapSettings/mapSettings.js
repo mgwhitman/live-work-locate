@@ -329,7 +329,9 @@ define([
             deferredListFeatureResult = new DeferredList(deferredArray);
             deferredListFeatureResult.then(lang.hitch(this, function () {
                 if (query(".esriCTAddressHolder")[0] && selectedFeaturesGroup.length > 0) {
-                    domClass.replace(query(".esriCTTdHeaderSearch")[0], "esriCTTdHeaderSearch-select", "esriCTTdHeaderSearch");
+                    if (query(".esriCTTdHeaderSearch")[0]) {
+                        domClass.replace(query(".esriCTTdHeaderSearch")[0], "esriCTTdHeaderSearch-select", "esriCTTdHeaderSearch");
+                    }
                     domClass.replace(query(".esriCTAddressHolder")[0], "esriCTShowContainerHeight", "esriCTHideContainerHeight");
                     domClass.replace(query(".esriCTAddressHolder")[0], "esriCTFullHeight", "esriCTAddressContentHeight");
                 }
