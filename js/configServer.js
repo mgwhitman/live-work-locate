@@ -127,7 +127,6 @@ define([], function () {
         NoThumbnail: "js/library/themes/images/not-available.png",
 
 
-
         // ------------------------------------------------------------------------------------------------------------------------
         // GEOMETRY SERVICE SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
@@ -165,16 +164,17 @@ define([], function () {
         // ------------------------------------------------------------------------------------------------------------------------
         // DRIVE TIME SLIDER SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
-		// Specify drive/walk time slider settings
+        // Specify drive/walk time slider settings
         // Possible Values for defaultMinutes should be between 0 to 60 and should be greater than minMinute and less than maxMinute
         // Possible Values for minMinute should be between 0 to 60 and less than maxMinute
         // Possible Values for maxMinute should be between 0 to 60 and greater than minMinute
+        // Possible Values for discreteValues should be appropriate
+
         DriveTimeSliderSettings: {
             defaultMinutes: 10,
             minMinutes: 5,
             maxMinutes: 60,
-            discreteValues: 12,
-            showButtons: false
+            discreteValues: 12
         },
 
         //set legend panel visibility

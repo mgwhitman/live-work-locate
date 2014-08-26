@@ -140,6 +140,11 @@
 		font-size: 14px !important;
 	}
 
+    .esriCTCrasualcount
+        {
+        padding-top: 0px !important;
+    }
+
 	.esriCTDisplayField, .esriCTValueField
 	{
 		font-size: 14px !important;
@@ -236,6 +241,10 @@
 		font-size: 14px !important;
 	}
 
+        .esriCTCrasualcount
+	{
+	        padding-top:0px !important;
+	}
 	.esriCTApplicationHeaderIcon
 	{
 		padding: 15px 0 2px 15px !important;

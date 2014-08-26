@@ -381,7 +381,10 @@ define([
                         }
                     } else {
                         this.lastSearchString = lang.trim(this.txtAddress.value);
-
+                        if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
+                            this.map.getLayer("esriGraphicsLayerMapSettings").clear();
+                        }
+                        topic.publish("setMaxLegendLength");
                         domStyle.set(this.divSelectedFeature, "display", "none");
                         domStyle.set(this.imgSearchLoader, "display", "none");
                         domStyle.set(this.close, "display", "block");
@@ -441,6 +444,8 @@ define([
             addressField[searchFieldName] = lang.trim(this.txtAddress.value);
             if (this.map.getLayer("defaultBasemap")) {
                 baseMapExtent = this.map.getLayer("defaultBasemap").fullExtent;
+            } else if (this.map.getLayer("defaultBasemap0")) {
+                baseMapExtent = this.map.getLayer("defaultBasemap0").fullExtent;
             }
             options = {};
             options.address = addressField;
@@ -935,11 +940,10 @@ define([
             domClass.add(horizontalRule.domNode.lastChild, "esriCTLastChild");
             horizontalSlider = new HorizontalSlider({
                 value: dojo.sliderValue,
+                discreteValues: dojo.configData.DriveTimeSliderSettings.discreteValues,
                 minimum: dojo.configData.DriveTimeSliderSettings.minMinutes,
                 maximum: dojo.configData.DriveTimeSliderSettings.maxMinutes,
-                discreteValues: dojo.configData.DriveTimeSliderSettings.discreteValues,
-                intermediateChanges: dojo.configData.DriveTimeSliderSettings.intermediateChanges,
-                showButtons: dojo.configData.DriveTimeSliderSettings.showButtons,
+                showButtons: false,
                 "class": "horizontalSlider"
             }, this.horizontalSliderContainer);
             on(horizontalSlider, "change", lang.hitch(this, function (defaultMinutes) {
@@ -987,11 +991,12 @@ define([
         * @memberOf widgets/locator/locator
         */
         _createFeatureList: function (featureList) {
-            var featureListArray, scrollContentHeight, layerTitleCell, sharedLayer, queryTask, queryFeature, featureObjId, currentTime;
+            var featureListArray, scrollContentHeight, layerTitleCell, totalHeight;
             if (featureList.length > 0) {
                 topic.subscribe("resetLocatorContainer", lang.hitch(this, function () {
                     this._resetLocateContainer();
                 }));
+                this.expandedListItem = 0;
                 domClass.remove(this.divAddressResultContainer, "borderbottom");
                 topic.publish("setMinLegendLength");
                 domStyle.set(this.noResultFound, "display", "none");
@@ -1014,8 +1019,9 @@ define([
                 } else {
                     domStyle.set(this.headerContainer, "display", "none");
                 }
-                scrollContentHeight = ((domGeom.getMarginBox(this.divSelectedFeature).h - domGeom.position(this.divSelectedFeature).y) - 60) + "px";
-                domStyle.set(this.divSelectedFeatureContent, "height", scrollContentHeight);
+                totalHeight = window.innerHeight;
+                scrollContentHeight = totalHeight - (domGeom.getMarginBox(this.divAddressResultContainer).h + domGeom.getMarginBox(this.SliderContainer).h + 100);
+                domStyle.set(this.divSelectedFeatureContent, "height", scrollContentHeight + "px");
                 this.featureListScrollbar = new ScrollBar({ domNode: this.divSelectedFeatureContent });
                 this.featureListScrollbar.setContent(this.divSelectedFeatureList);
                 this.featureListScrollbar.createScrollBar();
@@ -1050,7 +1056,7 @@ define([
                         * display infowindow on clicking of nearby address
                         */
                         on(featueName, "click", lang.hitch(this, function () {
-                            dojo.mapClickedPoint = false;
+                            topic.publish("hideInfoWindow");
                             setTimeout(lang.hitch(this, function () {
                                 if (feature.geometry.type === "point") {
                                     this._removeHighlightingFeature(feature);
@@ -1066,32 +1072,7 @@ define([
                     }));
                 }));
 
-                if (window.location.toString().split("$layerID=").length > 1) {
-                    sharedLayer = parseFloat(window.location.toString().split("$layerID=")[1]);
-                    currentTime = new Date();
-                    array.some(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings, lang.hitch(this, function (layer, infoIndex) {
-                        if (Number(layer.QueryLayerId) === sharedLayer) {
-                            queryTask = new QueryTask(layer.QueryURL);
-                            queryFeature = new Query();
-                            featureObjId = window.location.toString().split("$featureID=")[1].split("$")[0];
-                            queryFeature.where = "OBJECTID=" + parseInt(featureObjId, 10) + " AND " + currentTime.getTime() + infoIndex.toString() + "=" + currentTime.getTime() + infoIndex.toString();
-                            queryFeature.outSpatialReference = this.map.spatialReference;
-                            queryFeature.returnGeometry = true;
-                            queryFeature.outFields = ["*"];
-                            queryTask.execute(queryFeature, lang.hitch(this, function (featureSet) {
-                                featureSet.features[0].layerIndex = infoIndex;
-                                if (featureSet.features[0].geometry.type === "point") {
-                                    this._createInfoWindowContent(featureSet.features[0].geometry, featureSet.features, 0, false, true);
-                                } else {
-                                    this._createInfoWindowContent(featureSet.features[0].geometry.getCentroid(), featureSet.features, 0, false, true);
-                                }
-                            }), function (error) {
-                                console.log(error);
-                            });
-                            return false;
-                        }
-                    }));
-                }
+
                 topic.publish("hideLoadingIndicatorHandler");
             } else {
                 topic.publish("clearFeatureList");
@@ -1111,9 +1092,18 @@ define([
                 sign = (query(".plusMinusFeatureTitle")[idx].innerHTML === "+") ? "-" : "+";
                 query(".plusMinusFeatureTitle")[idx].innerHTML = sign;
                 if (domClass.contains(query(".divAddressListGroup")[idx], "listExpand")) {
-                    domClass.toggle(query(".divAddressListGroup")[idx], "listExpand");
+                    this.expandedListItem--;
+                    domClass.remove(query(".divAddressListGroup")[idx], "listExpand");
                 } else {
+                    this.expandedListItem++;
                     domClass.add(query(".divAddressListGroup")[idx], "listExpand");
+                }
+                if (this.expandedListItem === 0) {
+                    domClass.replace(query(".toggleExpandCollapse")[0], "collapse", "expand");
+                    domAttr.set(query(".toggleExpandCollapse")[0], "title", dojo.configData.ExpandResultTooltip);
+                } else if (query(".plusMinusFeatureTitle").length === this.expandedListItem) {
+                    domClass.replace(query(".toggleExpandCollapse")[0], "expand", "collapse");
+                    domAttr.set(query(".toggleExpandCollapse")[0], "title", dojo.configData.CollapseResultTooltip);
                 }
             }));
         },
@@ -1128,6 +1118,7 @@ define([
                 domClass.add(query(".divAddressListGroup")[idx], "listExpand");
                 query(".plusMinusFeatureTitle")[idx].innerHTML = "-";
             });
+            this.expandedListItem = query(".plusMinusFeatureTitle").length;
         },
 
         /**
@@ -1140,6 +1131,7 @@ define([
                 domClass.remove(query(".divAddressListGroup")[idx], "listExpand");
                 query(".plusMinusFeatureTitle")[idx].innerHTML = "+";
             });
+            this.expandedListItem = 0;
         },
 
         /**
@@ -1193,6 +1185,9 @@ define([
                 attributes = featureArray[count].attributes;
             }
             infoIndex = featureArray[count].layerIndex;
+            if (!dojo.configData.Workflows[dojo.workFlowIndex].InfowindowSettings[infoIndex]) {
+                return;
+            }
             if (featureArray.length > 1 && (!isFeatureListClicked)) {
 
                 if (featureArray.length > 1 && count !== featureArray.length - 1) {
@@ -1308,16 +1303,10 @@ define([
         * @memberOf widgets/locator/locator
         */
         _calculateCustomMapExtent: function (mapPoint) {
-            var width, infoWidth, height, diff, ratioHeight, ratioWidth, totalYPoint, xmin,
-                ymin, xmax, ymax;
+            var width, height, diff, ratioHeight, ratioWidth, totalYPoint, xmin, ymin, xmax, ymax;
             width = this.map.extent.getWidth();
-            infoWidth = (this.map.width / 2) + dojo.configData.InfoPopupWidth / 2 + 400;
             height = this.map.extent.getHeight();
-            if (infoWidth > this.map.width) {
-                diff = infoWidth - this.map.width;
-            } else {
-                diff = 0;
-            }
+            diff = 0;
             ratioHeight = height / this.map.height;
             ratioWidth = width / this.map.width;
             totalYPoint = dojo.configData.InfoPopupHeight + 30 + 61;
@@ -1348,7 +1337,9 @@ define([
             domStyle.set(query(".esriCTAddressScrollContent")[0], "display", "none");
             domClass.replace(this.domNode, "esriCTTdHeaderSearch", "esriCTTdHeaderSearch-select");
             domClass.replace(this.divAddressHolder, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
-            domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
+            if (query(".esriControlsBR")[0]) {
+                domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
+            }
             domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
             topic.publish("setMaxLegendLength");
             this.txtAddress.blur();
@@ -1393,14 +1384,12 @@ define([
             gLayer.add(this.selectedPolygon);
         },
 
-
-
         /**
         * set address for sharing
         * @memberOf widgets/locator/locator
         */
         _shareAddress: function () {
-            var sharedLocation, mapPoint, point, currentExtSplit, currentExt, currentExtent;
+            var sharedLocation, mapPoint, point, currentExtSplit, currentExt, currentExtent, sharedLayer, queryTask, queryFeature, featureObjId, currentTime;
             if (window.location.toString().split("$locationPoint=").length > 1) {
                 this._showLocateContainer();
                 sharedLocation = window.location.toString().split("$locationPoint=")[1].split("$")[0];
@@ -1416,11 +1405,39 @@ define([
                 }
             }
             if (window.location.toString().split("$mapClickPoint=").length > 1) {
+                dojo.sharedInfowindow = true;
                 mapPoint = window.location.toString().split("$mapClickPoint=")[1].split("$")[0];
                 point = new Point([mapPoint.split(",")[0], mapPoint.split(",")[1]], this.map.spatialReference);
                 setTimeout(lang.hitch(this, function () {
                     topic.publish("showInfoWindowOnMap", point);
                 }), 2000);
+            }
+            if (window.location.toString().split("$layerID=").length > 1) {
+                sharedLayer = parseFloat(window.location.toString().split("$layerID=")[1]);
+                currentTime = new Date();
+                dojo.sharedInfowindow = true;
+                array.some(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings, lang.hitch(this, function (layer, infoIndex) {
+                    if (Number(layer.QueryLayerId) === sharedLayer) {
+                        queryTask = new QueryTask(layer.QueryURL);
+                        queryFeature = new Query();
+                        featureObjId = window.location.toString().split("$featureID=")[1].split("$")[0];
+                        queryFeature.where = "OBJECTID=" + parseInt(featureObjId, 10) + " AND " + currentTime.getTime() + infoIndex.toString() + "=" + currentTime.getTime() + infoIndex.toString();
+                        queryFeature.outSpatialReference = this.map.spatialReference;
+                        queryFeature.returnGeometry = true;
+                        queryFeature.outFields = ["*"];
+                        queryTask.execute(queryFeature, lang.hitch(this, function (featureSet) {
+                            featureSet.features[0].layerIndex = infoIndex;
+                            if (featureSet.features[0].geometry.type === "point") {
+                                this._createInfoWindowContent(featureSet.features[0].geometry, featureSet.features, 0, false, true);
+                            } else {
+                                this._createInfoWindowContent(featureSet.features[0].geometry.getCentroid(), featureSet.features, 0, false, true);
+                            }
+                        }), function (error) {
+                            console.log(error);
+                        });
+                        return false;
+                    }
+                }));
             }
         },
 
