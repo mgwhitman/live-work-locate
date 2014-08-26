@@ -20,7 +20,7 @@ define({
     titles: {
         webpageDispalyText: "Copy/paste HTML into your web page",
         moreInfo: "Website",
-        sliderDisplayText: "Show results within <b> ${defaultMinute} mins drive</b>"
+        sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
     },
     errorMessages: {
         noSearchSettingAvailable: "No search setting is available",
@@ -35,7 +35,8 @@ define({
         noLegend: "No Legend Available",
         invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
         invalidBasemapQuery: "Invalid BasemapQuery",
-        noBasemap: "No Basemap Found"
+        noBasemap: "No Basemap Found",
+        portalUrlNotFound: "Portal URL cannot be empty"
     },
     buttons: {
         embedding: "Embedding", //Shown next to icon for sharing the map embedding in website

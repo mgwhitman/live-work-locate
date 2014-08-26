@@ -48,17 +48,15 @@ define([
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         sharedNls: sharedNls,
-        divLegendList: null,
+        divLegendlist: null,
         layerObject: null,
         logoContainer: null,
         _layerCollection: {},
         webmapUpdatedRenderer: null,
         hostedLayersJSON: null,
         newLeft: 0,
-        total: 0,
         legendListWidth: [],
-        extenChangeLegend: false,
-        count: 0,
+        indexesForLayer: [],
         /**
         * create legends widget
         * @class
@@ -81,6 +79,10 @@ define([
             topic.subscribe("updateLegends", lang.hitch(this, function (geometry) {
                 this._UpdatedLegend(geometry);
             }));
+
+            this.own(on(window, "orientationchange", lang.hitch(this, function () {
+                this._resetSlideControls();
+            })));
         },
 
         /**
@@ -91,9 +93,10 @@ define([
             var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, rendererArray = [], resultListArray = [],
                 queryDefList, i, currentTime, layerUrl;
             currentTime = new Date();
-
+            this.legendListWidth = [];
             this._resetLegendContainer();
             domConstruct.empty(this.divlegendContainer);
+            this._addlegendListWidth(this.legendListWidth);
             domStyle.set(this.divRightArrow, "display", "none");
             domStyle.set(query(".esriCTLeftArrow")[0], "display", "none");
             domConstruct.create("span", { innerHTML: sharedNls.tooltips.loadingText, "class": "divlegendLoadingContainer" }, this.divlegendContainer);
@@ -174,6 +177,9 @@ define([
             }
         },
 
+        /*check layer visibility on map
+        * @memberOf widgets/legends/legends
+        */
         _checkLayerVisibility: function (layerUrl) {
             var layer, layerUrlIndex = layerUrl.split('/'), returnVal = false;
             layerUrlIndex = layerUrlIndex[layerUrlIndex.length - 1];
@@ -195,11 +201,14 @@ define([
             }
             return returnVal;
         },
+
         /* set legend container width to maximum
         * @memberOf widgets/legends/legends
         */
         _setMaxLegendLengthResult: function () {
-            domClass.add(this.logoContainer, "mapLogoUrl");
+            if (this.logoContainer) {
+                domClass.add(this.logoContainer, "mapLogoUrl");
+            }
             if (this.legendrightbox) {
                 if (query('.legenboxInner')[0]) {
                     domClass.remove(query('.legenboxInner')[0], "rightBorderNone");
@@ -209,6 +218,7 @@ define([
             if (this.divRightArrow) {
                 domClass.add(this.divRightArrow, "esriCTRightArrowShift");
             }
+            this._resetSlideControls();
         },
 
         /**
@@ -216,7 +226,9 @@ define([
         * @memberOf widgets/legends/legends
         */
         _setMinLegendLengthResult: function () {
-            domClass.remove(this.logoContainer, "mapLogoUrl");
+            if (this.logoContainer) {
+                domClass.remove(this.logoContainer, "mapLogoUrl");
+            }
             if (this.legendrightbox) {
                 if (query('.legenboxInner')[0]) {
                     domClass.add(query('.legenboxInner')[0], "rightBorderNone");
@@ -226,7 +238,7 @@ define([
             if (this.divRightArrow) {
                 domClass.replace(this.divRightArrow, "esriCTRightArrow", "esriCTRightArrowShift");
             }
-
+            this._resetSlideControls();
         },
 
         /**
@@ -235,7 +247,7 @@ define([
         */
         _resetLegendContainer: function () {
             this.newLeft = 0;
-            domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
+            domStyle.set(query(".divlegendContent")[0], "left", this.newLeft + "px");
             this._resetSlideControls();
         },
 
@@ -256,12 +268,12 @@ define([
             dom.byId("esriCTParentDivContainer").appendChild(this.esriCTdivLegendbox);
             divlegendContainer = domConstruct.create("div", { "class": "divlegendContainer" }, this.divlegendList);
             this.divlegendContainer = domConstruct.create("div", { "class": "divlegendContent" }, divlegendContainer);
-            divLeftArrow = domConstruct.create("div", { "class": "esriCTLeftArrow" }, this.legendbox);
-            domStyle.set(divLeftArrow, "display", "none");
+            divLeftArrow = domConstruct.create("div", { "class": "esriCTLeftArrow", "style": "display:none" }, this.legendbox);
             on(divLeftArrow, "click", lang.hitch(this, function () {
                 this._slideLeft();
             }));
-            this.divRightArrow = domConstruct.create("div", { "class": "esriCTRightArrow" }, this.legendbox);
+
+            this.divRightArrow = domConstruct.create("div", { "class": "esriCTRightArrow", "style": "display:none" }, this.legendbox);
             on(this.divRightArrow, "click", lang.hitch(this, function () {
                 this._slideRight();
             }));
@@ -276,7 +288,7 @@ define([
             if (this.newLeft > difference) {
                 domStyle.set(query(".esriCTLeftArrow")[0], "display", "block");
                 domStyle.set(query(".esriCTLeftArrow")[0], "cursor", "pointer");
-                this.newLeft = this.newLeft - (200 + 9);
+                this.newLeft = this.newLeft - (100 + 9);
                 domStyle.set(query(".divlegendContent")[0], "left", (this.newLeft) + "px");
                 this._resetSlideControls();
             }
@@ -288,10 +300,10 @@ define([
         */
         _slideLeft: function () {
             if (this.newLeft < 0) {
-                if (this.newLeft > -(200 + 9)) {
+                if (this.newLeft > -(100 + 9)) {
                     this.newLeft = 0;
                 } else {
-                    this.newLeft = this.newLeft + (200 + 9);
+                    this.newLeft = this.newLeft + (100 + 9);
                 }
                 if (this.newLeft >= -10) {
                     this.newLeft = 0;
@@ -355,7 +367,7 @@ define([
         * @memberOf widgets/legends/legends
         */
         startup: function (layerArray, updatedRendererArray) {
-            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i, featureLayerUrl;
+            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i, featureLayerUrl, layerIndex;
             this.mapServerArray = [];
             this.featureServerArray = [];
             this.hostedLayersJSON = null;
@@ -390,6 +402,7 @@ define([
                     this._addlegendListWidth(this.legendListWidth);
                 }));
             }
+
             for (index = 0; index < layerArray.length; index++) {
                 if (layerArray[index].match("/FeatureServer")) {
                     featureLayerUrl = layerArray[index];
@@ -398,8 +411,13 @@ define([
                     featureLayerUrl = null;
                 }
                 mapServerURL = layerArray[index].split("/");
+                layerIndex = mapServerURL[mapServerURL.length - 1];
                 mapServerURL.pop();
                 mapServerURL = mapServerURL.join("/");
+                if (!this.indexesForLayer[mapServerURL]) {
+                    this.indexesForLayer[mapServerURL] = [];
+                }
+                this.indexesForLayer[mapServerURL].push(layerIndex);
                 this.mapServerArray.push({ "url": mapServerURL, "featureLayerUrl": featureLayerUrl });
             }
             this.mapServerArray = this._removeDuplicate(this.mapServerArray);
@@ -415,11 +433,15 @@ define([
             }
             deferredList = new DeferredList(defArray);
             deferredList.then(lang.hitch(this, function (result) {
-                this._layerCollection = null;
+                this._layerCollection = {};
+                var LegendCreated = [];
                 for (index = 0; index < result.length; index++) {
                     if (result[index][1]) {
-                        this._createLegendList(result[index][1], this.mapServerArray[index]);
+                        LegendCreated.push(this._createLegendList(result[index][1], this.mapServerArray[index]));
                     }
+                }
+                if (!LegendCreated.length) {
+                    this._layerCollection = null;
                 }
             }));
             this._displayWebmapRenderer();
@@ -504,11 +526,7 @@ define([
                     this.divLegendlist.appendChild(divLegendImage);
                     divLegendLabel = dojo.create("div", { "class": "legendlbl" }, null);
                     this.divLegendlist.appendChild(divLegendLabel);
-                    if (image && image.offsetWidth) {
-                        legendWidth = this.divLegendlist.offsetWidth;
-                    } else {
-                        legendWidth = this.divLegendlist.offsetWidth + 20;
-                    }
+                    legendWidth = divLegendLabel.offsetWidth + renderer.symbol.width + 60;
                     this.legendListWidth.push(legendWidth);
                 }
             }
@@ -522,6 +540,8 @@ define([
             var bgColor, divLegendLabel, divLegendImage, divSymbol, image, legendWidth;
             this.divLegendlist = domConstruct.create("div", { "class": "divLegendlist" }, this.divlegendContainer);
             divLegendImage = domConstruct.create("div", { "class": "legend" }, null);
+            height = height ? height < 5 ? 5 : height : 15;
+            width = width ? width < 5 ? 5 : width : 15;
             if (symbolType === "picturemarkersymbol" && url) {
                 image = this._createImage(url, "", false, width, height);
                 divLegendImage.appendChild(image);
@@ -542,8 +562,8 @@ define([
                         divSymbol.style.backgroundColor = Color.fromArray([255, 0, 255, 5]).toHex();
                     }
                 }
-                divSymbol.style.height = height ? height < 5 ? "5px" : height + "px" : "15px";
-                divSymbol.style.width = width ? width < 5 ? "5px" : width + "px" : "15px";
+                divSymbol.style.height = height + "px";
+                divSymbol.style.width = width + "px";
                 divSymbol.style.marginTop = "8px";
                 divLegendImage.appendChild(divSymbol);
                 this.divLegendlist.appendChild(divLegendImage);
@@ -551,11 +571,7 @@ define([
             divLegendLabel = dojo.create("div", { "class": "legendlbl" }, null);
             domAttr.set(divLegendLabel, "innerHTML", label);
             this.divLegendlist.appendChild(divLegendLabel);
-            if (image && image.offsetWidth) {
-                legendWidth = this.divLegendlist.offsetWidth;
-            } else {
-                legendWidth = this.divLegendlist.offsetWidth + 20;
-            }
+            legendWidth = divLegendLabel.offsetWidth + width + 60;
             this.legendListWidth.push(legendWidth);
         },
 
@@ -639,13 +655,15 @@ define([
         * @memberOf widgets/legends/legends
         */
         _removeDuplicate: function (mapServerArray) {
-            var filterArray = [];
+            var filterArray = [], fliteredArray = [];
             array.filter(mapServerArray, function (item) {
-                if (array.indexOf(filterArray, item) === -1) {
-                    filterArray.push(item);
+                if (array.indexOf(filterArray, item.url) === -1) {
+                    fliteredArray.push(item);
+                    filterArray.push(item.url);
                 }
             });
-            return filterArray;
+
+            return fliteredArray;
         },
 
         /**
@@ -653,16 +671,26 @@ define([
         * @memberOf widgets/legends/legends
         */
         _createLegendList: function (layerList, mapServerUrl) {
-            var layerURL, i, j;
+            var layerURL, i, j, isLegendCreated = false, layerUrl;
 
             if (layerList && layerList.layers && layerList.layers.length > 0) {
-                this._layerCollection = {};
                 for (i = 0; i < layerList.layers.length; i++) {
                     layerList.layers[i].featureLayerUrl = mapServerUrl.featureLayerUrl;
-                    layerURL = mapServerUrl.url + '/' + layerList.layers[i].layerId;
-                    this._layerCollection[layerURL] = layerList.layers[i];
-                    for (j = 0; j < layerList.layers[i].legend.length; j++) {
-                        this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
+                    if (array.indexOf(this.indexesForLayer[mapServerUrl.url], layerList.layers[i].layerId) !== -1) {
+                        isLegendCreated = true;
+                        layerURL = mapServerUrl.url + '/' + layerList.layers[i].layerId;
+                        this._layerCollection[layerURL] = layerList.layers[i];
+
+                        if (this._layerCollection[layerURL].featureLayerUrl) {
+                            layerUrl = this._layerCollection[layerURL].featureLayerUrl;
+                        } else {
+                            layerUrl = layerURL;
+                        }
+                        if (this._checkLayerVisibility(layerUrl)) {
+                            for (j = 0; j < layerList.layers[i].legend.length; j++) {
+                                this._addLegendSymbol(layerList.layers[i].legend[j], layerList.layers[i].layerName);
+                            }
+                        }
                     }
                 }
             }
@@ -673,6 +701,7 @@ define([
             } else {
                 this._UpdatedLegend(null);
             }
+            return isLegendCreated;
         },
 
         /**
@@ -685,7 +714,11 @@ define([
                 total += listWidth[j];
             }
 
-            domStyle.set(this.divlegendContainer, "width", (total + 5) + "px");
+            if (total < query(".divlegendContainer")[0].offsetWidth) {
+                domStyle.set(this.divlegendContainer, "width", "auto");
+            } else {
+                domStyle.set(this.divlegendContainer, "width", (total + 5) + "px");
+            }
             if (this.legendbox) {
                 if (domClass.contains(query(".esriCTAddressHolder")[0], "esriCTShowContainerHeight")) {
                     boxWidth = this.legendbox.offsetWidth - query(".esriCTAddressHolder")[0].offsetWidth;
@@ -722,11 +755,7 @@ define([
                     divLegendLabel = domConstruct.create("div", { "class": "legendlbl", "innerHTML": layerName }, null);
                 }
                 this.divLegendlist.appendChild(divLegendLabel);
-                if (image && image.offsetWidth) {
-                    legendWidth = this.divLegendlist.offsetWidth;
-                } else {
-                    legendWidth = this.divLegendlist.offsetWidth + 20;
-                }
+                legendWidth = divLegendLabel.offsetWidth + legend.width + 60;
                 this.legendListWidth.push(legendWidth);
             }
         },

@@ -31,9 +31,10 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "esri/tasks/query",
+    "dojo/query",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dijit/_WidgetsInTemplateMixin"
-], function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, sharedNls, _WidgetsInTemplateMixin) {
+], function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, queryTask, query, sharedNls, _WidgetsInTemplateMixin) {
     return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         InfoShow: null,
@@ -74,8 +75,21 @@ define([
             this.own(on(window, "resize", lang.hitch(this, function () {
                 topic.publish("_setInfoWindowLocation");
             })));
+            topic.subscribe("hideInfoWindow", lang.hitch(this, function () {
+                this._hideInfoWindow();
+            }));
             this.own(on(window, "orientationchange", lang.hitch(this, function () {
-                topic.publish("_setInfoWindowLocation");
+                if (dojo.infoWindowIsShowing) {
+                    domUtils.hide(query(".esriCTinfoWindow")[0]);
+                    domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
+                    this.isShowing = false;
+                    topic.publish("_setInfoWindowLocation");
+                    setTimeout(lang.hitch(this, function () {
+                        domUtils.show(query(".esriCTinfoWindow")[0]);
+                        domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "visible");
+                        this.isShowing = true;
+                    }), 1500);
+                }
             })));
         },
 
@@ -163,6 +177,14 @@ define([
             this.isShowing = false;
             this.onHide();
             domUtils.hide(this.domNode);
+        },
+
+        _hideInfoWindow: function () {
+            dojo.infoWindowIsShowing = false;
+            domUtils.hide(query(".esriCTinfoWindow")[0]);
+            domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
+            this.isShowing = false;
+            dojo.mapClickedPoint = null;
         },
 
         /**

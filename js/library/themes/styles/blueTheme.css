@@ -371,6 +371,10 @@
     border-right: 1px solid #007AC2;
 }
 
+.esriCTSliderMinutes
+{
+    color: #007AC2;
+}
 
 /*header*/
 .driveIconSelected

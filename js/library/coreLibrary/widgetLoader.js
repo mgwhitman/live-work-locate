@@ -72,12 +72,12 @@ define([
                 if (dojo.configData.SplashScreen) {
                     splashScreen = new SplashScreen();
                     appUrl = window.location.toString();
-                    if (appUrl.search("app") > 0) {
-                        if (appUrl.search("extent") > 0) {
+                    if (appUrl.split("?app=").length > 1) {
+                        if (appUrl.split("$extent=").length > 1) {
                             dojo.share = true;
-                            workflow = (appUrl.slice(array.indexOf(appUrl, "=") + 1, array.indexOf(appUrl, "$"))).toUpperCase();
+                            workflow = appUrl.split("?app=")[1].split("$")[0].toUpperCase();
                         } else {
-                            workflow = (appUrl.slice(array.indexOf(appUrl, "=") + 1)).toUpperCase();
+                            workflow = appUrl.split("?app=")[1].toUpperCase();
                         }
                         splashScreen._hideSplashScreenDialog();
                         splashScreen._loadSelectedWorkflow(workflow, map);
@@ -96,7 +96,9 @@ define([
                         splashScreen.showSplashScreenDialog(map);
                     });
                 }
+
                 mapInstance = this._initializeMap(map);
+
                 /**
                 * create an object with widgets specified in Header Widget Settings of configuration file
                 * @param {array} dojo.configData.AppHeaderWidgets Widgets specified in configuration file
@@ -165,79 +167,83 @@ define([
             * If group owner & title are configured, create request to fetch the group id
             */
             if (dojo.configData.BasemapGroupTitle && dojo.configData.BasemapGroupOwner) {
-                groupUrl = dojo.configData.PortalAPIURL + "community/groups?q=title:\"" + dojo.configData.BasemapGroupTitle + "\" AND owner:" + dojo.configData.BasemapGroupOwner + "&f=json";
-                groupRequest = esriRequest({
-                    url: groupUrl,
-                    callbackParamName: "callback"
-                });
-                groupRequest.then(function (groupInfo) {
-                    if (groupInfo.results.length === 0) {
-                        basemapDeferred.resolve(baseMapArray);
-                        return;
-                    }
-                    /**
-                    * Create request using group id to fetch all the items from that group
-                    */
-                    searchUrl = dojo.configData.PortalAPIURL + 'search?q=group:' + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
-                    webmapRequest = esriRequest({
-                        url: searchUrl,
+                if (lang.trim(dojo.configData.PortalAPIURL) !== "") {
+                    groupUrl = dojo.configData.PortalAPIURL + "community/groups?q=title:\"" + dojo.configData.BasemapGroupTitle + "\" AND owner:" + dojo.configData.BasemapGroupOwner + "&f=json";
+                    groupRequest = esriRequest({
+                        url: groupUrl,
                         callbackParamName: "callback"
                     });
-                    webmapRequest.then(function (groupInfo) {
-                        /**
-                        * Loop for each item in the group
-                        */
-                        array.forEach(groupInfo.results, lang.hitch(this, function (info, index) {
-                            /**
-                            * If type is "Map Service", create the object and push it into "baseMapArray"
-                            */
-                            if (info.type === "Map Service") {
-                                thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + info.id + "/info/" + info.thumbnail;
-                                baseMapArray.push({
-                                    ThumbnailSource: thumbnailSrc,
-                                    Name: info.title,
-                                    MapURL: info.url
-                                });
-                                /**
-                                * If type is "Web Map", create requests to fetch all the items of the webmap (asynchronous request)
-                                */
-                            } else if (info.type === "Web Map") {
-                                var mapDeferred = esriUtils.getItem(info.id);
-                                mapDeferred.then(lang.hitch(this, function () {
-                                    deferred = new Deferred();
-                                    deferred.resolve();
-                                }));
-                                deferredArray.push(mapDeferred);
-                            }
-                        }));
-                        if (deferredArray.length > 0) {
-                            dListResult = new DeferredList(deferredArray);
-
-                            dListResult.then(function (res) {
-                                /**
-                                *If result of webmaps are empty
-                                */
-                                if (res.length === 0) {
-                                    basemapDeferred.resolve(baseMapArray);
-                                    return;
-                                }
-                                /**
-                                * Else for each items in the webmap, create the object and push it into "baseMapArray"
-                                */
-                                array.forEach(res, function (data, innerIdx) {
-                                    self._filterRedundantBasemap(data[1], baseMapArray, false);
-                                });
-                                basemapDeferred.resolve(baseMapArray);
-                            });
-                        } else {
+                    groupRequest.then(function (groupInfo) {
+                        if (groupInfo.results.length === 0) {
                             basemapDeferred.resolve(baseMapArray);
+                            return;
                         }
+                        /**
+                        * Create request using group id to fetch all the items from that group
+                        */
+                        searchUrl = dojo.configData.PortalAPIURL + 'search?q=group:' + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
+                        webmapRequest = esriRequest({
+                            url: searchUrl,
+                            callbackParamName: "callback"
+                        });
+                        webmapRequest.then(function (groupInfo) {
+                            /**
+                            * Loop for each item in the group
+                            */
+                            array.forEach(groupInfo.results, lang.hitch(this, function (info, index) {
+                                /**
+                                * If type is "Map Service", create the object and push it into "baseMapArray"
+                                */
+                                if (info.type === "Map Service") {
+                                    thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + info.id + "/info/" + info.thumbnail;
+                                    baseMapArray.push({
+                                        ThumbnailSource: thumbnailSrc,
+                                        Name: info.title,
+                                        MapURL: info.url
+                                    });
+                                    /**
+                                    * If type is "Web Map", create requests to fetch all the items of the webmap (asynchronous request)
+                                    */
+                                } else if (info.type === "Web Map") {
+                                    var mapDeferred = esriUtils.getItem(info.id);
+                                    mapDeferred.then(lang.hitch(this, function () {
+                                        deferred = new Deferred();
+                                        deferred.resolve();
+                                    }));
+                                    deferredArray.push(mapDeferred);
+                                }
+                            }));
+                            if (deferredArray.length > 0) {
+                                dListResult = new DeferredList(deferredArray);
+
+                                dListResult.then(function (res) {
+                                    /**
+                                    *If result of webmaps are empty
+                                    */
+                                    if (res.length === 0) {
+                                        basemapDeferred.resolve(baseMapArray);
+                                        return;
+                                    }
+                                    /**
+                                    * Else for each items in the webmap, create the object and push it into "baseMapArray"
+                                    */
+                                    array.forEach(res, function (data, innerIdx) {
+                                        self._filterRedundantBasemap(data[1], baseMapArray, false);
+                                    });
+                                    basemapDeferred.resolve(baseMapArray);
+                                });
+                            } else {
+                                basemapDeferred.resolve(baseMapArray);
+                            }
+                        }, function (err) {
+                            alert(err.message);
+                        });
                     }, function (err) {
                         alert(err.message);
                     });
-                }, function (err) {
-                    alert(err.message);
-                });
+                } else {
+                    alert(sharedNls.errorMessages.portalUrlNotFound);
+                }
             } else {
                 /**
                 * If group owner & title are not configured, fetch the basemap collections from AGOL using BasemapGallery widget
@@ -286,6 +292,9 @@ define([
         _filterRedundantBasemap: function (bmLayers, baseMapArray, isWorkFlowBasemap) {
             var i, bmLayerData, multiBasemap = [];
             bmLayerData = bmLayers.itemData.baseMap.baseMapLayers;
+            if (bmLayerData[0].layerType === "OpenStreetMap") {
+                bmLayerData[0].url = bmLayerData[0].id;
+            }
             if (this._isUniqueBasemap(baseMapArray, bmLayerData, isWorkFlowBasemap)) {
                 if (isWorkFlowBasemap) {
                     dojo.selectedBasemapIndex = baseMapArray.length;
@@ -377,7 +386,8 @@ define([
                     ThumbnailSource: thumbnailSrc,
                     Name: bmLayer.title,
                     MapURL: bmLayer.url,
-                    isWorkFlowBasemap: bmLayer.isWorkFlowBasemap
+                    isWorkFlowBasemap: bmLayer.isWorkFlowBasemap,
+                    layerType: bmLayer.layerType
                 });
             }
         },
