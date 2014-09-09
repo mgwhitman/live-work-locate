@@ -179,8 +179,12 @@ define([
         */
         _removeParamFromAppUrl: function (Workflows) {
             var href = parent.location.href.split('?');
-            if (href.length > 1 && history.pushState) {
-                history.pushState({ "id": 1 }, Workflows, href[0]);
+            if (href.length > 1) {
+                if (history.pushState) {
+                    history.pushState({ "id": 1 }, Workflows, href[0]);
+                } else {
+                    window.location.href = href[0] + "#?app=" + Workflows;
+                }
             }
         },
         /**

@@ -37,7 +37,8 @@ define({
             invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
             invalidBasemapQuery: "Invalid BasemapQuery",
             noBasemap: "No Basemap Found",
-            portalUrlNotFound: "Portal URL cannot be empty"
+            portalUrlNotFound: "Portal URL cannot be empty",
+            noWorkflowConfigured: "No workflow available"
         },
         buttons: {
             embedding: "Embedding", //Shown next to icon for sharing the map embedding in website

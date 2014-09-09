@@ -69,33 +69,7 @@ define([
                 }
                 dojo.configData.BaseMapLayers = baseMapLayers;
                 map = new Map();
-                if (dojo.configData.SplashScreen) {
-                    splashScreen = new SplashScreen();
-                    appUrl = window.location.toString();
-                    if (appUrl.split("?app=").length > 1) {
-                        if (appUrl.split("$extent=").length > 1) {
-                            dojo.share = true;
-                            workflow = appUrl.split("?app=")[1].split("$")[0].toUpperCase();
-                        } else {
-                            workflow = appUrl.split("?app=")[1].toUpperCase();
-                        }
-                        splashScreen._hideSplashScreenDialog();
-                        splashScreen._loadSelectedWorkflow(workflow, map);
-                    } else {
-                        if (dojo.configData.SplashScreen.IsVisible && dojo.configData.Workflows.length > 1) {
-                            splashScreen.showSplashScreenDialog(map);
-                        } else {
-                            if (dojo.configData.Workflows.length > 0) {
-                                location.hash = "?app=" + dojo.configData.Workflows[0].Name;
-                                splashScreen._hideSplashScreenDialog();
-                                splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
-                            }
-                        }
-                    }
-                    topic.subscribe("showSplashScreen", function () {
-                        splashScreen.showSplashScreenDialog(map);
-                    });
-                }
+
 
                 mapInstance = this._initializeMap(map);
 
@@ -114,6 +88,43 @@ define([
                 });
                 all(deferredArray).then(lang.hitch(this, function () {
                     try {
+                        if (dojo.configData.SplashScreen) {
+                            splashScreen = new SplashScreen();
+                            appUrl = window.location.toString();
+                            if (dojo.configData.Workflows.length > 0) {
+                                if (dojo.configData.Workflows.length === 1) {
+                                    location.hash = "?app=" + dojo.configData.Workflows[0].Name;
+                                    splashScreen._hideSplashScreenDialog();
+                                    splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
+                                } else {
+                                    if (appUrl.split("?app=").length > 1) {
+                                        if (appUrl.split("$extent=").length > 1) {
+                                            dojo.share = true;
+                                            workflow = appUrl.split("?app=")[1].split("$")[0].toUpperCase();
+                                        } else {
+                                            workflow = appUrl.split("?app=")[1].toUpperCase();
+                                        }
+                                        splashScreen._hideSplashScreenDialog();
+                                        splashScreen._loadSelectedWorkflow(workflow, map);
+                                    } else {
+                                        if (dojo.configData.SplashScreen.IsVisible && dojo.configData.Workflows.length > 1) {
+                                            splashScreen.showSplashScreenDialog(map);
+                                        } else {
+                                            location.hash = "?app=" + dojo.configData.Workflows[0].Name;
+                                            splashScreen._hideSplashScreenDialog();
+                                            splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
+                                        }
+                                    }
+                                }
+
+                                topic.subscribe("showSplashScreen", function () {
+                                    splashScreen.showSplashScreenDialog(map);
+                                });
+                            } else {
+                                alert(sharedNls.errorMessages.noWorkflowConfigured);
+                            }
+                        }
+
                         /**
                         * create application header
                         */
