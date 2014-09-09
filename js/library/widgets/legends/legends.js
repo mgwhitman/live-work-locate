@@ -52,6 +52,7 @@ define([
         layerObject: null,
         logoContainer: null,
         _layerCollection: {},
+        rendererArray: [],
         webmapUpdatedRenderer: null,
         hostedLayersJSON: null,
         newLeft: 0,
@@ -77,7 +78,7 @@ define([
                 this.map = map;
             }));
             topic.subscribe("updateLegends", lang.hitch(this, function (geometry) {
-                this._UpdatedLegend(geometry);
+                this._updatedLegend(geometry);
             }));
 
             this.own(on(window, "orientationchange", lang.hitch(this, function () {
@@ -89,10 +90,10 @@ define([
         * update legend data
         * @memberOf widgets/legends/legends
         */
-        _UpdatedLegend: function (geometry) {
-            var defQueryArray = [], queryResult, layer, layerObject, rendererObject, index, rendererArray = [], resultListArray = [],
-                queryDefList, i, currentTime, layerUrl;
-            currentTime = new Date();
+        _updatedLegend: function (geometry) {
+            var defQueryArray = [], queryResult, resultListArray = [], queryDefList, i;
+
+            this.rendererArray = [];
             this.legendListWidth = [];
             this._resetLegendContainer();
             domConstruct.empty(this.divlegendContainer);
@@ -106,59 +107,35 @@ define([
                 domStyle.set(this.divRightArrow, "display", "none");
                 return;
             }
-            for (layer in this._layerCollection) {
-                if (this._layerCollection.hasOwnProperty(layer)) {
-                    layerUrl = layer;
-                    if (this._layerCollection[layer].featureLayerUrl) {
-                        layerUrl = this._layerCollection[layer].featureLayerUrl;
-                    }
-                    if (this._checkLayerVisibility(layerUrl)) {
-                        layerObject = this._layerCollection[layer];
-                        rendererObject = this._layerCollection[layer].legend;
-                        if (rendererObject && rendererObject.length) {
-                            for (index = 0; index < rendererObject.length; index++) {
-                                rendererObject[index].layerUrl = layer;
-                                rendererArray.push(rendererObject[index]);
-                                queryResult = this._fireQueryOnExtentChange(geometry);
-                                if (layerObject.rendererType === "uniqueValue") {
-                                    if (rendererObject[index].values) {
-                                        queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject[index].values[0] + "'" + " AND " + currentTime.getTime() + "=" + currentTime.getTime();
-                                    } else {
-                                        queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
-                                    }
-                                } else if (layerObject.rendererType === "classBreaks") {
-                                    queryResult.where = rendererObject[index - 1] ? layerObject.fieldName + ">" + rendererObject[index - 1].values[0] + " AND " + layerObject.fieldName + "<=" + rendererObject[index].values[0] : layerObject.fieldName + "=" + rendererObject[index].values[0] + " AND " + currentTime.getTime().toString() + "=" + currentTime.getTime().toString();
-                                } else {
-                                    queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
-                                }
-                                this._executeQueryTask(layer, defQueryArray, queryResult);
-                            }
-                        }
-                    }
-                }
-            }
-            this.legendListWidth = [];
+            queryResult = this._fireQueryOnExtentChange(geometry);
+            this._queryLegendOnMapExtent(this._layerCollection, defQueryArray, queryResult, false);
+            this._queryLegendOnMapExtent(this.hostedLayersJSON, defQueryArray, queryResult, true);
+            this._queryLegendOnMapExtent(this.webmapUpdatedRenderer, defQueryArray, queryResult, true);
             if (defQueryArray.length > 0) {
                 queryDefList = new DeferredList(defQueryArray);
                 queryDefList.then(lang.hitch(this, function (result) {
                     domConstruct.empty(this.divlegendContainer);
                     this.legendListWidth = [];
                     for (i = 0; i < result.length; i++) {
-                        if (result[i][0] && result[i][1] > 0) {
+                        if (result[i][0] && result[i][1].count > 0) {
                             resultListArray.push(result[i][1]);
-                            this._addLegendSymbol(rendererArray[i], this._layerCollection[rendererArray[i].layerUrl].layerName);
+                            if (result[i][1].hasDrawingInfo) {
+                                if (this.rendererArray[i].drawingInfo) {
+                                    this._createLegendSymbol(this.rendererArray[i].drawingInfo, this.rendererArray[i].name);
+                                } else if (this.rendererArray[i].layerDefinition) {
+                                    this._createLegendSymbol(this.rendererArray[i].layerDefinition.drawingInfo, this.rendererArray[i].title);
+                                } else {
+                                    this._createLegendSymbol(this.rendererArray[i], this.rendererArray[i].renderer.label);
+
+                                }
+                            } else {
+                                this._addLegendSymbol(this.rendererArray[i], this._layerCollection[this.rendererArray[i].layerUrl].layerName);
+                            }
                         }
                     }
-
-                    if (this.webmapUpdatedRenderer || this.hostedLayersJSON) {
-                        this._displayWebmapRenderer();
-                        this._displayHostedLayerRenderer();
-                        this._addlegendListWidth(this.legendListWidth);
-                    } else {
-                        this._addlegendListWidth(this.legendListWidth);
-                        if (resultListArray.length === 0) {
-                            domConstruct.create("span", { "innerHTML": sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
-                        }
+                    this._addlegendListWidth(this.legendListWidth);
+                    if (resultListArray.length === 0) {
+                        domConstruct.create("span", { "innerHTML": sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
                     }
                 }), function (err) {
                     console.log(err);
@@ -166,13 +143,75 @@ define([
                     console.log(err2);
                 });
             } else {
+                this.legendListWidth = [];
                 domConstruct.empty(this.divlegendContainer);
-                if (this.webmapUpdatedRenderer || this.hostedLayersJSON) {
-                    this._displayWebmapRenderer();
-                    this._displayHostedLayerRenderer();
-                    this._addlegendListWidth(this.legendListWidth);
-                } else {
-                    domConstruct.create("span", { "innerHTML": sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
+                this._addlegendListWidth(this.legendListWidth);
+                domConstruct.create("span", { "innerHTML": sharedNls.errorMessages.noLegend, "class": "divNoLegendContainer" }, this.divlegendContainer);
+            }
+        },
+
+        //query legend for current extent
+        _queryLegendOnMapExtent: function (layerArray, defQueryArray, queryResult, hasDrawingInfo) {
+            var layer, layerUrl, rendererObject, layerObject, index, i, currentTime = new Date();
+            for (layer in layerArray) {
+                if (layerArray.hasOwnProperty(layer)) {
+                    layerUrl = layer;
+                    if (layerArray[layer].featureLayerUrl) {
+                        layerUrl = layerArray[layer].featureLayerUrl;
+                    }
+                    if (this._checkLayerVisibility(layerUrl)) {
+                        layerObject = layerArray[layer];
+                        if (!hasDrawingInfo) {
+                            rendererObject = layerArray[layer].legend;
+                            if (rendererObject && rendererObject.length) {
+                                for (index = 0; index < rendererObject.length; index++) {
+                                    rendererObject[index].layerUrl = layer;
+                                    this.rendererArray.push(rendererObject[index]);
+
+                                    if (layerObject.rendererType === "uniqueValue") {
+                                        if (rendererObject[index].values) {
+                                            queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject[index].values[0] + "'" + " AND " + currentTime.getTime() + "=" + currentTime.getTime();
+                                        } else {
+                                            queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
+                                        }
+                                    } else if (layerObject.rendererType === "classBreaks") {
+                                        queryResult.where = rendererObject[index - 1] ? layerObject.fieldName + ">" + rendererObject[index - 1].values[0] + " AND " + layerObject.fieldName + "<=" + rendererObject[index].values[0] : layerObject.fieldName + "=" + rendererObject[index].values[0] + " AND " + currentTime.getTime().toString() + "=" + currentTime.getTime().toString();
+                                    } else {
+                                        queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
+                                    }
+                                    this._executeQueryTask(layer, defQueryArray, queryResult, hasDrawingInfo);
+                                }
+                            }
+                        } else {
+                            if (layerObject.drawingInfo) {
+                                rendererObject = layerObject.drawingInfo.renderer;
+                            } else {
+                                rendererObject = layerObject.layerDefinition.drawingInfo.renderer;
+                            }
+
+                            if (rendererObject.type === "uniqueValue") {
+                                for (i = 0; i < rendererObject.uniqueValueInfos.length; i++) {
+                                    this.rendererArray.push({ "renderer": rendererObject.uniqueValueInfos[i] });
+                                    if (rendererObject.uniqueValueInfos[i].value) {
+                                        queryResult.where = layerObject.fieldName + " = " + "'" + rendererObject.uniqueValueInfos[i].value + "'" + " AND " + currentTime.getTime() + "=" + currentTime.getTime();
+                                    } else {
+                                        queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
+                                    }
+                                    this._executeQueryTask(layer, defQueryArray, queryResult, hasDrawingInfo);
+                                }
+                            } else if (rendererObject.type === "classBreaks") {
+                                for (i = 0; i < rendererObject.classBreakInfos.length; i++) {
+                                    this.rendererArray.push({ "renderer": rendererObject.classBreakInfos[i] });
+                                    queryResult.where = layerObject.fieldName + ">=" + rendererObject.classBreakInfos[i].minValue + " AND " + layerObject.fieldName + "<=" + rendererObject.classBreakInfos[i].maxValue + " AND " + currentTime.getTime().toString() + "=" + currentTime.getTime().toString();
+                                    this._executeQueryTask(layer, defQueryArray, queryResult, hasDrawingInfo);
+                                }
+                            } else {
+                                this.rendererArray.push(layerObject);
+                                queryResult.where = currentTime.getTime() + "=" + currentTime.getTime();
+                                this._executeQueryTask(layer, defQueryArray, queryResult, hasDrawingInfo);
+                            }
+                        }
+                    }
                 }
             }
         },
@@ -195,7 +234,6 @@ define([
                             returnVal = true;
                             break;
                         }
-
                     }
                 }
             }
@@ -342,7 +380,7 @@ define([
             var queryParams = new Query();
             queryParams.outFields = ["*"];
             queryParams.geometry = currentExtent;
-            queryParams.spatialRelationship = "esriSpatialRelContains";
+            queryParams.spatialRelationship = "esriSpatialRelIntersects";
             queryParams.returnGeometry = false;
             return queryParams;
         },
@@ -351,15 +389,19 @@ define([
         * performs query task for the no of features present in the current extent
         * @memberOf widgets/legends/legends
         */
-        _executeQueryTask: function (layer, defQueryArray, queryParams) {
-            var queryTask = new QueryTask(layer);
-            defQueryArray.push(queryTask.executeForCount(queryParams, function (count) {
-                var queryDeferred = new Deferred();
-                queryDeferred.resolve(count);
-                return queryDeferred.promise;
-            }, function (error) {
+        _executeQueryTask: function (layer, defQueryArray, queryParams, hasDrawingInfo) {
+            var defResult = [], queryTask, queryDeferred = new Deferred();
+            queryTask = new QueryTask(layer);
+            defResult.hasDrawingInfo = hasDrawingInfo;
+            defResult.count = 0;
+            queryTask.executeForCount(queryParams, lang.hitch(this, function (count) {
+                defResult.count = count;
+                queryDeferred.resolve(defResult);
+            }), function (error) {
                 console.log(error);
-            }));
+                queryDeferred.reject(defResult);
+            });
+            defQueryArray.push(queryDeferred);
         },
 
         /*
@@ -382,7 +424,7 @@ define([
                     callbackParamName: "callback"
                 };
                 layersRequest = esriRequest(params);
-                hostedDefArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
+                this._getLayerDetail(layersRequest, hostedDefArray);
             }
             if (hostedDefArray.length > 0) {
                 hostedDeferredList = new DeferredList(hostedDefArray);
@@ -429,7 +471,7 @@ define([
                     callbackParamName: "callback"
                 };
                 layersRequest = esriRequest(params);
-                defArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
+                this._getLayerDetail(layersRequest, defArray);
             }
             deferredList = new DeferredList(defArray);
             deferredList.then(lang.hitch(this, function (result) {
@@ -442,6 +484,8 @@ define([
                 }
                 if (!LegendCreated.length) {
                     this._layerCollection = null;
+                } else {
+                    this._addFieldValue(this._layerCollection);
                 }
             }));
             this._displayWebmapRenderer();
@@ -456,8 +500,13 @@ define([
             var layer;
             for (layer in this.webmapUpdatedRenderer) {
                 if (this.webmapUpdatedRenderer.hasOwnProperty(layer)) {
-                    this._createLegendSymbol(this.webmapUpdatedRenderer[layer].layerDefinition.drawingInfo, this.webmapUpdatedRenderer[layer].title);
+                    this._setFieldValue(this.webmapUpdatedRenderer[layer].layerDefinition.drawingInfo, this.webmapUpdatedRenderer[layer]);
                 }
+            }
+            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                this._updatedLegend(this.map.extent);
+            } else {
+                this._updatedLegend(null);
             }
         },
 
@@ -469,8 +518,13 @@ define([
             var layer;
             for (layer in this.hostedLayersJSON) {
                 if (this.hostedLayersJSON.hasOwnProperty(layer)) {
-                    this._createLegendSymbol(this.hostedLayersJSON[layer].drawingInfo, this.hostedLayersJSON[layer].name);
+                    this._setFieldValue(this.hostedLayersJSON[layer].drawingInfo, this.hostedLayersJSON[layer]);
                 }
+            }
+            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                this._updatedLegend(this.map.extent);
+            } else {
+                this._updatedLegend(null);
             }
         },
 
@@ -488,9 +542,6 @@ define([
                 if (renderer && renderer.symbol) {
                     this._createSymbol(renderer.symbol.type, renderer.symbol.url, renderer.symbol.color,
                         renderer.symbol.width, renderer.symbol.height, renderer.symbol.imageData, layerTitle);
-                } else if (renderer && renderer.defaultSymbol) {
-                    this._createSymbol(renderer.defaultSymbol.type, renderer.defaultSymbol.url, renderer.defaultSymbol.color,
-                        renderer.defaultSymbol.width, renderer.defaultSymbol.height, renderer.defaultSymbol.imageData, layerTitle);
                 } else if (renderer) {
                     if (renderer.infos) {
                         rendererObject = renderer.info;
@@ -516,6 +567,9 @@ define([
                                 rendererObject[i].symbol.width, rendererObject[i].symbol.height, rendererObject[i].symbol.imageData, rendererObject[i].label);
                         }
                     }
+                } else if (renderer && renderer.defaultSymbol) {
+                    this._createSymbol(renderer.defaultSymbol.type, renderer.defaultSymbol.url, renderer.defaultSymbol.color,
+                        renderer.defaultSymbol.width, renderer.defaultSymbol.height, renderer.defaultSymbol.imageData, layerTitle);
                 } else {
                     this.divLegendlist = domConstruct.create("div", { "class": "divLegendlist" }, this.divlegendContainer);
                     divLegendImage = dojo.create("div", { "class": "legend" }, null);
@@ -595,31 +649,13 @@ define([
         },
 
         /*
-        * get layer json data
-        * @memberOf widgets/legends/legends
-        */
-        _getLayerDetail: function (response) {
-            var deferred = new Deferred();
-            deferred.resolve(response);
-            return deferred.promise;
-        },
-
-        /**
-        * log error message in console
-        * @memberOf widgets/legends/legends
-        */
-        _displayError: function (error) {
-            console.log("Error: ", error.message);
-        },
-
-        /*
         * add field values
         * @memberOf widgets/legends/legends
         */
-        _addFieldValue: function () {
-            var defArray = [], layerTempArray = [], params, layer, layersRequest, deferredList, layerObject, i;
-            for (layer in this._layerCollection) {
-                if (this._layerCollection.hasOwnProperty(layer)) {
+        _addFieldValue: function (layerCollectionArray) {
+            var defArray = [], layerTempArray = [], params, layer, layersRequest, deferredList, i;
+            for (layer in layerCollectionArray) {
+                if (layerCollectionArray.hasOwnProperty(layer)) {
                     if (this._layerCollection[layer].legend && this._layerCollection[layer].legend.length > 1) {
                         layerTempArray.push(layer);
                         params = {
@@ -629,7 +665,7 @@ define([
                             callbackParamName: "callback"
                         };
                         layersRequest = esriRequest(params);
-                        defArray.push(layersRequest.then(this._getLayerDetail, this._displayError));
+                        this._getLayerDetail(layersRequest, defArray);
                     }
                 }
             }
@@ -637,17 +673,44 @@ define([
             deferredList.then(lang.hitch(this, function (result) {
                 for (i = 0; i < result.length; i++) {
                     if (result[i][0]) {
-                        layerObject = result[i][1];
-                        if (layerObject.drawingInfo && layerObject.drawingInfo.renderer && layerObject.drawingInfo.renderer.type === "uniqueValue") {
-                            this._layerCollection[layerTempArray[i]].rendererType = "uniqueValue";
-                            this._layerCollection[layerTempArray[i]].fieldName = layerObject.drawingInfo.renderer.field1 || layerObject.drawingInfo.renderer.field2 || layerObject.drawingInfo.renderer.field3;
-                        } else if (layerObject.drawingInfo && layerObject.drawingInfo.renderer && layerObject.drawingInfo.renderer.type === "classBreaks") {
-                            this._layerCollection[layerTempArray[i]].rendererType = "classBreaks";
-                            this._layerCollection[layerTempArray[i]].fieldName = layerObject.drawingInfo.renderer.field;
-                        }
+                        this._setFieldValue(result[i][1].drawingInfo, layerCollectionArray[layerTempArray[i]]);
                     }
                 }
+                if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
+                    this._updatedLegend(this.map.extent);
+                } else {
+                    this._updatedLegend(null);
+                }
             }));
+        },
+
+        /*
+        * get layer json data
+        * @memberOf widgets/legends/legends
+        */
+        _getLayerDetail: function (layersRequest, defArray) {
+            var deferred = new Deferred();
+            layersRequest.then(function (response) {
+                deferred.resolve(response);
+            }, function (error) {
+                console.log("Error: ", error.message);
+                deferred.reject();
+            });
+            defArray.push(deferred);
+        },
+
+        /*
+        *set field values for unique value and class breaks renderers
+        * @memberOf widgets/legends/legends
+        */
+        _setFieldValue: function (layerDrawingInfo, layerCollectionArray) {
+            if (layerDrawingInfo && layerDrawingInfo.renderer && layerDrawingInfo.renderer.type === "uniqueValue") {
+                layerCollectionArray.rendererType = "uniqueValue";
+                layerCollectionArray.fieldName = layerDrawingInfo.renderer.field1 || layerDrawingInfo.renderer.field2 || layerDrawingInfo.renderer.field3;
+            } else if (layerDrawingInfo && layerDrawingInfo.renderer && layerDrawingInfo.renderer.type === "classBreaks") {
+                layerCollectionArray.rendererType = "classBreaks";
+                layerCollectionArray.fieldName = layerDrawingInfo.renderer.field;
+            }
         },
 
         /**
@@ -662,7 +725,6 @@ define([
                     filterArray.push(item.url);
                 }
             });
-
             return fliteredArray;
         },
 
@@ -695,12 +757,6 @@ define([
                 }
             }
             this._addlegendListWidth(this.legendListWidth);
-            this._addFieldValue();
-            if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
-                this._UpdatedLegend(this.map.extent);
-            } else {
-                this._UpdatedLegend(null);
-            }
             return isLegendCreated;
         },
 
@@ -720,7 +776,7 @@ define([
                 domStyle.set(this.divlegendContainer, "width", (total + 5) + "px");
             }
             if (this.legendbox) {
-                if (domClass.contains(query(".esriCTAddressHolder")[0], "esriCTShowContainerHeight")) {
+                if (query(".esriCTAddressHolder")[0] && domClass.contains(query(".esriCTAddressHolder")[0], "esriCTShowContainerHeight")) {
                     boxWidth = this.legendbox.offsetWidth - query(".esriCTAddressHolder")[0].offsetWidth;
                 } else {
                     boxWidth = this.legendbox.offsetWidth;
