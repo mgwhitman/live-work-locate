@@ -23,7 +23,7 @@
         background-image: url("../images/img2X/share@2X.png") !important;
     }
 
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img2X/share-select@2X-purple.png") !important;
     }
@@ -73,7 +73,7 @@
     {
         background-image: url("../images/img44x44/imgSocialMedia.png") !important;
     }
-    .esriCTImgSocialMedia-select
+    .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img44x44/imgSocialMedia-select-purple.png") !important;
     }
@@ -127,7 +127,7 @@
 {
     background-image: url("../images/img24x24/imgGeolocation-24.png");
 }
-.esriCTImgSocialMedia-select
+.esriCTImgSocialMediaSelect
 {
     background-image: url("../images/img24x24/imgSocialMedia_purple-24.png");
 }
@@ -358,6 +358,11 @@
     border-bottom: 1px solid #5C2E6F;
     border-left: 1px solid #5C2E6F;
     border-right: 1px solid #5C2E6F;
+}
+
+.esriCTSliderMinutes
+{
+    color: #5C2E6F;
 }
 
 /*header*/

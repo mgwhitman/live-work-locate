@@ -118,6 +118,7 @@ define([
                 outerSplashContainerWidth = slideWidth + 2 * domStyle.get(query('.esriPrevious')[0], "width") + 10;
                 domStyle.set(this.splashScreenDialogContainer, "width", outerSplashContainerWidth + 'px');
             }
+            domStyle.set(this.splashScreenLableDiv, "width", slideWidth + 'px');
         },
         /**
         * load selected workflow
@@ -160,6 +161,7 @@ define([
         */
         _selectWorkflow: function (Workflows, share) {
             var url, j;
+            this._removeParamFromAppUrl(Workflows);
             url = "?app=" + Workflows;
             location.hash = url;
             this._applicationThemeLoader();
@@ -171,6 +173,20 @@ define([
             }
         },
 
+        /**
+        * remove parameters from application url
+        * @memberOf widgets/splashScreen/splashScreen
+        */
+        _removeParamFromAppUrl: function (Workflows) {
+            var href = parent.location.href.split('?');
+            if (href.length > 1) {
+                if (history.pushState) {
+                    history.pushState({ "id": 1 }, Workflows, href[0]);
+                } else {
+                    window.location.href = href[0] + "#?app=" + Workflows;
+                }
+            }
+        },
         /**
         * load theme for selected workflow
         * @memberOf widgets/splashScreen/splashScreen

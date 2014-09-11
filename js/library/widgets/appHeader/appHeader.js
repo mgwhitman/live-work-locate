@@ -80,7 +80,7 @@ define([
             * @memberOf widgets/appHeader/appHeader
             */
             for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflowsTooltip, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, query(".esriCTApplicationHeader")[0]);
+                workflowSpan = domConstruct.create("span", { innerHTML: dojo.configData.Workflows[i].Name, index: i, title: dojo.configData.SwitchWorkflowsTooltip, "class": "esriCTApplicationHeaderTextTD " + dojo.configData.Workflows[i].Name }, this.divWorkflowNameContainer);
                 on(workflowSpan, "click", lang.hitch(this, "_setSelectedWorkflow"));
             }
         },
@@ -108,6 +108,8 @@ define([
                 } else {
                     topic.publish("loadBasemapToggleWidget");
                 }
+                topic.publish("_resetAddressContainer");
+
             }
         },
 
@@ -131,15 +133,15 @@ define([
                     }
                 }
             }
-            if (location.hash) {
-                domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
-                if (query(".esriCTExitImg")[0]) {
-                    domStyle.set(query(".esriCTExitImg")[0], "display", "none");
-                }
-            } else if (dojo.share || window.location.toString().search("app") > 0) {
-                domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
-            }
             if (dojo.workFlowIndex) {
+                if (location.hash) {
+                    domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
+                    if (query(".esriCTExitImg")[0]) {
+                        domStyle.set(query(".esriCTExitImg")[0], "display", "none");
+                    }
+                } else if (dojo.share || window.location.toString().search("app") > 0) {
+                    domClass.add(query(".esriCTApplicationHeaderTextTD")[Number(dojo.workFlowIndex)], "esriCTApplicationHeaderTextSelected");
+                }
                 if (query(".esriCTExitImg")[0]) {
                     domStyle.set(query(".esriCTExitImg")[0], "display", "none");
                 }

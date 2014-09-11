@@ -1,4 +1,4 @@
-/*global define,dojo,dojoConfig,esri */
+﻿/*global define,dojo,dojoConfig,esri */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -29,21 +29,22 @@ define([], function () {
         // 5.  Set URL for logo                              - [ Tag(s) to look for: LogoURL ]
         // 6.  Set settings  for splash screen               - [ Tag(s) to look for: SplashScreen ]
         // 7.  Specify header widget settings                - [ Tag(s) to look for: AppHeaderWidgets ]
-        // 8.  Specify URLs for base maps                    - [ Tag(s) to look for: BaseMapLayers ]
+        // 8.  Set setting for base maps gallery             - [ Tag(s) to look for: BaseMapLayers ]
         // 9.  Geometry service setting                      - [ Tag(s) to look for: GeometryService ]
         // 10. RouteTask setting                             - [ Tag(s) to look for: RouteTask ]
         // 11. ServiceAreaTask setting                       - [ Tag(s) to look for: ServiceAreaTask ]
-        // 12. Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
-        // 13. Customize InfoPopupHeight                     - [ Tag(s) to look for: InfoPopupHeight ]
-        // 14. Customize InfoPopupWidth                      - [ Tag(s) to look for: InfoPopupWidth ]
-        // 15. Specify ShowNullValueAs                       - [ Tag(s) to look for: ShowNullValueAs ]
-        // 16. Customize DriveTimeSliderSettings             - [ Tag(s) to look for: DriveTimeSliderSettings ]
-        // 17. Customize  DriveTimeSliderRulerSettings       - [ Tag(s) to look for: DriveTimeSliderRulerSettings ]
-        // 18. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
-        // 19. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
-        // 20. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
-        // 21. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
-        // 22. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
+        // 12. set proxy url                                 - [ Tag(s) to look for: ProxyUrl ]
+        // 13. Customize zoom level for address search       - [ Tag(s) to look for: ZoomLevel ]
+        // 14. Customize InfoPopupHeight                     - [ Tag(s) to look for: InfoPopupHeight ]
+        // 15. Customize InfoPopupWidth                      - [ Tag(s) to look for: InfoPopupWidth ]
+        // 16. Specify ShowNullValueAs                       - [ Tag(s) to look for: ShowNullValueAs ]
+        // 17. Customize DriveTimeSliderSettings             - [ Tag(s) to look for: DriveTimeSliderSettings ]
+        // 18. set Legend visibility                         - [ Tag(s) to look for: ShowLegend ]
+        // 19. Customize  DefaultExtent                      - [ Tag(s) to look for: DefaultExtent]
+        // 20. Customize  Workflow                           - [ Tag(s) to look for: Workflow]
+        // 21. Set URL for LocatorSettings                   - [ Tag(s) to look for: LocatorSettings ]
+        // 22. Customize  DriveTimePolygonSymbology          - [ Tag(s) to look for: DriveTimePolygonSymbology ]
+        // 23. Specify URLs for map sharing                  - [ Tag(s) to look for: MapSharingOptions,TinyURLServiceURL, TinyURLResponseAttribute, FacebookShareURL, TwitterShareURL, ShareByMailLink ]
 
         // ------------------------------------------------------------------------------------------------------------------------
         // GENERAL SETTINGS
@@ -68,6 +69,31 @@ define([], function () {
             SplashScreenContent: "Please select an app to continue"
         },
 
+        //-------------------------------------------------------------------------------------------------------------------
+        // Header Widget Settings
+        //-------------------------------------------------------------------------------------------------------------------
+        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
+        // Title: Name of the widget, will displayed as title of widget in header panel
+        // WidgetPath: path of the widget respective to the widgets package.
+        // MapInstanceRequired: true if widget is dependent on the map instance.
+
+        AppHeaderWidgets: [{
+            WidgetPath: "widgets/locator/locator",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/geoLocation/geoLocation",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/share/share",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/help/help",
+            MapInstanceRequired: false
+        }, {
+            WidgetPath: "widgets/exit/exit",
+            MapInstanceRequired: false
+        }],
+
         //ExitButtonTooltip: Specify tooltip text for exit workflow button
         ExitButtonTooltip: "Exit",
         //DriveTimeButtonTooltip : Specify tooltip text for switch to drivetime button in distance slider
@@ -83,7 +109,7 @@ define([], function () {
         //SwitchWorkflowsTooltip: Specify tooltip text for switch workflow buttons in header
         SwitchWorkflowsTooltip: "Click to switch workflows",
 
-        
+        // ------------------------------------------------------------------------------------------------------------------------
         // BASEMAP SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Set options for basemap
@@ -106,9 +132,18 @@ define([], function () {
 
         // Set geometry service URL
         GeometryService: "http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
+
         // ------------------------------------------------------------------------------------------------------------------------
+        //  ROUTE TASK SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Set route task service URL
         RouteTask: "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
-        ServiceAreaTask: "https://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
+
+        // ------------------------------------------------------------------------------------------------------------------------
+        //  SERVICE SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
+        // Set Service Area Task  URL
+        ServiceAreaTask: "http://route.arcgis.com/arcgis/rest/services/World/ServiceAreas/NAServer/ServiceArea_World",
 
         // Set proxy url
         ProxyUrl: "/proxy/proxy.ashx",
@@ -125,23 +160,29 @@ define([], function () {
         // Set string value to be shown for null or blank values
         ShowNullValueAs: "N/A",
 
+        // ------------------------------------------------------------------------------------------------------------------------
+        // DRIVE TIME SLIDER SETTINGS
+        // ------------------------------------------------------------------------------------------------------------------------
         // Specify drive/walk time slider settings
+        // Possible Values for defaultMinutes should be between 0 to 60 and should be greater than minMinute and less than maxMinute
+        // Possible Values for minMinute should be between 0 to 60 and less than maxMinute
+        // Possible Values for maxMinute should be between 0 to 60 and greater than minMinute
+        // Possible Values for discreteValues should be appropriate
         DriveTimeSliderSettings: {
             defaultMinutes: 10,
             minMinutes: 5,
             maxMinutes: 60,
-            discreteValues: 12,
-            showButtons: false
+            discreteValues: 12
         },
 
-        DriveTimeSliderRulerSettings: {
-            SliderRulerContainer: "topDecoration"
-        },
+        //set legend panel visibility
+        ShowLegend: true,
 
         // Initial map extent. Use comma (,) to separate values and dont delete the last comma
         // The coordinates must be specified in the basemap's coordinate system, usually WKID:102100, unless a custom basemap is used
         DefaultExtent: "-9412951.815477943,4480918.013545, -7742344.125277582,5077738.330395495",
 
+        // ------------------------------------------------------------------------------------------------------------------------
         // WORKFLOW SETTINGS
         // ------------------------------------------------------------------------------------------------------------------------
         // Configure workflows
@@ -151,6 +192,8 @@ define([], function () {
         // ThemeColor: Set theme color
         // WebMapId: Choose if you want to use WebMap or Map Services for operational layers.
         // If using WebMap, specify WebMapId within quotes, otherwise leave this empty and configure operational layers
+        // BgColor: Background color of workflow thumbnail in splashscreen
+        // FeatureHighlightColor: To highlight selected polygon feature on map, when selected from proximity results
         // OperationalLayers: Configure operational layers for each workflow. The order of displaying layers is reversed on map. The last configured layer is displayed on top.
         // ServiceURL: URL of the layer.
         // LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.
@@ -176,6 +219,7 @@ define([], function () {
 
         Workflows: [{
             Name: "LIVE",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
             WebMapId: "3681f359e4314042a633deb5daaeb13e",
@@ -207,7 +251,7 @@ define([], function () {
                 SearchDisplayTitle: "Personal Income Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${TAXRTE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
+            }, {
                 UnifiedSearch: "true",
                 Title: "HospitalsAndHealthcareFacilities",
                 QueryLayerId: "12",
@@ -228,36 +272,35 @@ define([], function () {
                 SearchDisplayTitle: "Orchard Markets",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
-            },{
-	        UnifiedSearch: "true",
+            }, {
+                UnifiedSearch: "true",
                 Title: "FarmersMarkets",
                 QueryLayerId: "3",
                 SearchDisplayTitle: "Farmer's Markets",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "PickYourOwnProduce",
                 QueryLayerId: "4",
                 SearchDisplayTitle: "Pick Your Own Produce",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "ChildrensActivities",
                 QueryLayerId: "5",
                 SearchDisplayTitle: "Activities for Children",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ZIP) LIKE UPPER('${0}%')"
             }, {
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "Wineries",
                 QueryLayerId: "6",
                 SearchDisplayTitle: "Wineries",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },
-		{
+            }, {
                 UnifiedSearch: "true",
                 Title: "HistoricalandCulturalMuseums",
                 QueryLayerId: "7",
@@ -265,7 +308,7 @@ define([], function () {
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "ArtGalleries",
                 QueryLayerId: "8",
                 SearchDisplayTitle: "Art Galleries",
@@ -291,17 +334,18 @@ define([], function () {
                 QueryLayerId: "10",
                 SearchDisplayTitle: "Airports",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
-               SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
+                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
             }]
 
-        },{
+        }, {
             Name: "WORK",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
             WebMapId: "2a49c79a487142a38e519bebd8babd53",
             BgColor: "#028D6A",
             FeatureHighlightColor: "#1C86EE",
-             SearchSettings: [{
+            SearchSettings: [{
                 UnifiedSearch: "true",
                 Title: "PerCapita Personal Income",
                 QueryLayerId: "9",
@@ -329,7 +373,7 @@ define([], function () {
                 SearchDisplayTitle: "Incubators",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
+            }, {
                 UnifiedSearch: "true",
                 Title: "Top Bioscience Employers",
                 QueryLayerId: "0",
@@ -373,8 +417,9 @@ define([], function () {
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
             }]
 
-        },{
+        }, {
             Name: "LOCATE",
+            Visible: true,
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/orangeTheme.css",
             WebMapId: "0cb3c691eccc446eb16194511fa5fcab",
@@ -382,27 +427,27 @@ define([], function () {
             FeatureHighlightColor: "#1C86EE",
 
             SearchSettings: [{
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "BachelorsDegreeAttainment",
                 QueryLayerId: "16",
                 SearchDisplayTitle: "Bachelors Degree Attainment",
                 SearchDisplayFields: "${SITENAME} / ${BACHATTRATE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
-	        UnifiedSearch: "true",
+            }, {
+                UnifiedSearch: "true",
                 Title: "ForeignTradeZones",
                 QueryLayerId: "17",
                 SearchDisplayTitle: "Foreign Trade Zones",
                 SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
-            },{
-	        UnifiedSearch: "true",
+            }, {
+                UnifiedSearch: "true",
                 Title: "Employment",
                 QueryLayerId: "11",
                 SearchDisplayTitle: "Employment",
                 SearchDisplayFields: "${SITENAME} / ${COUNTY} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
+            }, {
                 UnifiedSearch: "true",
                 Title: "ResearchParks",
                 QueryLayerId: "1",
@@ -417,21 +462,21 @@ define([], function () {
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
-	        UnifiedSearch: "true",
+                UnifiedSearch: "true",
                 Title: "BusinessPersonalPropertyTaxRate",
                 QueryLayerId: "14",
                 SearchDisplayTitle: "Business Personal Property Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${COUNTY} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },  {
-	        UnifiedSearch: "true",
+            }, {
+                UnifiedSearch: "true",
                 Title: "HigherEducationFourYearPublic",
                 QueryLayerId: "5",
                 SearchDisplayTitle: "Higher Ed 4-Year Public",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },  {
-	        UnifiedSearch: "true",
+            }, {
+                UnifiedSearch: "true",
                 Title: "RegionalEducationCenter",
                 QueryLayerId: "6",
                 SearchDisplayTitle: "Higher Ed. Regional Ed. Center",
@@ -458,14 +503,14 @@ define([], function () {
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${SITENAME} / ${LABORVALUE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
+            }, {
                 UnifiedSearch: "true",
                 Title: "RealPropertyTaxRate",
                 QueryLayerId: "15",
                 SearchDisplayTitle: "Property Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${PROPTAXRT}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-            },{
+            }, {
                 UnifiedSearch: "true",
                 Title: "Airports",
                 QueryLayerId: "9",
@@ -523,32 +568,6 @@ define([], function () {
             LineSymbolColor: "255,255,102",
             LineSymbolTransparency: "1"
         },
-//-------------------------------------------------------------------------------------------------------------------
-        // Header Widget Settings
-        //-------------------------------------------------------------------------------------------------------------------
-        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
-        // Title: Name of the widget, will displayed as title of widget in header panel
-        // WidgetPath: path of the widget respective to the widgets package.
-        // MapInstanceRequired: true if widget is dependent on the map instance.
-
-        AppHeaderWidgets: [{
-            WidgetPath: "widgets/locator/locator",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/geoLocation/geoLocation",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/share/share",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/help/help",
-            MapInstanceRequired: false
-        }, {
-            WidgetPath: "widgets/exit/exit",
-            MapInstanceRequired: true
-        }],
-
-        // ------------------------------------------------------------------------------------------------------------------------
 
         // ------------------------------------------------------------------------------------------------------------------------
         // SETTINGS FOR MAP SHARING

@@ -31,9 +31,10 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "esri/tasks/query",
+    "dojo/query",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dijit/_WidgetsInTemplateMixin"
-], function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, query, sharedNls, _WidgetsInTemplateMixin) {
+], function (declare, domConstruct, domStyle, lang, on, dom, topic, domUtils, InfoWindowBase, ScrollBar, template, _WidgetBase, _TemplatedMixin, queryTask, query, sharedNls, _WidgetsInTemplateMixin) {
     return declare([InfoWindowBase, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
         InfoShow: null,
@@ -62,9 +63,33 @@ define([
                 } else {
                     this.InfoShow = false;
                 }
+                dojo.mapClickedPoint = null;
                 domUtils.hide(this.domNode);
                 dojo.infoWindowIsShowing = false;
                 topic.publish("clearSelectedFeature");
+            })));
+
+            topic.subscribe("setMap", lang.hitch(this, function (map) {
+                this.map = map;
+            }));
+            this.own(on(window, "resize", lang.hitch(this, function () {
+                topic.publish("_setInfoWindowLocation");
+            })));
+            topic.subscribe("hideInfoWindow", lang.hitch(this, function () {
+                this._hideInfoWindow();
+            }));
+            this.own(on(window, "orientationchange", lang.hitch(this, function () {
+                if (dojo.infoWindowIsShowing) {
+                    domUtils.hide(query(".esriCTinfoWindow")[0]);
+                    domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
+                    this.isShowing = false;
+                    topic.publish("_setInfoWindowLocation");
+                    setTimeout(lang.hitch(this, function () {
+                        domUtils.show(query(".esriCTinfoWindow")[0]);
+                        domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "visible");
+                        this.isShowing = true;
+                    }), 1500);
+                }
             })));
         },
 
@@ -81,18 +106,22 @@ define([
                     this.divInfoDetailsScroll.removeChild(this.divInfoDetailsScroll.lastChild);
                 }
             }
-            scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
-            domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
-            this.setLocation(screenPoint);
             if (this.infoContainerScrollbar) {
                 this.infoContainerScrollbar.removeScrollBar();
             }
+
+            scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
+            domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
+            this.setLocation(screenPoint);
             this.divInfoDetailsScroll.appendChild(detailsTab);
             this.infoContainerScrollbar = new ScrollBar({
                 domNode: this.divInfoScrollContent
             });
             this.infoContainerScrollbar.setContent(this.divInfoDetailsScroll);
             this.infoContainerScrollbar.createScrollBar();
+            while (this.infoContainerScrollbar.domNode.children.length > 1) {
+                this.infoContainerScrollbar.domNode.removeChild(this.infoContainerScrollbar.domNode.firstChild);
+            }
         },
 
         /**
@@ -112,13 +141,11 @@ define([
         * set title of infowindow
         * @memberOf widgets/infoWindow/infoWindow
         */
-        setTitle: function (str) {
-            var infoTitle, len = 30;
-            infoTitle = (str.length > len) ? str.substring(0, len) + "..." : str;
+        setTitle: function (infoTitle) {
             if (infoTitle.length > 0) {
                 this.esriCTheadderPanel.innerHTML = "";
                 this.esriCTheadderPanel.innerHTML = infoTitle;
-                this.esriCTheadderPanel.title = str;
+                this.esriCTheadderPanel.title = infoTitle;
             } else {
                 this.esriCTheadderPanel.innerHTML = dojo.configData.ShowNullValueAs;
             }
@@ -150,6 +177,14 @@ define([
             this.isShowing = false;
             this.onHide();
             domUtils.hide(this.domNode);
+        },
+
+        _hideInfoWindow: function () {
+            dojo.infoWindowIsShowing = false;
+            domUtils.hide(query(".esriCTinfoWindow")[0]);
+            domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
+            this.isShowing = false;
+            dojo.mapClickedPoint = null;
         },
 
         /**

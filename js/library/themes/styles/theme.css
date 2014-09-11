@@ -21,13 +21,23 @@ html, body
     margin: 0px;
     padding: 0px;
     width: 100%;
-    overflow: hidden;
+    overflow: hidden !important;
     font-size: 11px !important;
     font-family: Verdana !important;
     visibility: visible !important;
     top: 0px !important;
 }
 
+.esriCTBody
+{
+    position: relative !important;
+}
+
+.esriCTWorkflowOptions
+{
+    float: left;
+    padding: 5px;
+}
 .esriCTFullHeightWidth
 {
     width: 100%;
@@ -41,7 +51,7 @@ html, body
 
 .esriCTFullHeight
 {
-    height: 100%;
+    height: 100% !important;
 }
 
 .esriCTZeroHeight
@@ -117,7 +127,7 @@ html, body
     z-index: 1000;
     background-repeat: no-repeat;
 }
-.esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTHelpImg, .esriCTTdGeolocation, .esriCTImgSocialMedia-select, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select
+.esriCTTdHeaderSearch, .esriCTTdHeaderSearch-select, .esriCTHelpImg, .esriCTTdGeolocation, .esriCTImgSocialMediaSelect, .esriCTImgSocialMedia, .esriCTRouteImg, .esriCTRouteImg-select
 {
     margin: 12px 24px;
     background-repeat: no-repeat;
@@ -144,7 +154,6 @@ html, body
     min-height: 146px;
     background-color: #fff;
     cursor: default !important;
-    padding-top: 48px;
 }
 
 .esriCTAddressContainerHeight
@@ -188,7 +197,7 @@ html, body
 {
     z-index: 1000;
     position: absolute;
-    top: 0px;
+    top: 48px;
     right: 0px;
     width: 287px;
 }
@@ -224,7 +233,7 @@ html, body
     color: #6e6e6e !important;
     background-color: transparent;
     border: none;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 
 .esriCTAddressList
@@ -321,7 +330,6 @@ html, body
     -moz-transition: height 0.5s ease-in;
     -o-transition: height 0.5s ease-in;
     transition: height 0.5s ease-in;
-    height: 100% !important;
 }
 
 .esriCTShowRouteContainerHeight
@@ -653,9 +661,12 @@ html, body
 {
     top: 0px;
     left: 0px;
-    background: rgba(0,0,0,0.65);
-    -pie-background: rgba(0,0,0,0.65);
-    behavior: url("styles/PIE.htc");
+    background-color: #000;
+    filter: alpha(opacity = 65);
+    -moz-opacity: 0.65;
+    -khtml-opacity: 0.65;
+    opacity: 0.65;
+    behavior: url("../styles/PIE.htc");
     position: absolute;
     z-index: 1009;
     width: 100%;
@@ -677,6 +688,9 @@ html, body
 {
     vertical-align: bottom;
     margin-top: 103px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .innerSlide
@@ -720,7 +734,7 @@ html, body
     -moz-box-shadow: 0 0 10px #fff;
     -o-box-shadow: 0 0 10px #fff;
     box-shadow: 0 0 10px #fff;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 
 
@@ -755,12 +769,16 @@ html, body
     border: none;
     color: #083C88;
     height: 20px !important;
+    width: 600px;
     margin: 15px AUTO;
     float: left;
+    margin-left: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 15px;
     vertical-align: middle;
     text-align: center;
-    width: 100%;
 }
 
 .holder
@@ -846,7 +864,7 @@ html, body
     color: #9b9b9b;
     float: left;
     font-size: 15px;
-    padding: 10px 5px;
+    padding: 3px 5px;
     line-height: 25px;
     cursor: pointer;
 }
@@ -855,8 +873,12 @@ html, body
 {
     color: #9b9b9b;
     float: left;
+    text-overflow: ellipsis;
     font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
     padding: 10px 5px;
+    max-width: 60%;
     line-height: 25px;
 }
 
@@ -916,7 +938,7 @@ html, body
 /* CSS for styling corners*/
 .esriCTRoundedCorner
 {
-    behavior: url("esri_template/core_library/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 
 .topRoundedCorner
@@ -934,7 +956,7 @@ html, body
     border-top-right-radius: 4px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    behavior: url("esri_template/core_library/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 
 .bottomRoundedCorner
@@ -952,7 +974,7 @@ html, body
     border-top-right-radius: 0px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    behavior: url("esri_template/core_library/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 /* End of CSS for styling corners*/
 
@@ -990,7 +1012,7 @@ html, body
     width: 10px;
     background-color: #C0C0C0;
     cursor: default;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
     opacity: 0.89999997615814208984375;
 }
 
@@ -1024,14 +1046,17 @@ html, body
 {
     top: 0px;
     left: 0px;
-    -pie-background: rgba(0,0,0,0.6);
-    background: rgba(0,0,0,0.6);
+    background-color: #000;
+    filter: alpha(opacity = 60);
+    -moz-opacity: 0.6;
+    -khtml-opacity: 0.6;
+    opacity: 0.6;
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 1006;
     cursor: default;
-    behavior: url("../..//core_library/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 /* End of CSS for Loading Indicator */
 
@@ -1047,7 +1072,7 @@ html, body
 .divLayerHolder
 {
     width: 120px;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
     background: transparent !important;
 }
 
@@ -1060,7 +1085,7 @@ html, body
     -moz-box-shadow: 0 0 5px #666;
     -webkit-box-shadow: 0 0 5px #666;
     box-shadow: 0 0 5px #666;
-    behavior: url("PIE.htc");
+    behavior: url("../styles/PIE.htc");
     border: 4px solid #fff;
 }
 
@@ -1077,18 +1102,10 @@ html, body
     padding: 7px;
 }
 
-.esriCTDivLayerContainer
-{
-    position: absolute;
-    top: 65px;
-    left: 50px;
-    z-index: 1000;
-}
-
 .divLayerHolder
 {
     width: 120px;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
     background: transparent !important;
 }
 
@@ -1098,7 +1115,7 @@ html, body
     -moz-box-shadow: 0 0 15px #63BA65;
     box-shadow: 0 0 15px #63BA65;
     filter: progid:DXImageTransform.Microsoft.Glow(color='#8EAE21', Strength='4');
-    behavior: url("PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 /* End of basemap container */
 
@@ -1111,6 +1128,7 @@ html, body
     z-index: 1000;
     overflow: hidden;
     width: 100%;
+    left: 0px;
     bottom: 0px;
 }
 
@@ -1129,6 +1147,8 @@ html, body
     display: table-cell;
     vertical-align: middle;
     margin-right: 5px;
+    width: 16px !important;
+    height: 16px !important;
 }
 
 .legend img
@@ -1164,7 +1184,7 @@ html, body
 
 .esriCTLegendRightBox
 {
-    width: 288px;
+    width: 287px;
     float: right;
     background: transparent;
 }
@@ -1401,7 +1421,7 @@ html, body
     z-index: 100002;
     position: absolute;
     background: #FFF;
-    behavior: url("styles/PIE.htc");
+    behavior: url("../styles/PIE.htc");
 }
 
 .esriCTTInfoWindowContainer .container
@@ -1582,7 +1602,7 @@ input
 .esriControlsBR
 {
     bottom: 5px !important;
-    z-index: 1001;
+    z-index: 1000;
 }
 
 
@@ -1590,6 +1610,7 @@ input
 .esriCTWalk, .esriCTDrive
 {
     float: left;
+    margin-top: 5px;
 }
 
 .driveIconSelected
@@ -1723,6 +1744,7 @@ input
     height: 3px !important;
     border-color: #fff;
     background-color: #0f3bcb;
+    box-shadow: none !important;
 }
 
 .claro .dijitSlider .dijitSliderRemainingBarH, .claro .dijitSlider .dijitSliderRightBumper
@@ -1730,6 +1752,7 @@ input
     border-color: #fff;
     background-color: #ddd;
     height: 3px !important;
+    box-shadow: none !important;
 }
 
 .dijitSliderImageHAndleH
@@ -1977,6 +2000,10 @@ input
     display: inline-block;
     font-weight: bold;
     color: gray;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 200px;
 }
 
 .toggleExpandCollapse
@@ -2065,6 +2092,7 @@ input
     vertical-align: middle;
     padding: 5px 10px 5px 0px;
     max-width: 175px;
+    word-break: break-word;
 }
 
 /*scrollbarcontainer*/
