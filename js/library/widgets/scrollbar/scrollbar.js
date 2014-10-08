@@ -37,7 +37,7 @@ define([
         _currentYCoordinate: null,
         _currentTop: 0,
         _scrollableContent: null,
-        _touchStartPosition: null,
+        _touchStartPosition: 0,
         _scrollingTimer: null,
         _isScrolling: false, //flag to detect is touchmove event scrolling div
 
@@ -161,9 +161,18 @@ define([
 
                 dojo.connect(this._scrollBarContainer, "touchstart", this, "_onTouchStart");
                 dojo.connect(this._scrollBarContainer, "touchmove", this, "_onTouchMove");
-                dojo.connect(this._scrollBarContainer, "touchend", this, "_onTouchEnd");
+                dojo.connect(this._scrollBarContent, "touchstart", this, "_onTouchNoop");
+                dojo.connect(this._scrollBarContent, "touchmove", this, "_onTouchNoop");
                 this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
             }
+        },
+
+        /**
+        * no-op function that permits content touch to be recognized but to bubble up to container;
+        * needed for iOS 8
+        * @memberOf widgets/scrollbar/scrollbar
+        */
+        _onTouchNoop: function (evt) {
         },
 
         /**
@@ -179,32 +188,35 @@ define([
         * @memberOf widgets/scrollbar/scrollbar
         */
         _onTouchMove: function (evt) {
-            var touch, y;
+            var touch, y, change;
             touch = evt.touches[0];
-            evt.cancelBubble = true;
+            if (evt.cancelBubble) {
+                evt.cancelBubble = true;
+            }
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             }
             evt.preventDefault();
-            dojo.stopEvent(evt);
-            this._topPosition = this._scrollBarHandle.offsetTop;
-            if (this._touchStartPosition > touch.pageY) {
-                y = this._topPosition + 10;
-            } else {
-                y = this._topPosition - 10;
-            }
-            //setting scrollbar handle
-            if (y > this._yMax) {
-                y = this._yMax;
-            } // Limit vertical movement
-            if (y < 0) {
-                y = 0;
-            } // Limit vertical movement
-            this._scrollBarHandle.style.top = y + "px";
 
-            //setting content position
-            this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
-            this._isScrolling = true;
+            change = this._touchStartPosition - touch.pageY;
+            if (change !== 0) {
+                this._topPosition = this._scrollBarHandle.offsetTop;
+                y = this._topPosition + change;
+
+                //setting scrollbar handle
+                if (y > this._yMax) {
+                    y = this._yMax;
+                } // Limit vertical movement
+                if (y < 0) {
+                    y = 0;
+                } // Limit vertical movement
+                this._scrollBarHandle.style.top = y + "px";
+
+                //setting content position
+                this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
+
+                this._touchStartPosition = touch.pageY;
+            }
         },
 
         /**
@@ -223,7 +235,9 @@ define([
             var offsetY, coords, y;
             if (!this._dragStart) {
                 evt = evt || event;
-                evt.cancelBubble = true;
+                if (evt.cancelBubble) {
+                    evt.cancelBubble = true;
+                }
                 if (evt.stopPropagation) {
                     evt.stopPropagation();
                 }
