@@ -37,8 +37,9 @@ define([
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dojo/topic",
-    "esri/request"
-], function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, Deferred, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest) {
+    "esri/request",
+    "widgets/share/commonShare"
+], function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, Deferred, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest, commonShare) {
 
     //========================================================================================================================//
 
@@ -173,7 +174,7 @@ define([
         * @memberOf widgets/share/share
         */
         _shareLink: function () {
-            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords, encodedUri, shareUrl;
+            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords;
             /**
             * get current map extent to be shared
             */
@@ -208,37 +209,7 @@ define([
             this.urlStr = urlStr;
 
             // Attempt the shrinking of the URL
-            encodedUri = encodeURIComponent(urlStr);
-            try {
-                shareUrl = string.substitute(dojo.configData.MapSharingOptions.TinyURLServiceURL, [encodedUri]);
-                this.getTinyUrl = this._sendEsriRequest(shareUrl);
-            } catch (ex) {
-                this.getTinyUrl = new Deferred();
-                this.getTinyUrl.resolve();
-            }
-        },
-
-        /* send esri request to generate bitly url
-        * @memberOf widgets/share/share
-        */
-        _sendEsriRequest: function (shareUrl) {
-            var deferred = new Deferred();
-
-            esriRequest({
-                url: shareUrl
-            }, {
-                useProxy: true
-            }).then(lang.hitch(this, function (response) {
-                if (response.data) {
-                    deferred.resolve(response.data.url);
-                } else {
-                    deferred.resolve();
-                }
-            }), lang.hitch(this, function (error) {
-                deferred.resolve();
-            }));
-
-            return deferred;
+            this.getTinyUrl = commonShare.getTinyLink(urlStr, dojo.configData.MapSharingOptions.TinyURLServiceURL);
         },
 
         /**
@@ -252,41 +223,14 @@ define([
             /*
             * hide share panel once any of the sharing options is selected
             */
+            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
             if (html.coords(this.divAppContainer).h > 0) {
                 domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
             }
-            try {
-                this.getTinyUrl.then(lang.hitch(this, function (tinyUrl) {
-                    if (tinyUrl) {
-                        this._shareOptions(site, tinyUrl);
-                    } else {
-                        this._shareOptions(site, this.urlStr);
-                    }
-                }));
-            } catch (err) {
-                alert(sharedNls.errorMessages.shareFailed);
-            }
-        },
 
-        /**
-        * generate sharing URL and share with selected share option
-        * @param {string} site Selected share option
-        * @param {string} url URL for sharing
-        * @memberOf widgets/share/share
-        */
-        _shareOptions: function (site, url) {
-            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
-            switch (site) {
-            case "facebook":
-                window.open(string.substitute(dojo.configData.MapSharingOptions.FacebookShareURL, [url]));
-                break;
-            case "twitter":
-                window.open(string.substitute(dojo.configData.MapSharingOptions.TwitterShareURL, [url]));
-                break;
-            case "email":
-                parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
-                break;
-            }
+            // Do the share
+            commonShare.share(this.getTinyUrl, dojo.configData.MapSharingOptions, site);
         }
+
     });
 });
