@@ -1400,13 +1400,14 @@ define([
                 dojo.extentShared++;
                 this._showLocateContainer();
                 sharedLocation = window.location.toString().split("$locationPoint=")[1].split("$")[0];
-                mapPoint = new Point(parseFloat(sharedLocation.split(",")[0]), parseFloat(sharedLocation.split(",")[1]), this.map.spatialReference);
+                var pointDecode = decodeURIComponent(sharedLocation).split(",")
+                mapPoint = new Point(parseFloat(pointDecode[0]), parseFloat(pointDecode[1]), this.map.spatialReference);
                 this._locateAddressOnMap(mapPoint);
             }
             if (window.location.toString().split("$extent=").length > 1) {
                 currentExtent = window.location.toString().split("$extent=")[1].split("$")[0];
                 if (currentExtent) {
-                    currentExtSplit = currentExtent.split(',');
+                    currentExtSplit = decodeURIComponent(currentExtent).split(',');
                     currentExt = new esri.geometry.Extent(parseFloat(currentExtSplit[0]), parseFloat(currentExtSplit[1]), parseFloat(currentExtSplit[2]), parseFloat(currentExtSplit[3]), this.map.spatialReference);
                     this.map.setExtent(currentExt);
                 }
@@ -1415,8 +1416,9 @@ define([
                 dojo.extentShared++;
                 dojo.sharedInfowindow = true;
                 mapPoint = window.location.toString().split("$mapClickPoint=")[1].split("$")[0];
-                point = new Point([mapPoint.split(",")[0], mapPoint.split(",")[1]], this.map.spatialReference);
-                setTimeout(lang.hitch(this, function () {
+                decodeMapPoint = decodeURIComponent(mapPoint).split(",");
+                point = new Point([decodeMapPoint[0], decodeMapPoint[1]], this.map.spatialReference);
+                setTimeout(lang.hitch(this, function () {   
                     topic.publish("showInfoWindowOnMap", point);
                 }), 2000);
             }
