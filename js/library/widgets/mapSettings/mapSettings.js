@@ -623,7 +623,8 @@ define([
                 }
                 var mapDeferred = esriUtils.createMap(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId, "esriCTParentDivContainer", {
                     mapOptions: {
-                        slider: true
+                        slider: true,
+                        showAttribution: false
                     },
                     ignorePopups: true
                 });
