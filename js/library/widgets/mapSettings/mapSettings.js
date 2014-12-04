@@ -134,7 +134,9 @@ define([
                 this.map = null;
             }
             this.featureOnMap = false;
-            this.map = esriMap("esriCTParentDivContainer", {});
+            this.map = esriMap("esriCTParentDivContainer", {
+                showAttribution: false
+            });
             if (!dojo.configData.BaseMapLayers[0].length) {
                 if (dojo.configData.BaseMapLayers[0].layerType === "OpenStreetMap") {
                     layer = new OpenStreetMapLayer({ id: "defaultBasemap", visible: true });
