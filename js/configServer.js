@@ -332,7 +332,7 @@ define([], function () {
                 QueryLayerId: "6",
                 SearchDisplayTitle: "Wineries",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "HistoricalandCulturalMuseums",
@@ -353,7 +353,7 @@ define([], function () {
                 QueryLayerId: "9",
                 SearchDisplayTitle: "Mass Transit Stations",
                 SearchDisplayFields: "${SITENAME}, ${CITY}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
+                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Airports",
@@ -374,7 +374,7 @@ define([], function () {
                 QueryLayerId: "12",
                 SearchDisplayTitle: "Hospitals and Healthcare Facilities ",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
+                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
             }, {
                 UnifiedSearch: "true",
                 Title: "PersonalIncomeTaxRate",
