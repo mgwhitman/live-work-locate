@@ -244,7 +244,12 @@ define([
             this.own(on(this.esriCTSearch, "click", lang.hitch(this, function (evt) {
                 domStyle.set(this.imgSearchLoader, "display", "block");
                 domStyle.set(this.close, "display", "none");
-                this._locateAddress(evt);
+
+                /**
+                 * replace the staged search
+                 */
+                clearTimeout(this.stagedSearch);
+                this._locateAddress();
             })));
             this.own(on(this.txtAddress, "keyup", lang.hitch(this, function (evt) {
                 domStyle.set(this.close, "display", "block");
@@ -334,7 +339,12 @@ define([
                     if (this.txtAddress.value !== '') {
                         domStyle.set(this.imgSearchLoader, "display", "block");
                         domStyle.set(this.close, "display", "none");
-                        this._locateAddress(evt);
+
+                        /**
+                         * replace the staged search
+                         */
+                        clearTimeout(this.stagedSearch);
+                        this._locateAddress();
                         return;
                     }
                 }
@@ -1418,7 +1428,7 @@ define([
                 mapPoint = window.location.toString().split("$mapClickPoint=")[1].split("$")[0];
                 decodeMapPoint = decodeURIComponent(mapPoint).split(",");
                 point = new Point([decodeMapPoint[0], decodeMapPoint[1]], this.map.spatialReference);
-                setTimeout(lang.hitch(this, function () {   
+                setTimeout(lang.hitch(this, function () {
                     topic.publish("showInfoWindowOnMap", point);
                 }), 2000);
             }
