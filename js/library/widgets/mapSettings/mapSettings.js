@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri,alert,console */
+/*global define,dojo,dojoConfig,esri,alert,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -285,7 +285,7 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _selectFeatures: function (bufferGeometry) {
-            var deferredArray, selectedFeaturesGroup, selectedFeatures, deferredListFeatureResult, layerSearchSetting;
+            var deferredArray, selectedFeaturesGroup, selectedFeatures, deferredListFeatureResult, layerSearchSetting, dateObj;
 
             if (!dojo.extentShared) {
                 this.map.setExtent(bufferGeometry.geometry.getExtent().expand(2));
@@ -296,6 +296,7 @@ define([
             selectedFeaturesGroup = [];
             selectedFeatures = [];
             this._clearSelectedFeature();
+            dateObj = new Date().getTime().toString();
             layerSearchSetting = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
 
             this.map.reorderLayer(this.map.getLayer("esriGraphicsLayerMapSettings"), this.map.graphicsLayerIds.length - 1);
@@ -309,6 +310,7 @@ define([
                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
                     featureLayer = featureLayer.layerObject;
                 }
+                queryFeature.where = dateObj + arrayIndex + "=" + dateObj + arrayIndex;
                 featureLayerResult = featureLayer.selectFeatures(queryFeature, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
                     var deferred, cloneArray, displayField, settingsIndex, res, index;
                     deferred = new Deferred();
