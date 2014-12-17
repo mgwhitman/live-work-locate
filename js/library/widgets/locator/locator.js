@@ -66,6 +66,7 @@ define([
         templateString: template,
         sharedNls: sharedNls,
         lastSearchString: null,
+        lastSearchTime: 0,
         stagedSearch: null,
         locatorScrollbar: null,
         geometryArrayForPolyline: [],
@@ -242,16 +243,12 @@ define([
         */
         _attachLocatorEvents: function () {
             this.own(on(this.esriCTSearch, "click", lang.hitch(this, function (evt) {
-                domStyle.set(this.imgSearchLoader, "display", "block");
-                domStyle.set(this.close, "display", "none");
-                this._locateAddress(evt);
+                this._locateAddress(true);
             })));
             this.own(on(this.txtAddress, "keyup", lang.hitch(this, function (evt) {
                 domStyle.set(this.close, "display", "block");
-                domAttr.set(this.close, "title", sharedNls.tooltips.clear);
                 if (this.txtAddress.value === "") {
                     domClass.replace(this.close, "clearInputNotApear", "clearInput");
-                    domAttr.set(this.close, "title", "");
                 } else {
                     domClass.replace(this.close, "clearInput", "clearInputNotApear");
                 }
@@ -273,7 +270,6 @@ define([
             domClass.replace(this.close, "clearInputNotApear", "clearInput");
             domConstruct.empty(this.divAddressResults);
             domAttr.set(this.txtAddress, "defaultAddress", this.txtAddress.value);
-            domAttr.set(this.close, "title", "");
             domClass.remove(this.divAddressContent, "esriCTAddressResultHeight");
             if (this.locatorScrollbar) {
                 domClass.add(this.locatorScrollbar._scrollBarContent, "esriCTZeroHeight");
@@ -319,7 +315,6 @@ define([
                     }
                 }
                 this.txtAddress.value = domAttr.get(this.txtAddress, "defaultAddress");
-                this.lastSearchString = lang.trim(this.txtAddress.value);
             }
         },
 
@@ -330,71 +325,33 @@ define([
         */
         _submitAddress: function (evt) {
             if (evt) {
-                if (evt.keyCode === dojo.keys.ENTER) {
-                    if (this.txtAddress.value !== '') {
-                        domStyle.set(this.imgSearchLoader, "display", "block");
-                        domStyle.set(this.close, "display", "none");
-                        this._locateAddress(evt);
-                        return;
-                    }
-                }
-
                 /**
-                * do not perform auto complete search if alphabets,
-                * numbers,numpad keys,comma,ctl+v,ctrl +x,delete or
-                * backspace is pressed
-                */
-                if ((!((evt.keyCode >= 46 && evt.keyCode < 58) || (evt.keyCode > 64 && evt.keyCode < 91) || (evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode === 8 || evt.keyCode === 110 || evt.keyCode === 188)) || (evt.keyCode === 86 && evt.ctrlKey) || (evt.keyCode === 88 && evt.ctrlKey)) {
-                    evt.cancelBubble = true;
-                    evt.stopPropagation();
-                    domStyle.set(this.imgSearchLoader, "display", "none");
-                    domStyle.set(this.close, "display", "block");
-                    domAttr.set(this.close, "title", sharedNls.tooltips.clear);
+                 * Enter key immediately starts search
+                 */
+                if (evt.keyCode === dojo.keys.ENTER) {
+                    this._locateAddress(true);
                     return;
                 }
 
                 /**
-                * call locator service if search text is not empty
+                * do not perform auto complete search if control &| alt key pressed, except for ctrl-v
                 */
-                domStyle.set(this.imgSearchLoader, "display", "block");
-                domStyle.set(this.close, "display", "none");
-                if (domGeom.getMarginBox(this.divAddressContent).h > 0) {
-                    if (lang.trim(this.txtAddress.value) !== '') {
-                        if (this.lastSearchString !== lang.trim(this.txtAddress.value)) {
-                            this.lastSearchString = lang.trim(this.txtAddress.value);
-                            domConstruct.empty(this.divAddressResults);
-
-                            /**
-                            * clear any staged search
-                            */
-                            clearTimeout(this.stagedSearch);
-                            if (lang.trim(this.txtAddress.value).length > 0) {
-
-                                /**
-                                * stage a new search, which will launch if no new searches show up
-                                * before the timeout
-                                */
-                                this.stagedSearch = setTimeout(lang.hitch(this, function () {
-                                    this.stagedSearch = this._locateAddress();
-                                }), 500);
-                            }
-                        }
-                    } else {
-                        this.lastSearchString = lang.trim(this.txtAddress.value);
-                        if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
-                            this.map.getLayer("esriGraphicsLayerMapSettings").clear();
-                        }
-                        topic.publish("setMaxLegendLength");
-                        domStyle.set(this.divSelectedFeature, "display", "none");
-                        domStyle.set(this.imgSearchLoader, "display", "none");
-                        domStyle.set(this.close, "display", "block");
-                        domAttr.set(this.close, "title", "");
-                        domConstruct.empty(this.divAddressResults);
-                        domStyle.set(this.divAddressScrollContainer, "display", "none");
-                        this._setAddressHolderHeight();
-                        this._locatorErrBack();
-                    }
+                if (evt.ctrlKey || evt.altKey ||
+                    evt.keyCode === dojo.keys.UP_ARROW || evt.keyCode === dojo.keys.DOWN_ARROW ||
+                    evt.keyCode === dojo.keys.LEFT_ARROW || evt.keyCode === dojo.keys.RIGHT_ARROW ||
+                    evt.keyCode === dojo.keys.HOME || evt.keyCode === dojo.keys.END ||
+                    evt.keyCode === dojo.keys.CTRL || evt.keyCode === dojo.keys.SHIFT) {
+                    evt.cancelBubble = true;
+                    evt.stopPropagation();
+                    domStyle.set(this.imgSearchLoader, "display", "none");
+                    domStyle.set(this.close, "display", "block");
+                    return;
                 }
+
+                /**
+                * call locator service
+                */
+                this._locateAddress(false);
             }
         },
 
@@ -402,22 +359,35 @@ define([
         * perform search by addess if search type is address search
         * @memberOf widgets/locator/locator
         */
-        _locateAddress: function () {
-            domConstruct.empty(this.divAddressResults);
-            this.resetShareParameters();
-            if (lang.trim(this.txtAddress.value) === '') {
-                topic.publish("clearFeatureList");
-                domStyle.set(this.divSelectedFeature, "display", "none");
-                domStyle.set(this.divAddressScrollContainer, "display", "none");
-                if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
-                    this.map.getLayer("esriGraphicsLayerMapSettings").clear();
-                }
-                topic.publish("setMaxLegendLength");
-                domStyle.set(this.imgSearchLoader, "display", "none");
-                domStyle.set(this.close, "display", "block");
-                this._locatorErrBack();
-            } else {
-                this._searchLocation();
+        _locateAddress: function (launchImmediately) {
+            var searchText = lang.trim(this.txtAddress.value);
+            if (launchImmediately || this.lastSearchString !== searchText) {
+                this.lastSearchString = searchText;
+
+                // Clear any staged search
+                clearTimeout(this.stagedSearch);
+
+                // Hide existing results
+                domConstruct.empty(this.divAddressResults);
+                this._setAddressHolderHeight();
+                this._setHeightAddressResults();
+                domStyle.set(this.noResultFound, "display", "none");
+
+                /**
+                * stage a new search, which will launch if no new searches show up
+                * before the timeout
+                */
+                this.stagedSearch = setTimeout(lang.hitch(this, function () {
+                    var thisSearchTime;
+
+                    // Replace search type-in box' clear X with a busy cursor
+                    domStyle.set(this.close, "display", "none");
+                    domStyle.set(this.imgSearchLoader, "display", "block");
+
+                    // Launch a search after recording when the search began
+                    this.lastSearchTime = thisSearchTime = (new Date()).getTime();
+                    this._searchLocation(searchText, thisSearchTime);
+                }), (launchImmediately? 0 : 500));
             }
         },
 
@@ -425,107 +395,135 @@ define([
         * call locator service and get search results
         * @memberOf widgets/locator/locator
         */
-        _searchLocation: function () {
+        _searchLocation: function (searchText, thisSearchTime) {
             var nameArray, locatorSettings, locator, searchFieldName, addressField, baseMapExtent, options, searchFields, addressFieldValues,
-                addressFieldName, addressFieldIndex, defferedArray, index, locatorDef, resultLength, deferredListResult;
-            nameArray = { Address: [] };
-            domStyle.set(this.imgSearchLoader, "display", "block");
-            domStyle.set(this.close, "display", "none");
-            domAttr.set(this.txtAddress, "defaultAddress", this.txtAddress.value);
-            this._setHeightAddressResults();
-            domStyle.set(this.noResultFound, "display", "none");
-            /**
-            * call locator service specified in configuration file
-            */
-            locatorSettings = dojo.configData.LocatorSettings;
-            locator = new Locator(locatorSettings.LocatorURL);
-            searchFieldName = locatorSettings.LocatorParameters.SearchField;
-            addressField = {};
-            addressField[searchFieldName] = lang.trim(this.txtAddress.value);
-            if (this.map.getLayer("defaultBasemap")) {
-                baseMapExtent = this.map.getLayer("defaultBasemap").fullExtent;
-            } else if (this.map.getLayer("defaultBasemap0")) {
-                baseMapExtent = this.map.getLayer("defaultBasemap0").fullExtent;
-            }
-            options = {};
-            options.address = addressField;
-            options.outFields = locatorSettings.LocatorOutFields;
-            options[locatorSettings.LocatorParameters.SearchBoundaryField] = baseMapExtent;
-            locator.outSpatialReference = this.map.spatialReference;
-            searchFields = [];
-            addressFieldValues = locatorSettings.FilterFieldValues;
-            addressFieldName = locatorSettings.FilterFieldName;
-            for (addressFieldIndex in addressFieldValues) {
-                if (addressFieldValues.hasOwnProperty(addressFieldIndex)) {
-                    searchFields.push(addressFieldValues[addressFieldIndex]);
-                }
+                addressFieldName, addressFieldIndex, deferredArray, index, locatorDef, resultLength, deferredListResult;
+
+            // Discard searches made obsolete by new typing from user
+            if (thisSearchTime < this.lastSearchTime) {
+                return;
             }
 
-            /**
-            * get results from locator service
-            * @param {object} options Contains address, outFields and basemap extent for locator service
-            * @param {object} candidates Contains results from locator service
-            */
-            defferedArray = [];
-            for (index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
-                this._locateLayersearchResult(defferedArray, index);
-            }
-            locatorDef = locator.addressToLocations(options);
-            locator.on("address-to-locations-complete", lang.hitch(this, function (candidates) {
-                var deferred = new Deferred();
-                deferred.resolve(candidates);
-                return deferred.promise;
-            }), function () {
+            if (searchText === "") {
+                // Short-circuit and clear results if the search string is empty
                 domStyle.set(this.imgSearchLoader, "display", "none");
                 domStyle.set(this.close, "display", "block");
-                this._locatorErrBack();
-            });
-            defferedArray.push(locatorDef);
-            deferredListResult = new DeferredList(defferedArray);
-            deferredListResult.then(lang.hitch(this, function (result) {
-                var num, key, order, i;
-                dojo.lastSearchAddress = this.lastSearchString;
-                if (result) {
-                    if (result.length > 0) {
-                        for (num = 0; num < result.length; num++) {
-                            if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num]) {
-                                key = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayTitle;
-                                if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].UnifiedSearch.toLowerCase() === "true") {
-                                    nameArray[key] = [];
-                                    if (result[num][1].features) {
-                                        for (order = 0; order < result[num][1].features.length; order++) {
-                                            for (i in result[num][1].features[order].attributes) {
-                                                if (result[num][1].features[order].attributes.hasOwnProperty(i)) {
-                                                    if (!result[num][1].features[order].attributes[i]) {
-                                                        result[num][1].features[order].attributes[i] = sharedNls.showNullValue;
+                this.mapPoint = null;
+                this._locatorErrBack(false);
+
+            } else {
+                nameArray = { Address: [] };
+                domAttr.set(this.txtAddress, "defaultAddress", searchText);
+                /**
+                * call locator service specified in configuration file
+                */
+                locatorSettings = dojo.configData.LocatorSettings;
+                locator = new Locator(locatorSettings.LocatorURL);
+                searchFieldName = locatorSettings.LocatorParameters.SearchField;
+                addressField = {};
+                addressField[searchFieldName] = searchText;
+                if (this.map.getLayer("defaultBasemap")) {
+                    baseMapExtent = this.map.getLayer("defaultBasemap").fullExtent;
+                } else if (this.map.getLayer("defaultBasemap0")) {
+                    baseMapExtent = this.map.getLayer("defaultBasemap0").fullExtent;
+                }
+                options = {};
+                options.address = addressField;
+                options.outFields = locatorSettings.LocatorOutFields;
+                options[locatorSettings.LocatorParameters.SearchBoundaryField] = baseMapExtent;
+                locator.outSpatialReference = this.map.spatialReference;
+                searchFields = [];
+                addressFieldValues = locatorSettings.FilterFieldValues;
+                addressFieldName = locatorSettings.FilterFieldName;
+                for (addressFieldIndex in addressFieldValues) {
+                    if (addressFieldValues.hasOwnProperty(addressFieldIndex)) {
+                        searchFields.push(addressFieldValues[addressFieldIndex]);
+                    }
+                }
+
+                // Discard searches made obsolete by new typing from user
+                if (thisSearchTime < this.lastSearchTime) {
+                    return;
+                }
+
+                /**
+                * get results from locator service
+                * @param {object} options Contains address, outFields and basemap extent for locator service
+                * @param {object} candidates Contains results from locator service
+                */
+                deferredArray = [];
+
+                // Get deferred for searching for search term in each feature layer in workflow in order
+                for (index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
+                    this._locateLayersearchResult(searchText, deferredArray, index);
+                }
+
+                // Get deferred for searching for search term in geocoding
+                locatorDef = locator.addressToLocations(options);
+                locator.on("address-to-locations-complete", lang.hitch(this, function (candidates) {
+                    var deferred = new Deferred();
+                    deferred.resolve(candidates);
+                    return deferred.promise;
+                }), function () {
+                    domStyle.set(this.imgSearchLoader, "display", "none");
+                    domStyle.set(this.close, "display", "block");
+                    this._locatorErrBack(true);
+                });
+                deferredArray.push(locatorDef);
+
+                // When deferreds all complete, process the list in workflow order followed by the geocoding
+                deferredListResult = new DeferredList(deferredArray);
+                deferredListResult.then(lang.hitch(this, function (result) {
+                    var num, key, order, i;
+
+                    // Discard searches made obsolete by new typing from user
+                    if (thisSearchTime < this.lastSearchTime) {
+                        return;
+                    }
+
+                    dojo.lastSearchAddress = this.lastSearchString;
+                    if (result) {
+                        if (result.length > 0) {
+                            for (num = 0; num < result.length; num++) {
+                                if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num]) {
+                                    key = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayTitle;
+                                    if (dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].UnifiedSearch.toLowerCase() === "true") {
+                                        nameArray[key] = [];
+                                        if (result[num][1].features) {
+                                            for (order = 0; order < result[num][1].features.length; order++) {
+                                                for (i in result[num][1].features[order].attributes) {
+                                                    if (result[num][1].features[order].attributes.hasOwnProperty(i)) {
+                                                        if (!result[num][1].features[order].attributes[i]) {
+                                                            result[num][1].features[order].attributes[i] = sharedNls.showNullValue;
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            if (nameArray[key].length < dojo.configData.LocatorSettings.MaxResults) {
-                                                nameArray[key].push({
-                                                    name: string.substitute(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayFields, result[num][1].features[order].attributes),
-                                                    attributes: result[num][1].features[order].attributes,
-                                                    layer: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num],
-                                                    geometry: result[num][1].features[order].geometry
-                                                });
+                                                if (nameArray[key].length < dojo.configData.LocatorSettings.MaxResults) {
+                                                    nameArray[key].push({
+                                                        name: string.substitute(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num].SearchDisplayFields, result[num][1].features[order].attributes),
+                                                        attributes: result[num][1].features[order].attributes,
+                                                        layer: dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[num],
+                                                        geometry: result[num][1].features[order].geometry
+                                                    });
+                                                }
                                             }
                                         }
                                     }
+                                } else {
+                                    this._addressResult(result[num][1], nameArray, searchFields, addressFieldName);
                                 }
-                            } else {
-                                this._addressResult(result[num][1], nameArray, searchFields, addressFieldName);
+                                resultLength = result[num][1].length;
                             }
-                            resultLength = result[num][1].length;
+                            this._showLocatedAddress(searchText, nameArray, resultLength);
                         }
-                        this._showLocatedAddress(nameArray, resultLength);
+                    } else {
+                        domStyle.set(this.imgSearchLoader, "display", "none");
+                        domStyle.set(this.close, "display", "block");
+                        this.mapPoint = null;
+                        this._locatorErrBack(true);
                     }
-                } else {
-                    domStyle.set(this.imgSearchLoader, "display", "none");
-                    domStyle.set(this.close, "display", "block");
-                    this.mapPoint = null;
-                    this._locatorErrBack();
-                }
-            }));
+                }));
+            }
         },
 
         /**
@@ -556,12 +554,12 @@ define([
                 }
                 if (nameArray.Address.length === 0) {
                     setTimeout(lang.hitch(this, function () {
-                        this._locatorErrBack();
+                        this._locatorErrBack(true);
                     }), 100);
                 }
             } else {
                 this.resetShareParameters();
-                this._locatorErrBack();
+                this._locatorErrBack(true);
                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
                     topic.publish("updateLegends", this.map.extent);
                 } else {
@@ -577,7 +575,7 @@ define([
         * query layer for searched result
         * @memberOf widgets/locator/locator
         */
-        _locateLayersearchResult: function (defferedArray, index) {
+        _locateLayersearchResult: function (searchText, deferredArray, index) {
             var layerobject, queryTask, esriQuery, currentTime, queryTaskResult, deferred;
             layerobject = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings[index];
             domStyle.set(this.imgSearchLoader, "display", "block");
@@ -586,7 +584,7 @@ define([
                 queryTask = new QueryTask(layerobject.QueryURL);
                 esriQuery = new Query();
                 currentTime = new Date();
-                esriQuery.where = string.substitute(layerobject.SearchExpression, [lang.trim(this.txtAddress.value).toUpperCase()]) + " AND " + currentTime.getTime() + index.toString() + "=" + currentTime.getTime() + index.toString();
+                esriQuery.where = string.substitute(layerobject.SearchExpression, [searchText.toUpperCase()]) + " AND " + currentTime.getTime() + index.toString() + "=" + currentTime.getTime() + index.toString();
                 esriQuery.outSpatialReference = this.map.spatialReference;
                 esriQuery.returnGeometry = true;
                 esriQuery.outFields = ["*"];
@@ -597,7 +595,7 @@ define([
                 }), function (err) {
                     console.log(err);
                 });
-                defferedArray.push(queryTaskResult);
+                deferredArray.push(queryTaskResult);
             }
         },
 
@@ -606,7 +604,7 @@ define([
         * @param {object} candidates Contains results from locator service
         * @memberOf widgets/locator/locator
         */
-        _showLocatedAddress: function (candidates, resultLength) {
+        _showLocatedAddress: function (searchText, candidates, resultLength) {
             var addrListCount, addrList, divAddressSearchCell, candidateArray, divAddressCounty, candiate, listContainer, i;
             addrListCount = 0;
             addrList = [];
@@ -678,7 +676,7 @@ define([
                 domStyle.set(this.imgSearchLoader, "display", "none");
                 domStyle.set(this.close, "display", "block");
                 this.mapPoint = null;
-                this._locatorErrBack();
+                this._locatorErrBack(true);
             }
         },
 
@@ -844,10 +842,10 @@ define([
         },
 
         /**
-        * display error message if locator service fails or does not return any results
+        * clear results and optionally display error message
         * @memberOf widgets/locator/locator
         */
-        _locatorErrBack: function () {
+        _locatorErrBack: function (showMessage) {
             if (this.locatorScrollbar) {
                 this.locatorScrollbar.removeScrollBar();
             }
@@ -856,16 +854,18 @@ define([
             domStyle.set(this.divAddressScrollContainer, "display", "none");
             domStyle.set(this.close, "display", "block");
             domClass.add(this.divAddressContent, "esriCTAddressResultHeight");
-            domStyle.set(this.noResultFound, "display", "block");
+            if (showMessage) {
+                domStyle.set(this.noResultFound, "display", "block");
+            }
             domClass.remove(this.divAddressScrollContent, "esriCTdivAddressScrollContent");
             domClass.remove(this.divAddressContent, "esriCTAddressHolderHeight");
             domClass.remove(this.divAddressHolder, "esriCTAddressContentHeight");
             domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
-            domAttr.set(this.close, "title", "");
             this._setAddressHolderHeight();
             if (query('.esriCTdivLegendbox')[0]) {
                 domStyle.set(query('.esriCTdivLegendbox')[0], "zIndex", "1000");
             }
+            this._resetFeatureList();
         },
 
         /**
@@ -1418,7 +1418,7 @@ define([
                 mapPoint = window.location.toString().split("$mapClickPoint=")[1].split("$")[0];
                 decodeMapPoint = decodeURIComponent(mapPoint).split(",");
                 point = new Point([decodeMapPoint[0], decodeMapPoint[1]], this.map.spatialReference);
-                setTimeout(lang.hitch(this, function () {   
+                setTimeout(lang.hitch(this, function () {
                     topic.publish("showInfoWindowOnMap", point);
                 }), 2000);
             }

@@ -16,44 +16,44 @@
  | limitations under the License.
  */
 define({
-    showNullValue: "N/A",
+    showNullValue: "@ES@ N/A",
     titles: {
-        webpageDispalyText: "Copy/paste HTML into your web page",
-        moreInfo: "Website",
-        sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
+        webpageDispalyText: "@ES@ Copy/paste HTML into your web page",
+        moreInfo: "@ES@ Website",
+        sliderDisplayText: "@ES@ Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
     },
     errorMessages: {
-        noSearchSettingAvailable: "No search setting is available",
-        fieldNotFound: "field not found",
-        invalidSearch: "No results found",
-        falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
-        invalidLocation: "Current Location not found.",
-        invalidProjection: "Unable to plot current location on the map.",
-        widgetNotLoaded: "Fail to load widgets.",
-        shareLoadingFailed: "Unable to shorten URL, Bit.ly failed to load.",
-        shareFailed: "Unable to share.",
-        noLegend: "No Legend Available",
-        invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
-        invalidBasemapQuery: "Invalid BasemapQuery",
-        noBasemap: "No Basemap Found",
-        portalUrlNotFound: "Portal URL cannot be empty",
-        noWorkflowConfigured: "No workflow available"
+        noSearchSettingAvailable: "@ES@ No search setting is available",
+        fieldNotFound: "@ES@ field not found",
+        invalidSearch: "@ES@ No results found",
+        falseConfigParams: "@ES@ Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
+        invalidLocation: "@ES@ Current Location not found.",
+        invalidProjection: "@ES@ Unable to plot current location on the map.",
+        widgetNotLoaded: "@ES@ Fail to load widgets.",
+        shareLoadingFailed: "@ES@ Unable to shorten URL, Bit.ly failed to load.",
+        shareFailed: "@ES@ Unable to share.",
+        noLegend: "@ES@ No Legend Available",
+        invalidSearchSettings: "@ES@ Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
+        invalidBasemapQuery: "@ES@ Invalid BasemapQuery",
+        noBasemap: "@ES@ No Basemap Found",
+        portalUrlNotFound: "@ES@ Portal URL cannot be empty",
+        noWorkflowConfigured: "@ES@ No workflow available"
     },
     buttons: {
-        embedding: "Embedding", //Shown next to icon for sharing the map embedding in website
-        email: "Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
-        facebook: "Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
-        twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
+        embedding: "@ES@ Embedding", //Shown next to icon for sharing the map embedding in website
+        email: "@ES@ Email",  // Shown next to icon for sharing the current map extents via email; works with shareViaEmail tooltip
+        facebook: "@ES@ Facebook",  // Shown next to icon for sharing the current map extents via a Facebook post; works with shareViaFacebook tooltip
+        twitter: "@ES@ Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
     },
     tooltips: {
-        locate: "Locate",
-        share: "Share",
-        help: "Help",
-        clear: "Clear",
-        search: "Search",
-        locateAddress: "LocateAddress",
-        loadingText: "Loading...",
-        previous: "Previous",
-        next: "Next"
+        locate: "@ES@ Locate",
+        share: "@ES@ Share",
+        help: "@ES@ Help",
+        clear: "@ES@ Clear",
+        search: "@ES@ Search",
+        locateAddress: "@ES@ LocateAddress",
+        loadingText: "@ES@ Loading...",
+        previous: "@ES@ Previous",
+        next: "@ES@ Next"
     }
 });
