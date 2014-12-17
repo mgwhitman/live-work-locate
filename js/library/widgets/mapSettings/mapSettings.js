@@ -296,7 +296,6 @@ define([
             selectedFeaturesGroup = [];
             selectedFeatures = [];
             this._clearSelectedFeature();
-            dateObj = new Date().getTime().toString();
             layerSearchSetting = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
 
             this.map.reorderLayer(this.map.getLayer("esriGraphicsLayerMapSettings"), this.map.graphicsLayerIds.length - 1);
@@ -310,7 +309,8 @@ define([
                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
                     featureLayer = featureLayer.layerObject;
                 }
-                queryFeature.where = dateObj + arrayIndex + "=" + dateObj + arrayIndex;
+                dateObj = new Date().getTime().toString();
+                queryFeature.where = dateObj +  "=" + dateObj ;
                 featureLayerResult = featureLayer.selectFeatures(queryFeature, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
                     var deferred, cloneArray, displayField, settingsIndex, res, index;
                     deferred = new Deferred();
