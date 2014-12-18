@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri,alert,console */
+/*global define,dojo,dojoConfig,esri,alert,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -134,7 +134,9 @@ define([
                 this.map = null;
             }
             this.featureOnMap = false;
-            this.map = esriMap("esriCTParentDivContainer", {});
+            this.map = esriMap("esriCTParentDivContainer", {
+                showAttribution: false
+            });
             if (!dojo.configData.BaseMapLayers[0].length) {
                 if (dojo.configData.BaseMapLayers[0].layerType === "OpenStreetMap") {
                     layer = new OpenStreetMapLayer({ id: "defaultBasemap", visible: true });
@@ -160,7 +162,7 @@ define([
                     mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                     this.map.setExtent(mapDefaultExtent);
                 } else {
-                    mapDefaultExtent = extent.split(',');
+                    mapDefaultExtent = decodeURIComponent(extent).split(',');
                     mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                     this.map.setExtent(mapDefaultExtent);
                 }
@@ -283,7 +285,7 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _selectFeatures: function (bufferGeometry) {
-            var deferredArray, selectedFeaturesGroup, selectedFeatures, deferredListFeatureResult, layerSearchSetting;
+            var deferredArray, selectedFeaturesGroup, selectedFeatures, deferredListFeatureResult, layerSearchSetting, dateObj;
 
             if (!dojo.extentShared) {
                 this.map.setExtent(bufferGeometry.geometry.getExtent().expand(2));
@@ -307,6 +309,8 @@ define([
                 if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId) {
                     featureLayer = featureLayer.layerObject;
                 }
+                dateObj = new Date().getTime().toString();
+                queryFeature.where = dateObj +  "=" + dateObj ;
                 featureLayerResult = featureLayer.selectFeatures(queryFeature, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
                     var deferred, cloneArray, displayField, settingsIndex, res, index;
                     deferred = new Deferred();
@@ -623,7 +627,8 @@ define([
                 }
                 var mapDeferred = esriUtils.createMap(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId, "esriCTParentDivContainer", {
                     mapOptions: {
-                        slider: true
+                        slider: true,
+                        showAttribution: false
                     },
                     ignorePopups: true
                 });
@@ -641,7 +646,7 @@ define([
 
                     extent = this._getQueryString('extent');
                     if (extent !== "") {
-                        mapDefaultExtent = extent.split(',');
+                        mapDefaultExtent = decodeURIComponent(extent).split(',');
                         mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                         this.map.setExtent(mapDefaultExtent);
                     }

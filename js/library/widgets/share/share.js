@@ -30,14 +30,16 @@ define([
     "dojo/dom-geometry",
     "dojo/string",
     "dojo/_base/html",
+    "dojo/Deferred",
     "dojo/text!./templates/shareTemplate.html",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "dojo/topic",
-    "esri/request"
-], function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest) {
+    "esri/request",
+    "widgets/share/commonShare"
+], function (declare, domConstruct, domStyle, lang, array, domAttr, on, dom, query, domClass, domGeom, string, html, Deferred, template, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, sharedNls, topic, esriRequest, commonShare) {
 
     //========================================================================================================================//
 
@@ -82,8 +84,8 @@ define([
                 */
                 topic.publish("toggleWidget", "share");
                 topic.publish("setMaxLegendLength");
-                this._showHideShareContainer();
                 this._shareLink();
+                this._showHideShareContainer();
                 if (domClass.contains(query(".esriControlsBR")[0], "esriLogoShiftRight")) {
                     domClass.remove(query(".esriControlsBR")[0], "esriLogoShiftRight");
                 }
@@ -137,13 +139,42 @@ define([
             domStyle.set(this.divAppContainer, "height", contHeight + 2 + "px");
         },
 
+        /* show and hide share container
+        * @memberOf widgets/share/share
+        */
+        _showHideShareContainer: function () {
+            if (html.coords(this.divAppContainer).h > 0) {
+                /**
+                * when user clicks on share icon in header panel, close the sharing panel if it is open
+                */
+                domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
+                domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+            } else {
+                /**
+                * when user clicks on share icon in header panel, open the sharing panel if it is closed
+                */
+                domClass.replace(this.domNode, "esriCTImgSocialMediaSelect", "esriCTImgSocialMedia");
+                domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
+            }
+        },
+
+        /**
+        * return current map extent
+        * @return {string} Current map extent
+        * @memberOf widgets/share/share
+        */
+        _getMapExtent: function () {
+            var extents = Math.round(this.map.extent.xmin).toString() + "," + Math.round(this.map.extent.ymin).toString() + "," + Math.round(this.map.extent.xmax).toString() + "," + Math.round(this.map.extent.ymax).toString();
+            return extents;
+        },
+
         /**
         * display sharing panel
         * @param {array} dojo.configData.MapSharingOptions Sharing option settings specified in configuration file
         * @memberOf widgets/share/share
         */
         _shareLink: function () {
-            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords, encodedUri, shareUrl;
+            var url, mapExtent, splitUrl, locGeom, urlStr, clickCoords;
             /**
             * get current map extent to be shared
             */
@@ -176,63 +207,9 @@ define([
             }
             urlStr += "$sliderValue=" + dojo.sliderValue + "$driveType=" + dojo.driveTime;
             this.urlStr = urlStr;
-            encodedUri = encodeURIComponent(urlStr);
-            try {
-                shareUrl = string.substitute(dojo.configData.MapSharingOptions.TinyURLServiceURL, [encodedUri]);
-                this._sendEsriRequest(shareUrl);
-            } catch (ex) {
-                this.tinyUrl = null;
-            }
-        },
 
-        /* send esri request to generate bitly url
-        * @memberOf widgets/share/share
-        */
-        _sendEsriRequest: function (shareUrl) {
-
-            esriRequest({
-                url: shareUrl
-            }, {
-                useProxy: true
-            }).then(lang.hitch(this, function (response) {
-                var tinyResponse;
-                tinyResponse = response.data;
-                if (tinyResponse) {
-                    this.tinyUrl = tinyResponse.url;
-                }
-            }), lang.hitch(this, function (error) {
-                this.tinyUrl = null;
-            }));
-
-        },
-
-        /* show and hide share container
-        * @memberOf widgets/share/share
-        */
-        _showHideShareContainer: function () {
-            if (html.coords(this.divAppContainer).h > 0) {
-                /**
-                * when user clicks on share icon in header panel, close the sharing panel if it is open
-                */
-                domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
-                domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
-            } else {
-                /**
-                * when user clicks on share icon in header panel, open the sharing panel if it is closed
-                */
-                domClass.replace(this.domNode, "esriCTImgSocialMediaSelect", "esriCTImgSocialMedia");
-                domClass.replace(this.divAppContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
-            }
-        },
-
-        /**
-        * return current map extent
-        * @return {string} Current map extent
-        * @memberOf widgets/share/share
-        */
-        _getMapExtent: function () {
-            var extents = Math.round(this.map.extent.xmin).toString() + "," + Math.round(this.map.extent.ymin).toString() + "," + Math.round(this.map.extent.xmax).toString() + "," + Math.round(this.map.extent.ymax).toString();
-            return extents;
+            // Attempt the shrinking of the URL
+            this.getTinyUrl = commonShare.getTinyLink(urlStr, dojo.configData.MapSharingOptions.TinyURLServiceURL);
         },
 
         /**
@@ -243,43 +220,17 @@ define([
         * @memberOf widgets/share/share
         */
         _share: function (site) {
-
             /*
             * hide share panel once any of the sharing options is selected
             */
+            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
             if (html.coords(this.divAppContainer).h > 0) {
                 domClass.replace(this.divAppContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
             }
-            try {
-                if (this.tinyUrl) {
-                    this._shareOptions(site, this.tinyUrl);
-                } else {
-                    this._shareOptions(site, this.urlStr);
-                }
-            } catch (err) {
-                alert(sharedNls.errorMessages.shareFailed);
-            }
-        },
 
-        /**
-        * generate sharing URL and share with selected share option
-        * @param {string} site Selected share option
-        * @param {string} url URL for sharing
-        * @memberOf widgets/share/share
-        */
-        _shareOptions: function (site, url) {
-            domClass.replace(this.domNode, "esriCTImgSocialMedia", "esriCTImgSocialMediaSelect");
-            switch (site) {
-            case "facebook":
-                window.open(string.substitute(dojo.configData.MapSharingOptions.FacebookShareURL, [url]));
-                break;
-            case "twitter":
-                window.open(string.substitute(dojo.configData.MapSharingOptions.TwitterShareURL, [url]));
-                break;
-            case "email":
-                parent.location = string.substitute(dojo.configData.MapSharingOptions.ShareByMailLink, [url]);
-                break;
-            }
+            // Do the share
+            commonShare.share(this.getTinyUrl, dojo.configData.MapSharingOptions, site);
         }
+
     });
 });
