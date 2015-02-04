@@ -222,7 +222,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
-            WebMapId: "000633e08342496986406d532b30b440",
+            WebMapId: "51bd8650f18842e7bd5aa7bf78abd9d7",
             BgColor: "#007ac2",
             FeatureHighlightColor: "#1C86EE",
 
@@ -314,13 +314,6 @@ define([], function () {
                 SearchDisplayTitle: "Trails and Paths",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "false",
-                Title: "LiveWorkLocateTryItLive - Bike Lanes",
-                QueryLayerId: "13",
-                SearchDisplayTitle: "Bike Lanes",
-                SearchDisplayFields: "${NAME}",
-                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }]
 
         }, {
@@ -328,7 +321,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
-            WebMapId: "e57a5049fce04083b9de3ded8792aace",
+            WebMapId: "6c031b081b2b4c5996c514831d0c79b3",
             BgColor: "#028D6A",
             FeatureHighlightColor: "#1C86EE",
             SearchSettings: [{
@@ -366,13 +359,6 @@ define([], function () {
                 SearchDisplayTitle: "Retail Centers",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "false",
-                Title: "Tapestry_Households - ZIP Code",
-                QueryLayerId: "2",
-                SearchDisplayTitle: "ZIP Code",
-                SearchDisplayFields: "${TSEGNAME}",
-                SearchExpression: "UPPER(TSEGNAME) LIKE UPPER('${0}%')"
             }]
 
         }, {
@@ -380,7 +366,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/orangeTheme.css",
-            WebMapId: "6cf029952502446ebfbb784e91492f16",
+            WebMapId: "3cc363d86ca0498197e6ab0c6a6391f6",
             BgColor: "#5C2E6F",
             FeatureHighlightColor: "#1C86EE",
 
