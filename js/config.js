@@ -398,7 +398,7 @@ define([], function () {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearPublic",
                 QueryLayerId: "2",
-                SearchDisplayTitle: "Higher Education Four Year Public",
+                SearchDisplayTitle: "Higher Ed. 4-Year Public",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
@@ -493,7 +493,7 @@ define([], function () {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearIndependent",
                 QueryLayerId: "3",
-                SearchDisplayTitle: "Higher Education Four Year Independent",
+                SearchDisplayTitle: "Higher Ed. 4-Year Independent",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
@@ -507,7 +507,7 @@ define([], function () {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearPublic",
                 QueryLayerId: "4",
-                SearchDisplayTitle: "Higher Ed 4-Year Public",
+                SearchDisplayTitle: "Higher Ed. 4-Year Public",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
