@@ -307,13 +307,6 @@ define([], function () {
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "false",
-                Title: "LiveWorkLocateTryItLive - Trails and Paths",
-                QueryLayerId: "12",
-                SearchDisplayTitle: "Trails and Paths",
-                SearchDisplayFields: "${NAME}",
-                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }]
 
         }, {
