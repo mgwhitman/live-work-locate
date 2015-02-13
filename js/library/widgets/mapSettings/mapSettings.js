@@ -427,7 +427,7 @@ define([
                     layerUrl = configOperationalLayers[i].ServiceURL.split('/');
                     layerUrl = layerUrl[layerUrl.length - 1];
                     this.map.addLayer(featureLayer);
-                    var searchValues = [layerUrl, configOperationalLayers[i].Title]
+                    var searchValues = [i, configOperationalLayers[i].Title]
                     setting = this._getConfigSearchSetting(searchValues);
                     if (setting) {
                         j = mapSearchSettings.length;
@@ -783,7 +783,7 @@ define([
                 str = webMapDetails.operationalLayers[k].url.split('/');
                 lastIndex = str[str.length - 1];
                 i = webmapSearchSettings.length;
-                var searchValues = [lastIndex, webMapDetails.operationalLayers[k].title];
+                var searchValues = [k, webMapDetails.operationalLayers[k].title];
                 layerSearchSetting = this._getConfigSearchSetting(searchValues);
                 if (layerSearchSetting) {
                     webmapSearchSettings[i] = layerSearchSetting;
@@ -858,7 +858,7 @@ define([
         _getConfigSearchSetting: function (searchKey) {
             var i, configSearchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
             for (i = 0; i < configSearchSettings.length; i++) {
-                if (configSearchSettings[i].QueryLayerId === searchKey[0] && configSearchSettings[i].Title == searchKey[1]) {
+                if (configSearchSettings[i].QueryLayerId == searchKey[0] && configSearchSettings[i].Title === searchKey[1]) {
                     return configSearchSettings[i];
                 }
             }
