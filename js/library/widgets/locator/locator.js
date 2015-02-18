@@ -1213,7 +1213,7 @@ define([
             topic.publish("hideLoadingIndicatorHandler");
             dojo.featureID = attributes.OBJECTID;
             layerSettings = dojo.configData.Workflows[dojo.workFlowIndex];
-            dojo.layerID = layerSettings.SearchSettings[infoIndex].QueryLayerId;
+            dojo.title = layerSettings.SearchSettings[infoIndex].Title;
             infoPopupFieldsCollection = layerSettings.InfowindowSettings[infoIndex].InfoWindowData;
             infoPopupHeight = dojo.configData.InfoPopupHeight;
             infoPopupWidth = dojo.configData.InfoPopupWidth;
@@ -1422,12 +1422,12 @@ define([
                     topic.publish("showInfoWindowOnMap", point);
                 }), 2000);
             }
-            if (window.location.toString().split("$layerID=").length > 1) {
-                sharedLayer = parseFloat(window.location.toString().split("$layerID=")[1]);
+            if (window.location.toString().split("$title=").length > 1) {
+                sharedLayer = parseFloat(window.location.toString().split("$title=")[1]);
                 currentTime = new Date();
                 dojo.sharedInfowindow = true;
                 array.some(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings, lang.hitch(this, function (layer, infoIndex) {
-                    if (Number(layer.QueryLayerId) === sharedLayer) {
+                    if (Number(layer.Title) === sharedLayer) {
                         dojo.extentShared++;
                         queryTask = new QueryTask(layer.QueryURL);
                         queryFeature = new Query();

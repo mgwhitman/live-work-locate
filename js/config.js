@@ -201,19 +201,18 @@ define([], function () {
         // SearchSettings: Configure search settings for each workflow.
         // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
         // it should be the name of Map/Feature Service.
-        // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
         // SearchDisplayTitle: This text is displayed in search results as the title to group results.
         // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
         // SearchExpression: Configure the query expression to be used for search.
-        // InfowindowSettings: Configure info-popup settings. The Title and QueryLayerId fields should be the same as configured in "Title" and "QueryLayerId" fields in SearchSettings.
+        // InfowindowSettings: Configure info-popup settings. The Title should be the same as configured in the "Title" field in SearchSettings.
         // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
         // it should be the name of Map/Feature Service.
-        // QueryLayerId: Layer index used for performing queries.
+        // Title: Used for performing queries.
         // InfoWindowHeader: Specify field for the info window header
         // ShowAllFields: When set to true, infowindow will display all fields from layer and InfoWindowData section is ignored
         // When set to false, only fields configured in InfoWindowData section will be displayed
         // InfoWindowData: Set the content to be displayed in the info-Popup. Define labels and field values.
-        // These fields should be present in the layer referenced by 'QueryLayerId' specified under section 'SearchSettings'
+        // These fields should be present in the layer referenced by 'Title' specified under section 'SearchSettings'
         // DisplayText: Caption to be displayed instead of field alias names. Set this to empty string ("") if you wish to display field alias names as captions.
         // FieldName: Field used for displaying the value
 
@@ -222,7 +221,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
-            WebMapId: "f7a13ec10ab1441d94c0b70f1bd594c3",
+            WebMapId: "3681f359e4314042a633deb5daaeb13e",
             BgColor: "#007ac2",
             FeatureHighlightColor: "#1C86EE",
 
@@ -232,7 +231,6 @@ define([], function () {
 
             // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
             // It should be the name of Map/Feature Service.
-            // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
             // SearchDisplayTitle: This text is displayed in search results as the title to group results.
             // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
             // SearchExpression: Configure the query expression to be used for search.
@@ -240,105 +238,84 @@ define([], function () {
             SearchSettings: [{
                 UnifiedSearch: "true",
                 Title: "MedianSalePriceofaHome",
-                QueryLayerId: "14",
                 SearchDisplayTitle: "Home Median Sale Price",
                 SearchDisplayFields: "${SITENAME} / ${MEDSALEPC}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LocalPersonalIncomeTaxRate",
-                QueryLayerId: "13",
+                Title: "PersonalIncomeTaxRate",
                 SearchDisplayTitle: "Personal Income Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${TAXRTE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "HospitalsAndHealthcareFacilities",
-                QueryLayerId: "12",
                 SearchDisplayTitle: "Hospitals and Healthcare Facilities ",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
-			}, {
-                UnifiedSearch: "true",
-                Title: "ArtsAndCulturalCenters",
-                QueryLayerId: "0",
-                SearchDisplayTitle: "Arts And Cultural Centers",
-                SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "MusicVenues",
-                QueryLayerId: "1",
                 SearchDisplayTitle: "Music Venues",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "OrchardsFarmMarkets",
-                QueryLayerId: "2",
                 SearchDisplayTitle: "Orchard Markets",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "FarmersMarkets",
-                QueryLayerId: "3",
                 SearchDisplayTitle: "Farmer's Markets",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "PickYourOwnProduce",
-                QueryLayerId: "4",
                 SearchDisplayTitle: "Pick Your Own Produce",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "ChildrensActivities",
-                QueryLayerId: "5",
                 SearchDisplayTitle: "Activities for Children",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ZIP) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Wineries",
-                QueryLayerId: "6",
                 SearchDisplayTitle: "Wineries",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "HistoricalandCulturalMuseums",
-                QueryLayerId: "7",
                 SearchDisplayTitle: "Historical and Cultural Museums",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "ArtGalleries",
-                QueryLayerId: "8",
                 SearchDisplayTitle: "Art Galleries",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "StateAndNationalParks",
-                QueryLayerId: "11",
                 SearchDisplayTitle: "State and National Parks",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "MassTransitStations",
-                QueryLayerId: "9",
                 SearchDisplayTitle: "Mass Transit Stations",
                 SearchDisplayFields: "${SITENAME}, ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Airports",
-                QueryLayerId: "10",
                 SearchDisplayTitle: "Airports",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
@@ -349,83 +326,66 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
-            WebMapId: "b75e3df7f0e3424188700991f9b875d9",
+            WebMapId: "2a49c79a487142a38e519bebd8babd53",
             BgColor: "#028D6A",
             FeatureHighlightColor: "#1C86EE",
             SearchSettings: [{
                 UnifiedSearch: "true",
-                Title: "PerCapitaPersonalIncome",
-                QueryLayerId: "9",
+                Title: "PerCapita Personal Income",
                 SearchDisplayTitle: "Per Capita Personal Income",
                 SearchDisplayFields: "${sitename} / ${PERCAPIN}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "MedianHouseholdIncome",
-                QueryLayerId: "8",
+                Title: "Median Household Income",
                 SearchDisplayTitle: "Median Household Income",
                 SearchDisplayFields: "${SITENAME} / ${COUNTY} / ${MEDHOUSINCOME}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "ResearchParks",
-                QueryLayerId: "5",
+                Title: "Research Parks",
                 SearchDisplayTitle: "Research Parks",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Incubators",
-                QueryLayerId: "6",
                 SearchDisplayTitle: "Incubators",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "TopBioscienceEmployers",
-                QueryLayerId: "0",
+                Title: "Top Bioscience Employers",
                 SearchDisplayTitle: "Top Bioscience Employers",
                 SearchDisplayFields: "${SITENAME}/ ${CITY} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "TopCompanyHeadquarters",
-                QueryLayerId: "1",
+                Title: "Top Company Headquarters",
                 SearchDisplayTitle: "Top Company Headquarters",
-                SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
-                UnifiedSearch: "true",
-                Title: "HigherEducationFourYearPublic",
-                QueryLayerId: "2",
-                SearchDisplayTitle: "Higher Ed. 4-Year Public",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LaborForce",
-                QueryLayerId: "7",
+                Title: "Labor Force",
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${SITENAME} / ${LABORVALUE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Unemployment",
-                QueryLayerId: "10",
                 SearchDisplayTitle: "Unemployment",
                 SearchDisplayFields: "${SITENAME} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "MassTransitStations",
-                QueryLayerId: "3",
+                Title: "Mass Transit Stations",
                 SearchDisplayTitle: " Mass Transit Stations",
                 SearchDisplayFields: "${SITENAME} / ${CITY} / ${TRANSITNM}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(TRANSITNM) LIKE UPPER('${0}')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Airports",
-                QueryLayerId: "4",
                 SearchDisplayTitle: "Airports",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
@@ -436,119 +396,85 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/orangeTheme.css",
-            WebMapId: "ab7e302c31094e3c9c07ec15eb7eb208",
+            WebMapId: "0cb3c691eccc446eb16194511fa5fcab",
             BgColor: "#5C2E6F",
             FeatureHighlightColor: "#1C86EE",
 
             SearchSettings: [{
                 UnifiedSearch: "true",
                 Title: "BachelorsDegreeAttainment",
-                QueryLayerId: "11",
                 SearchDisplayTitle: "Bachelors Degree Attainment",
                 SearchDisplayFields: "${SITENAME} / ${BACHATTRATE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
-                UnifiedSearch: "true",
-                Title: "HighSchoolAttainment",
-                QueryLayerId: "12",
-                SearchDisplayTitle: "High School Attainment",
-                SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "ForeignTradeZones",
-                QueryLayerId: "15",
                 SearchDisplayTitle: "Foreign Trade Zones",
                 SearchDisplayFields: "${sitename} / ${city}",
                 SearchExpression: "UPPER(sitename) LIKE UPPER('${0}%') OR UPPER(city) LIKE UPPER('${0}%') OR UPPER(county) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Employment",
-                QueryLayerId: "10",
                 SearchDisplayTitle: "Employment",
                 SearchDisplayFields: "${SITENAME} / ${COUNTY} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "ResearchParks",
-                QueryLayerId: "0",
                 SearchDisplayTitle: "Research Parks",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Incubators",
-                QueryLayerId: "1",
                 SearchDisplayTitle: "Incubators",
-                SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
-                UnifiedSearch: "true",
-                Title: "TopCompanyHeadquarters",
-                QueryLayerId: "2",
-                SearchDisplayTitle: "Top Company Headquarters",
-                SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
-                SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
-                UnifiedSearch: "true",
-                Title: "HigherEducationFourYearIndependent",
-                QueryLayerId: "3",
-                SearchDisplayTitle: "Higher Ed. 4-Year Independent",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "BusinessPersonalPropertyTaxRate",
-                QueryLayerId: "13",
                 SearchDisplayTitle: "Business Personal Property Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${COUNTY} / ${NOJOBS}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearPublic",
-                QueryLayerId: "4",
-                SearchDisplayTitle: "Higher Ed. 4-Year Public",
+                SearchDisplayTitle: "Higher Ed 4-Year Public",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "HigherEducationRegionalEducationCenter",
-                QueryLayerId: "5",
+                Title: "RegionalEducationCenter",
                 SearchDisplayTitle: "Higher Ed. Regional Ed. Center",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "MassTransitStations",
-                QueryLayerId: "6",
                 SearchDisplayTitle: "Mass Transit Stations",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, ${TRANSITNM}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Seaports",
-                QueryLayerId: "7",
                 SearchDisplayTitle: " Sea Ports",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "LaborForce",
-                QueryLayerId: "9",
                 SearchDisplayTitle: "Labor Force",
                 SearchDisplayFields: "${SITENAME} / ${LABORVALUE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "RealPropertyTaxRate",
-                QueryLayerId: "14",
                 SearchDisplayTitle: "Property Tax Rate",
                 SearchDisplayFields: "${SITENAME} / ${PROPTAXRT}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "Airports",
-                QueryLayerId: "8",
                 SearchDisplayTitle: "Airports",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY)"

@@ -33,7 +33,7 @@ define({
         shareLoadingFailed: "@IT@ Unable to shorten URL, Bit.ly failed to load.",
         shareFailed: "@IT@ Unable to share.",
         noLegend: "@IT@ No Legend Available",
-        invalidSearchSettings: "@IT@ Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
+        invalidSearchSettings: "@IT@ Title parameter in SearchSettings does not match with configured webmap.",
         invalidBasemapQuery: "@IT@ Invalid BasemapQuery",
         noBasemap: "@IT@ No Basemap Found",
         portalUrlNotFound: "@IT@ Portal URL cannot be empty",

@@ -462,16 +462,16 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _generateLayerURL: function () {
-            var str, layerId, i, searchSettings, index;
+            var str, layerName, i, searchSettings, index;
             if (!dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length === 0) {
                 for (i = 0; i < dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers.length; i++) {
                     if (dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL) {
                         str = dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].ServiceURL.split('/');
-                        layerId = str[str.length - 1];
+                        layerName = dojo.configData.Workflows[dojo.workFlowIndex].OperationalLayers[i].title;
                         searchSettings = dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings;
                         for (index = 0; index < dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings.length; index++) {
-                            if (searchSettings[index].Title && searchSettings[index].QueryLayerId) {
-                                if (layerId === searchSettings[index].QueryLayerId) {
+                            if (searchSettings[index].Title) {
+                                if (layerName === searchSettings[index].Title) {
                                     searchSettings[index].QueryURL = str.join("/");
                                 }
                             }
@@ -780,8 +780,6 @@ define([
             k = 0;
             this.operationalLayers = [];
             for (j = 0; j < webMapDetails.operationalLayers.length; j++) {
-                str = webMapDetails.operationalLayers[k].url.split('/');
-                lastIndex = str[str.length - 1];
                 i = webmapSearchSettings.length;
                 var searchValue = webMapDetails.operationalLayers[k].title;
                 layerSearchSetting = this._getConfigSearchSetting(searchValue);
@@ -790,10 +788,10 @@ define([
                     this.operationalLayers[i] = webMapDetails.operationalLayers[j];
                     webmapSearchSettings[i].QueryURL = this.operationalLayers[i].url;
                     if (this.operationalLayers[i].popupInfo) {
-                        infowindowCurrentSettings[i] = this._getConfigInfoData(webmapSearchSettings[i].QueryLayerId);
+                        infowindowCurrentSettings[i] = this._getConfigInfoData(webmapSearchSettings[i].Title);
                         if (!infowindowCurrentSettings[i]) {
                             infowindowCurrentSettings[i] = {};
-                            infowindowCurrentSettings[i].QueryLayerId = webmapSearchSettings[i].QueryLayerId;
+                            infowindowCurrentSettings[i].Title = webmapSearchSettings[i].Title;
                         }
                         infowindowCurrentSettings[i].InfoQueryURL = this.operationalLayers[i].url;
                         if (this.operationalLayers[i].popupInfo.title.split("{").length > 1) {
@@ -838,7 +836,7 @@ define([
             var i, infoWindowSettings = dojo.configData.Workflows[dojo.workFlowIndex].InfowindowSettings;
             if (infoWindowSettings) {
                 for (i = 0; i < infoWindowSettings.length; i++) {
-                    if (infoWindowSettings[i].QueryLayerId === searchKey) {
+                    if (infoWindowSettings[i].Title === searchKey) {
                         return infoWindowSettings[i];
                     }
                 }
