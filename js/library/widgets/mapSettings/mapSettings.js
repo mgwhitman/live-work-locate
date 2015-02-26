@@ -159,11 +159,11 @@ define([
                 var mapDefaultExtent, extent;
                 extent = this._getQueryString('extent');
                 if (extent === "") {
-                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                     this.map.setExtent(mapDefaultExtent);
                 } else {
                     mapDefaultExtent = decodeURIComponent(extent).split(',');
-                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                     this.map.setExtent(mapDefaultExtent);
                 }
                 this.map.addLayer(graphicsLayer);
@@ -310,7 +310,7 @@ define([
                     featureLayer = featureLayer.layerObject;
                 }
                 dateObj = new Date().getTime().toString();
-                queryFeature.where = dateObj +  "=" + dateObj ;
+                queryFeature.where = dateObj + "=" + dateObj;
                 featureLayerResult = featureLayer.selectFeatures(queryFeature, FeatureLayer.SELECTION_NEW, lang.hitch(this, function (result) {
                     var deferred, cloneArray, displayField, settingsIndex, res, index;
                     deferred = new Deferred();
@@ -400,7 +400,7 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _addOperationalLayer: function () {
-            var featureLayer, i, j, setting, layerUrl, infowindowSettings = [], mapSearchSettings = [], configOperationalLayers = [];
+            var featureLayer, i, j, setting, layerUrl, infowindowSettings = [], mapSearchSettings = [], configOperationalLayers = [], searchValue;
             this._clearSelectedFeature();
             if (this.map.getLayer("esriGraphicsLayerMapSettings")) {
                 this.map.getLayer("esriGraphicsLayerMapSettings").clear();
@@ -427,7 +427,7 @@ define([
                     layerUrl = configOperationalLayers[i].ServiceURL.split('/');
                     layerUrl = layerUrl[layerUrl.length - 1];
                     this.map.addLayer(featureLayer);
-                    var searchValue = configOperationalLayers[i].Title;
+                    searchValue = configOperationalLayers[i].Title;
                     setting = this._getConfigSearchSetting(searchValue);
                     if (setting) {
                         j = mapSearchSettings.length;
@@ -566,10 +566,10 @@ define([
                 if (query(".esriControlsBR")[0]) {
                     domClass.add(query(".esriControlsBR")[0], "esriLogoLegend");
                 }
-                mapServerArray = [];
+                mapServerArray = {};
                 for (i = 0; i < opLayers.length; i++) {
                     if (opLayers[i].url) {
-                        mapServerArray.push(opLayers[i].url);
+                        mapServerArray[opLayers[i].url] = opLayers[i].Title;
                     }
                 }
                 legendObject = this._addLegendBox();
@@ -648,7 +648,7 @@ define([
                     extent = this._getQueryString('extent');
                     if (extent !== "") {
                         mapDefaultExtent = decodeURIComponent(extent).split(',');
-                        mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
+                        mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
                         this.map.setExtent(mapDefaultExtent);
                     }
                     this._addLogoUrl();
@@ -702,20 +702,20 @@ define([
         },
 
         _addLayerLegendWebmap: function (webMapLayers, webmapLayerList) {
-            var mapServerArray = [], i, j, legendObject, layer;
+            var mapServerArray = {}, i, j, legendObject, layer;
             for (j = 0; j < webMapLayers.length; j++) {
                 if (webMapLayers[j].layerObject) {
                     if (webMapLayers[j].layerObject.layerInfos) {
                         for (i = 0; i < webMapLayers[j].layerObject.layerInfos.length; i++) {
                             layer = webMapLayers[j].url + "/" + webMapLayers[j].layerObject.layerInfos[i].id;
-                            mapServerArray.push(layer);
+                            mapServerArray[layer] = webMapLayers[j].layerObject.layerInfos[i].title;
                         }
                     } else {
 
-                        mapServerArray.push(webMapLayers[j].url);
+                        mapServerArray[webMapLayers[j].url] = webMapLayers[j].title;
                     }
                 } else {
-                    mapServerArray.push(webMapLayers[j].url);
+                    mapServerArray[webMapLayers[j].url] = webMapLayers[j].title;
                 }
             }
             legendObject = this._addLegendBox();
@@ -759,7 +759,7 @@ define([
         */
         _fetchWebMapData: function (response) {
             var str, webMapDetails, serviceTitle, operationalLayerId, lastIndex,
-                infowindowCurrentSettings = [], i, j, k, lastSlashIndex, idx, popupField, layerSearchSetting, webmapSearchSettings = [];
+                infowindowCurrentSettings = [], i, j, k, lastSlashIndex, idx, popupField, layerSearchSetting, webmapSearchSettings = [], searchValue;
             webMapDetails = response.itemInfo.itemData;
             serviceTitle = [];
             for (i = 0; i < webMapDetails.operationalLayers.length; i++) {
@@ -781,7 +781,7 @@ define([
             this.operationalLayers = [];
             for (j = 0; j < webMapDetails.operationalLayers.length; j++) {
                 i = webmapSearchSettings.length;
-                var searchValue = webMapDetails.operationalLayers[k].title;
+                searchValue = webMapDetails.operationalLayers[k].title;
                 layerSearchSetting = this._getConfigSearchSetting(searchValue);
                 if (layerSearchSetting) {
                     webmapSearchSettings[i] = layerSearchSetting;

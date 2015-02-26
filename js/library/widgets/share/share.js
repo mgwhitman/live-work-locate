@@ -195,7 +195,7 @@ define([
                         clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
                         urlStr += "$mapClickPoint=" + clickCoords;
                     } else {
-                        urlStr += "$layerID=" + dojo.layerID + "$featureID=" + dojo.featureID;
+                        urlStr += "$title=" + dojo.title + "$featureID=" + dojo.featureID;
                     }
                 }
             } else if (dojo.mapClickedPoint) {

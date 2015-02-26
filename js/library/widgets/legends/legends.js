@@ -409,7 +409,7 @@ define([
         * @memberOf widgets/legends/legends
         */
         startup: function (layerArray, updatedRendererArray) {
-            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i, featureLayerUrl, layerIndex;
+            var mapServerURL, index, hostedDefArray = [], defArray = [], params, layersRequest, deferredList, hostedDeferredList, hostedLayers, i, featureLayerUrl, keys;
             this.mapServerArray = [];
             this.featureServerArray = [];
             this.hostedLayersJSON = null;
@@ -445,21 +445,21 @@ define([
                 }));
             }
 
-            for (index = 0; index < layerArray.length; index++) {
-                if (layerArray[index].match("/FeatureServer")) {
-                    featureLayerUrl = layerArray[index];
-                    layerArray[index] = layerArray[index].replace("/FeatureServer", "/MapServer");
+            keys = Object.keys(layerArray);
+            for (index = 0; index < keys.length; index++) {
+                if (keys[index].match("/FeatureServer")) {
+                    featureLayerUrl = keys[index];
+                    keys[index] = keys[index].replace("/FeatureServer", "/MapServer");
                 } else {
                     featureLayerUrl = null;
                 }
-                mapServerURL = layerArray[index].split("/");
-                layerIndex = mapServerURL[mapServerURL.length - 1];
+                mapServerURL = keys[index].split("/");
                 mapServerURL.pop();
                 mapServerURL = mapServerURL.join("/");
                 if (!this.indexesForLayer[mapServerURL]) {
                     this.indexesForLayer[mapServerURL] = [];
                 }
-                this.indexesForLayer[mapServerURL].push(layerIndex);
+                this.indexesForLayer[mapServerURL].push(layerArray[keys[index]]);
                 this.mapServerArray.push({ "url": mapServerURL, "featureLayerUrl": featureLayerUrl });
             }
             this.mapServerArray = this._removeDuplicate(this.mapServerArray);
@@ -634,13 +634,15 @@ define([
         * @memberOf widgets/legends/legends
         */
         _filterHostedFeatureServices: function (layerArray) {
-            var hostedLayers = [], layerDetails, index;
-            for (index = 0; index < layerArray.length; index++) {
-                if (layerArray[index].match("/FeatureServer")) {
-                    layerDetails = layerArray[index].split("/");
+            var hostedLayers = [], layerDetails, index, keys;
+            keys = Object.keys(layerArray);
+            for (index = 0; index < keys.length; index++) {
+                if (keys[index].match("/FeatureServer")) {
+                    layerDetails = keys[index].split("/");
                     if (layerDetails[5] && layerDetails[5].toLowerCase && layerDetails[5].toLowerCase() === "rest") {
-                        hostedLayers.push(layerArray[index]);
-                        layerArray.splice(index, 1);
+                        hostedLayers.push(keys[index]);
+                        keys.splice(index, 1);
+                        delete (layerArray[keys[index]]);
                         index--;
                     }
                 }
@@ -738,7 +740,7 @@ define([
             if (layerList && layerList.layers && layerList.layers.length > 0) {
                 for (i = 0; i < layerList.layers.length; i++) {
                     layerList.layers[i].featureLayerUrl = mapServerUrl.featureLayerUrl;
-                    if (array.indexOf(this.indexesForLayer[mapServerUrl.url], layerList.layers[i].layerId) !== -1) {
+                    if (array.indexOf(this.indexesForLayer[mapServerUrl.url], layerList.layers[i].title) !== -1) {
                         isLegendCreated = true;
                         layerURL = mapServerUrl.url + '/' + layerList.layers[i].layerId;
                         this._layerCollection[layerURL] = layerList.layers[i];

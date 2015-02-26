@@ -337,10 +337,10 @@ define([
                 * do not perform auto complete search if control &| alt key pressed, except for ctrl-v
                 */
                 if (evt.ctrlKey || evt.altKey ||
-                    evt.keyCode === dojo.keys.UP_ARROW || evt.keyCode === dojo.keys.DOWN_ARROW ||
-                    evt.keyCode === dojo.keys.LEFT_ARROW || evt.keyCode === dojo.keys.RIGHT_ARROW ||
-                    evt.keyCode === dojo.keys.HOME || evt.keyCode === dojo.keys.END ||
-                    evt.keyCode === dojo.keys.CTRL || evt.keyCode === dojo.keys.SHIFT) {
+                        evt.keyCode === dojo.keys.UP_ARROW || evt.keyCode === dojo.keys.DOWN_ARROW ||
+                        evt.keyCode === dojo.keys.LEFT_ARROW || evt.keyCode === dojo.keys.RIGHT_ARROW ||
+                        evt.keyCode === dojo.keys.HOME || evt.keyCode === dojo.keys.END ||
+                        evt.keyCode === dojo.keys.CTRL || evt.keyCode === dojo.keys.SHIFT) {
                     evt.cancelBubble = true;
                     evt.stopPropagation();
                     domStyle.set(this.imgSearchLoader, "display", "none");
@@ -387,7 +387,7 @@ define([
                     // Launch a search after recording when the search began
                     this.lastSearchTime = thisSearchTime = (new Date()).getTime();
                     this._searchLocation(searchText, thisSearchTime);
-                }), (launchImmediately? 0 : 500));
+                }), (launchImmediately ? 0 : 500));
             }
         },
 
@@ -1395,12 +1395,12 @@ define([
         * @memberOf widgets/locator/locator
         */
         _shareAddress: function () {
-            var sharedLocation, mapPoint, point, currentExtSplit, currentExt, currentExtent, sharedLayer, queryTask, queryFeature, featureObjId, currentTime;
+            var sharedLocation, mapPoint, point, currentExtSplit, currentExt, currentExtent, sharedLayer, queryTask, queryFeature, featureObjId, currentTime, pointDecode, decodeMapPoint;
             if (window.location.toString().split("$locationPoint=").length > 1) {
                 dojo.extentShared++;
                 this._showLocateContainer();
                 sharedLocation = window.location.toString().split("$locationPoint=")[1].split("$")[0];
-                var pointDecode = decodeURIComponent(sharedLocation).split(",")
+                pointDecode = decodeURIComponent(sharedLocation).split(",");
                 mapPoint = new Point(parseFloat(pointDecode[0]), parseFloat(pointDecode[1]), this.map.spatialReference);
                 this._locateAddressOnMap(mapPoint);
             }
@@ -1423,7 +1423,7 @@ define([
                 }), 2000);
             }
             if (window.location.toString().split("$title=").length > 1) {
-                sharedLayer = parseFloat(window.location.toString().split("$title=")[1]);
+                sharedLayer = window.location.toString().split("$title=")[1];
                 currentTime = new Date();
                 dojo.sharedInfowindow = true;
                 array.some(dojo.configData.Workflows[dojo.workFlowIndex].SearchSettings, lang.hitch(this, function (layer, infoIndex) {
