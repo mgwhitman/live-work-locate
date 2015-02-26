@@ -643,8 +643,8 @@ define([
                     layerDetails = keys[index].split("/");
                     if (layerDetails[5] && layerDetails[5].toLowerCase && layerDetails[5].toLowerCase() === "rest") {
                         hostedLayers.push(keys[index]);
-                        keys.splice(index, 1);
                         delete (layerArray[keys[index]]);
+                        keys.splice(index, 1);                      
                         index--;
                     }
                 }
