@@ -450,6 +450,8 @@ define([
                 if (keys[index].match("/FeatureServer")) {
                     featureLayerUrl = keys[index];
                     keys[index] = keys[index].replace("/FeatureServer", "/MapServer");
+                    layerArray[keys[index]] = layerArray[featureLayerUrl];
+                    delete (layerArray[featureLayerUrl]);
                 } else {
                     featureLayerUrl = null;
                 }
