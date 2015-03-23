@@ -16,11 +16,14 @@
  | limitations under the License.
  */
 define({
-    showNullValue: "@ES@ N/A",
     titles: {
         webpageDispalyText: "@ES@ Copy/paste HTML into your web page",
         moreInfo: "@ES@ Website",
-        sliderDisplayText: "@ES@ Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
+        sliderDisplayText: "@ES@ Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins ${mode}</span>",
+        driveTimeText: "@ES@ drive",
+        walkTimeText: "@ES@ walk",
+        showDistanceText: "@ES@ Show distance",
+        attachmentText: "@ES@ Attachments:"
     },
     errorMessages: {
         noSearchSettingAvailable: "@ES@ No search setting is available",
@@ -54,6 +57,7 @@ define({
         locateAddress: "@ES@ LocateAddress",
         loadingText: "@ES@ Loading...",
         previous: "@ES@ Previous",
-        next: "@ES@ Next"
+        next: "@ES@ Next",
+        infowindowCloseBtn: "@ES@ Close"
     }
 });

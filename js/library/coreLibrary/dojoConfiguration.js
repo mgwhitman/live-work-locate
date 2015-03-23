@@ -36,3 +36,6 @@ dojoConfig = {
         location: root + '/js/library/coreLibrary'
     }]
 };
+if (location.search.match(/locale=([\w\-]+)/)) {
+    dojoConfig.locale = RegExp.$1;
+}

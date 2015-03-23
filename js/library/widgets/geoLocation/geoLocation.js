@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,Modernizr,alert */
+﻿/*global define,dojo,dojoConfig,Modernizr,alert,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -66,13 +66,13 @@ define([
 
         /**
         * get device location from geolocation service
-        * @param {string} dojo.configData.GeometryService Geometry service url specified in configuration file
+        * @param {string} appGlobals.configData.GeometryService Geometry service url specified in configuration file
         * @memberOf widgets/geoLocation/geoLocation
         */
 
         _showCurrentLocation: function () {
             var mapPoint, newMapPoint, self = this, currentBaseMap, geometryServiceURL, geometryService;
-            geometryServiceURL = dojo.configData.GeometryService;
+            geometryServiceURL = appGlobals.configData.GeometryService;
             geometryService = new GeometryService(geometryServiceURL);
 
             /**
@@ -86,7 +86,7 @@ define([
 
                 /**
                 * projects the device location on the map
-                * @param {string} dojo.configData.ZoomLevel Zoom level specified in configuration file
+                * @param {string} appGlobals.configData.ZoomLevel Zoom level specified in configuration file
                 * @param {object} mapPoint Map point of device location in spatialReference of wkid:4326
                 * @param {object} newPoint Map point of device location in spatialReference of map
                 */
@@ -103,7 +103,7 @@ define([
                         }
                     }
                     newMapPoint = newPoint[0];
-                    self.map.centerAndZoom(newMapPoint, dojo.configData.ZoomLevel);
+                    self.map.centerAndZoom(newMapPoint, appGlobals.configData.ZoomLevel);
                     self._addGraphic(newMapPoint);
                 }, function () {
                     alert(sharedNls.errorMessages.invalidProjection);
@@ -119,14 +119,13 @@ define([
         * @memberOf widgets/geoLocation/geoLocation
         */
         _addGraphic: function (mapPoint) {
-            var geoLocationPushpin = dojoConfig.baseURL + dojo.configData.LocatorSettings.DefaultLocatorSymbol,
+            var geoLocationPushpin = dojoConfig.baseURL + appGlobals.configData.LocatorSettings.DefaultLocatorSymbol,
                 locatorMarkupSymbol = new PictureMarkerSymbol(geoLocationPushpin, "35", "35"),
                 graphic = new Graphic(mapPoint, locatorMarkupSymbol, null, null);
             this.map.getLayer("esriGraphicsLayerMapSettings").clear();
             this.map.getLayer("esriGraphicsLayerMapSettings").add(graphic);
-            dojo.addressLocation = graphic;
+            appGlobals.shareOptions.addressLocation = graphic;
             topic.publish("SliderChange");
         }
-
     });
 });

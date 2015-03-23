@@ -69,31 +69,6 @@ define([], function () {
             SplashScreenContent: "Please select an app to continue"
         },
 
-        //-------------------------------------------------------------------------------------------------------------------
-        // Header Widget Settings
-        //-------------------------------------------------------------------------------------------------------------------
-        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
-        // Title: Name of the widget, will displayed as title of widget in header panel
-        // WidgetPath: path of the widget respective to the widgets package.
-        // MapInstanceRequired: true if widget is dependent on the map instance.
-
-        AppHeaderWidgets: [{
-            WidgetPath: "widgets/locator/locator",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/geoLocation/geoLocation",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/share/share",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/help/help",
-            MapInstanceRequired: false
-        }, {
-            WidgetPath: "widgets/exit/exit",
-            MapInstanceRequired: false
-        }],
-
         //ExitButtonTooltip: Specify tooltip text for exit workflow button
         ExitButtonTooltip: "Exit",
         //DriveTimeButtonTooltip : Specify tooltip text for switch to drivetime button in distance slider
@@ -258,7 +233,7 @@ define([], function () {
                 SearchDisplayTitle: "Hospitals and Healthcare Facilities ",
                 SearchDisplayFields: "${SITENAME} / ${CITY}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
-			}, {
+            }, {
                 UnifiedSearch: "true",
                 Title: "ArtsAndCulturalCenters",
                 QueryLayerId: "0",
@@ -394,7 +369,7 @@ define([], function () {
                 SearchDisplayTitle: "Top Company Headquarters",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
+            }, {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearPublic",
                 QueryLayerId: "2",
@@ -447,7 +422,7 @@ define([], function () {
                 SearchDisplayTitle: "Bachelors Degree Attainment",
                 SearchDisplayFields: "${SITENAME} / ${BACHATTRATE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
+            }, {
                 UnifiedSearch: "true",
                 Title: "HighSchoolAttainment",
                 QueryLayerId: "12",
@@ -482,14 +457,14 @@ define([], function () {
                 SearchDisplayTitle: "Incubators",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
+            }, {
                 UnifiedSearch: "true",
                 Title: "TopCompanyHeadquarters",
                 QueryLayerId: "2",
                 SearchDisplayTitle: "Top Company Headquarters",
                 SearchDisplayFields: "${SITENAME} / ${CITY}/ Phone: ${PHONE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
-			}, {
+            }, {
                 UnifiedSearch: "true",
                 Title: "HigherEducationFourYearIndependent",
                 QueryLayerId: "3",
@@ -619,6 +594,30 @@ define([], function () {
             FacebookShareURL: "http://www.facebook.com/sharer.php?u=${0}&t=Live%20Work%20Locate",
             TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=Live%20Work%20Locate ${0}",
             ShareByMailLink: "mailto:%20?subject=Check%20out%20this%20map!&body=${0}"
-        }
+        },
+        //-------------------------------------------------------------------------------------------------------------------
+        // Header Widget Settings
+        //-------------------------------------------------------------------------------------------------------------------
+        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
+        // Title: Name of the widget, will displayed as title of widget in header panel
+        // WidgetPath: path of the widget respective to the widgets package.
+        // MapInstanceRequired: true if widget is dependent on the map instance.
+
+        AppHeaderWidgets: [{
+            WidgetPath: "widgets/locator/locator",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/geoLocation/geoLocation",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/share/share",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/help/help",
+            MapInstanceRequired: false
+        }, {
+            WidgetPath: "widgets/exit/exit",
+            MapInstanceRequired: false
+        }]
     };
 });

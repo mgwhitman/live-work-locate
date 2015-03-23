@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri */
+﻿/*global define,dojo,dojoConfig,esri,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -49,7 +49,7 @@ define([
             var holder, i, innercontainer, workflowContainer;
             this.showSplashScreenDialog();
             on(this.splashScreenScrollBarOuterContainer, "click", lang.hitch(this, function () {
-                if (dojo.workFlowIndex && dojo.seletedWorkflow) {
+                if (appGlobals.workFlowIndex && appGlobals.seletedWorkflow) {
                     domStyle.set(this.domNode, "display", "none");
                 }
             }));
@@ -66,12 +66,12 @@ define([
             this.domNode.appendChild(this.splashScreenScrollBarOuterContainer);
             domConstruct.create("div", { "class": "esriGovtLoadingIndicator", "id": "splashscreenlodingIndicator" }, this.splashScreenScrollBarOuterContainer);
             holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);
-            for (i = 0; i < dojo.configData.Workflows.length; i++) {
+            for (i = 0; i < appGlobals.configData.Workflows.length; i++) {
                 workflowContainer = domConstruct.create("div", { "class": "workflowContainer" }, holder);
-                innercontainer = domConstruct.create("div", { "class": "innerSlide", "index": i, "key": dojo.configData.Workflows[i].Name }, workflowContainer);
-                domConstruct.create("div", { "innerHTML": dojo.configData.Workflows[i].Name, "class": "esriCTWorkflowText" }, innercontainer);
-                domStyle.set(innercontainer, "backgroundColor", dojo.configData.Workflows[i].BgColor);
-                domStyle.set(innercontainer, "backgroundImage", 'url(' + dojo.configData.Workflows[i].SplashscreenImage + ')');
+                innercontainer = domConstruct.create("div", { "class": "innerSlide", "index": i, "key": appGlobals.configData.Workflows[i].Name }, workflowContainer);
+                domConstruct.create("div", { "innerHTML": appGlobals.configData.Workflows[i].Name, "class": "esriCTWorkflowText" }, innercontainer);
+                domStyle.set(innercontainer, "backgroundColor", appGlobals.configData.Workflows[i].BgColor);
+                domStyle.set(innercontainer, "backgroundImage", 'url(' + appGlobals.configData.Workflows[i].SplashscreenImage + ')');
                 this.own(on(innercontainer, "click", lang.hitch(this, "_setWorkflowParameter")));
             }
             this.own(on(this.splashscreenPreviousPage, "click", lang.hitch(this, function () {
@@ -110,10 +110,10 @@ define([
         _setSplashContainerWidth: function () {
             var slideWidth, outerSplashContainerWidth;
             if (query('.workflowContainer')[0]) {
-                slideWidth = domStyle.get(query('.workflowContainer')[0], "width") * dojo.configData.Workflows.length;
+                slideWidth = domStyle.get(query('.workflowContainer')[0], "width") * appGlobals.configData.Workflows.length;
                 domStyle.set(dom.byId("splashscreenUList"), "width", slideWidth + 'px');
             }
-            if (dojo.configData.Workflows.length < 3) {
+            if (appGlobals.configData.Workflows.length < 3) {
                 domStyle.set(this.splashScreenScrollBarContainer, "width", slideWidth + 'px');
                 outerSplashContainerWidth = slideWidth + 2 * domStyle.get(query('.esriPrevious')[0], "width") + 10;
                 domStyle.set(this.splashScreenDialogContainer, "width", outerSplashContainerWidth + 'px');
@@ -125,17 +125,16 @@ define([
         * @memberOf widgets/splashScreen/splashScreen
         */
         _setWorkflow: function (key, currentWorkflow) {
-            if (dojo.seletedWorkflow === key && dojo.workFlowIndex === currentWorkflow) {
+            if (appGlobals.seletedWorkflow === key && appGlobals.workFlowIndex === currentWorkflow) {
                 this._hideSplashScreenDialog();
                 return;
             }
-            dojo.workFlowIndex = currentWorkflow;
-            dojo.seletedWorkflow = key;
+            appGlobals.workFlowIndex = currentWorkflow;
+            appGlobals.seletedWorkflow = key;
             this._selectWorkflow(key);
-            this.mapObject._generateLayerURL();
             this._hideSplashScreenDialog();
             this.mapObject._clearMapGraphics();
-            if (dojo.configData.Workflows[currentWorkflow].WebMapId && lang.trim(dojo.configData.Workflows[currentWorkflow].WebMapId).length !== 0) {
+            if (appGlobals.configData.Workflows[currentWorkflow].WebMapId && lang.trim(appGlobals.configData.Workflows[currentWorkflow].WebMapId).length !== 0) {
                 topic.publish("initializeWebmap");
                 topic.publish("loadingIndicatorHandler");
             } else {
@@ -151,7 +150,7 @@ define([
             if (map) {
                 this.mapObject = map;
                 domStyle.set(this.domNode, "display", "block");
-                this.splashScreenLableDiv.innerHTML = dojo.configData.SplashScreen.SplashScreenContent;
+                this.splashScreenLableDiv.innerHTML = appGlobals.configData.SplashScreen.SplashScreenContent;
             }
         },
 
@@ -166,9 +165,9 @@ define([
             location.hash = url;
             this._applicationThemeLoader();
             if (!share) {
-                for (j = 0; j < dojo.configData.Workflows.length; j++) {
-                    domClass.remove(query("." + dojo.configData.Workflows[j].Name)[0], "esriCTApplicationHeaderTextSelected");
-                    domClass.add(query("." + dojo.seletedWorkflow)[0], "esriCTApplicationHeaderTextSelected");
+                for (j = 0; j < appGlobals.configData.Workflows.length; j++) {
+                    domClass.remove(query("." + appGlobals.configData.Workflows[j].Name)[0], "esriCTApplicationHeaderTextSelected");
+                    domClass.add(query("." + appGlobals.seletedWorkflow)[0], "esriCTApplicationHeaderTextSelected");
                 }
             }
         },
@@ -192,9 +191,9 @@ define([
         * @memberOf widgets/splashScreen/splashScreen
         */
         _applicationThemeLoader: function () {
-            if (dojo.configData.Workflows[dojo.workFlowIndex].ThemeColor) {
+            if (appGlobals.configData.Workflows[appGlobals.workFlowIndex].ThemeColor) {
                 if (dom.byId("theme")) {
-                    domAttr.set(dom.byId("theme"), "href", dojo.configData.Workflows[dojo.workFlowIndex].ThemeColor);
+                    domAttr.set(dom.byId("theme"), "href", appGlobals.configData.Workflows[appGlobals.workFlowIndex].ThemeColor);
                 }
             }
         },
@@ -206,16 +205,16 @@ define([
         _loadSelectedWorkflow: function (Workflows, map) {
             var i;
             this.mapObject = map;
-            dojo.seletedWorkflow = Workflows;
-            for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                if (dojo.configData.Workflows[i].Name.toUpperCase() === Workflows.toUpperCase()) {
-                    dojo.workFlowIndex = i.toString();
+            appGlobals.seletedWorkflow = Workflows;
+            for (i = 0; i < appGlobals.configData.Workflows.length; i++) {
+                if (appGlobals.configData.Workflows[i].Name.toUpperCase() === Workflows.toUpperCase()) {
+                    appGlobals.workFlowIndex = i.toString();
                     break;
                 }
             }
-            if (dojo.workFlowIndex) {
+            if (appGlobals.workFlowIndex) {
                 this._applicationThemeLoader();
-                if (dojo.configData.Workflows[dojo.workFlowIndex].WebMapId && lang.trim(dojo.configData.Workflows[dojo.workFlowIndex].WebMapId).length !== 0) {
+                if (appGlobals.configData.Workflows[appGlobals.workFlowIndex].WebMapId && lang.trim(appGlobals.configData.Workflows[appGlobals.workFlowIndex].WebMapId).length !== 0) {
                     setTimeout(function () {
                         topic.publish("initializeWebmap");
                         topic.publish("loadingIndicatorHandler");
@@ -223,7 +222,6 @@ define([
                 } else {
                     topic.publish("loadBasemapToggleWidget");
                 }
-                this.mapObject._generateLayerURL();
             } else {
                 this.showSplashScreenDialog(map);
             }

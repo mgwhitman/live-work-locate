@@ -1,11 +1,10 @@
 ﻿@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (-webkit-min-device-pixel-ratio: 2)
 {
-
-    .esriCTTdHeaderSearch
+    .esriCTHeaderSearch
     {
         background-image: url("../images/img2X/search@2X.png") !important;
     }
-    .esriCTTdHeaderSearch-select
+    .esriCTHeaderSearch-select
     {
         background-image: url("../images/img2X/search-select@2X-green.png") !important;
     }
@@ -48,14 +47,13 @@
     }
 }
 
-
 @media screen and (max-width: 1024px)
 {
-    .esriCTTdHeaderSearch
+    .esriCTHeaderSearch
     {
         background-image: url("../images/img44x44/search.png") !important;
     }
-    .esriCTTdHeaderSearch-select
+    .esriCTHeaderSearch-select
     {
         background-image: url("../images/img44x44/search-select-green.png") !important;
     }
@@ -77,14 +75,7 @@
     {
         background-image: url("../images/img44x44/imgSocialMedia-select-green.png") !important;
     }
-    .esriCTRouteImg
-    {
-        background-image: url("../images/img44x44/get-route.png") !important;
-    }
-    .esriCTRouteImg-select
-    {
-        background-image: url("../images/img44x44/get-route-select-green.png") !important;
-    }
+
     .facebook
     {
         background-image: url("../images/img44x44/img_facebook_green.png") !important;
@@ -110,7 +101,7 @@
 }
 
 /*main browser theme*/
-.esriCTTdHeaderSearch
+.esriCTHeaderSearch
 {
     background-image: url("../images/img24x24/search-24.png");
 }
@@ -119,7 +110,7 @@
     background-image: url("../images/img24x24/Help-24.png");
 }
 
-.esriCTTdHeaderSearch-select
+.esriCTHeaderSearch-select
 {
     background-image: url("../images/img24x24/search-select-green-24.png");
 }
@@ -135,14 +126,7 @@
 {
     background-image: url("../images/img24x24/imgSocialMedia-24.png");
 }
-.esriCTRouteImg
-{
-    background-image: url("../images/img24x24/get-route-24.png");
-}
-.esriCTRouteImg-select
-{
-    background-image: url("../images/img24x24/get-route-select-green-24.png");
-}
+
 .facebook
 {
     background-image: url("../images/img24x24/img_facebook_green-24.png");
@@ -169,10 +153,7 @@
 {
     background-image: url("../images/search-green.png") !important;
 }
-.simpleDirections .esriStopsReverse
-{
-    background: url("../images/direction-green.png") !important;
-}
+
 .infoTitleArrow
 {
     background-image: url("../images/right-green-arrow.png");
@@ -189,26 +170,10 @@
 {
     background: url("../images/green-arrow.png");
 }
-.esriCTRightArrow
-{
-    background-image: url("../images/right-green_Legend-arrow.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-.esriCTLeftArrow
-{
-    background-image: url('../images/left-green_Legend-arrow.png');
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-.esriCTArrow
-{
-    background-image: url("../images/right-green_Legend-arrow.png") !important;
-}
 
-.esriCTLeftArrow
+.esriCTLeftArrow, .esriCTRightArrow
 {
-    background-image: url("../images/left-green_Legend-arrow.png") !important;
+    background-color: #028D6A !important;
 }
 
 .esriCTApplicationHeader
@@ -246,11 +211,10 @@
     color: #028D6A !important;
 }
 
-.legenboxInner
+.esriCTDivLegendInnerBox
 {
     border: 1px solid #028D6A;
 }
-
 
 .esriInfoPanelContainer
 {
@@ -258,41 +222,6 @@
 }
 
 .esriCTHeaderLine
-{
-    color: #028D6A !important;
-}
-
-.esriCTRouteToplabel
-{
-    color: #028D6A;
-}
-
-.esriCTRouteMapName
-{
-    color: #028D6A;
-}
-
-.esriCTRouteMapNum
-{
-    color: #028D6A;
-}
-
-.esriCTRouteMapArrow
-{
-    color: #028D6A;
-}
-
-.esriCTRouteToplabelBackView
-{
-    color: #028D6A;
-}
-
-.esriCTRouteBAck
-{
-    color: #028D6A;
-}
-
-.esriCTdivShowReRouteContainer
 {
     color: #028D6A !important;
 }
@@ -410,7 +339,6 @@
 }
 /*share*/
 
-
 /*grouped address*/
 
 .esriCTResultColor
@@ -463,23 +391,17 @@
 }
 /*legends */
 
-.legendbox
+.esriCTDivLegendBoxContent
 {
     background: #FFFFFF;
 }
 
-.legenboxInner
-{
-    border: 1px solid #028D6A;
-    border-bottom: none !important;
-}
-
-.legendlbl
+.esriCTDivLegendLabel
 {
     color: #6e6e6e;
 }
 
-.legenboxInner div
+.esriCTDivLegendInnerBox div
 {
     color: #6e6e6e;
 }

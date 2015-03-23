@@ -28,10 +28,10 @@ define([
 
     CommonShare = declare("js.CommonShare", null, {
         /**
-         * Create the tiny url
-         * @param {string} urlStr is url to shrink
-         * @param {string} tinyURLServiceURL is Bitly service
-         */
+        * Create the tiny url
+        * @param {string} urlStr is url to shrink
+        * @param {string} tinyURLServiceURL is Bitly service
+        */
         getTinyLink: function (urlStr, tinyURLServiceURL) {
             var encodedUri, shareUrl, deferred;
 
@@ -62,23 +62,26 @@ define([
 
 
         /**
-         * share application detail with selected share option
-         * @param {Deferred} waitForUrl is deferred for shrinking url to share
-         * @param {object} mapSharingOptions sharing site urls
-         * @param {string} site Selected share option
-         */
+        * share application detail with selected share option
+        * @param {Deferred} waitForUrl is deferred for shrinking url to share
+        * @param {object} mapSharingOptions sharing site urls
+        * @param {string} site Selected share option
+        */
         share: function (waitForUrl, mapSharingOptions, site) {
             waitForUrl.then(function (urlToShare) {
-                var encodedUri = encodeURIComponent(urlToShare);
+                var sociaMediaWindow;
+                if (site === "facebook" || site === "twitter") {
+                    sociaMediaWindow = window.open('', '_blank');
+                }
                 switch (site) {
                 case "facebook":
-                    window.open(string.substitute(mapSharingOptions.FacebookShareURL, [encodedUri]));
+                    sociaMediaWindow.location.href = string.substitute(mapSharingOptions.FacebookShareURL, [urlToShare]);
                     break;
                 case "twitter":
-                    window.open(string.substitute(mapSharingOptions.TwitterShareURL, [encodedUri]));
+                    sociaMediaWindow.location.href = string.substitute(mapSharingOptions.TwitterShareURL, [urlToShare]);
                     break;
                 case "email":
-                    parent.location = string.substitute(mapSharingOptions.ShareByMailLink, [encodedUri]);
+                    parent.location = string.substitute(mapSharingOptions.ShareByMailLink, [urlToShare]);
                     break;
                 }
             });

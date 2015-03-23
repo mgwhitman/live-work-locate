@@ -17,11 +17,14 @@
  */
 define({
     root: {
-        showNullValue: "N/A",
         titles: {
             webpageDispalyText: "Copy/paste HTML into your web page",
             moreInfo: "Website",
-            sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
+            sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins ${mode}</span>",
+            driveTimeText: "drive",
+            walkTimeText: "walk",
+            showDistanceText: "Show distance",
+            attachmentText: "Attachments:"
         },
         errorMessages: {
             noSearchSettingAvailable: "No search setting is available",
@@ -55,7 +58,8 @@ define({
             locateAddress: "LocateAddress",
             loadingText: "Loading...",
             previous: "Previous",
-            next: "Next"
+            next: "Next",
+            infowindowCloseBtn: "Close"
         }
     },
 
