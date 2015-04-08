@@ -29,13 +29,14 @@ define([
     "esri/request",
     "esri/arcgis/utils",
     "dojo/dom-class",
+    "dojo/on",
     "dojo/query",
     "dojo/topic",
     "dojo/dom-style",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "esri/dijit/BasemapGallery",
     "dojo/domReady!"
-], function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, all, esriRequest, esriUtils, domClass, query, topic, domStyle, sharedNls, BasemapGallery) {
+], function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, all, esriRequest, esriUtils, domClass, on, query, topic, domStyle, sharedNls, BasemapGallery) {
 
     //========================================================================================================================//
 
@@ -88,15 +89,20 @@ define([
                 all(deferredArray).then(lang.hitch(this, function () {
                     try {
                         if (appGlobals.configData.SplashScreen) {
+                            //initialize splash screen
                             splashScreen = new SplashScreen();
                             appUrl = window.location.toString();
+                            //check if any workflow is configured
                             if (appGlobals.configData.Workflows.length > 0) {
                                 if (appGlobals.configData.Workflows.length === 1) {
+                                    //load app with workflow if only one workflow is available
                                     location.hash = "?app=" + appGlobals.configData.Workflows[0].Name;
                                     splashScreen._hideSplashScreenDialog();
                                     splashScreen._loadSelectedWorkflow(appGlobals.configData.Workflows[0].Name, map);
                                 } else {
+                                    //check if workflow is shared in app URL
                                     if (appUrl.split("?app=").length > 1) {
+                                        //check if extent is shared in app URL
                                         if (appUrl.split("$extent=").length > 1) {
                                             appGlobals.share = true;
                                             workflow = appUrl.split("?app=")[1].split("$")[0].toUpperCase();
@@ -107,11 +113,14 @@ define([
                                             }
                                         }
                                         splashScreen._hideSplashScreenDialog();
+                                        //display shared workflow
                                         splashScreen._loadSelectedWorkflow(workflow, map);
                                     } else {
+                                        //display splash screen if no workflow is given in app URL
                                         if (appGlobals.configData.SplashScreen.IsVisible && appGlobals.configData.Workflows.length > 1) {
                                             splashScreen.showSplashScreenDialog(map);
                                         } else {
+                                            //display workflow if only one is available in config
                                             location.hash = "?app=" + appGlobals.configData.Workflows[0].Name;
                                             splashScreen._hideSplashScreenDialog();
                                             splashScreen._loadSelectedWorkflow(appGlobals.configData.Workflows[0].Name, map);
@@ -133,6 +142,7 @@ define([
                         this._createApplicationHeader(widgets, map, splashScreen);
 
                     } catch (ex) {
+                        //display error message if app fails to load widgets
                         alert(sharedNls.errorMessages.widgetNotLoaded);
                     }
 
@@ -167,10 +177,12 @@ define([
         _setWorkflowConfig: function () {
             var i, WorkFlows = [];
             for (i = 0; i < appGlobals.configData.Workflows.length; i++) {
+                //check if workflow is visibility is set to true in config
                 if (appGlobals.configData.Workflows[i].Visible) {
                     WorkFlows.push(appGlobals.configData.Workflows[i]);
                 }
             }
+            //update array to contain visible workflows
             appGlobals.configData.Workflows = WorkFlows;
         },
 
@@ -263,7 +275,7 @@ define([
                 agolBasemapsCollection = new BasemapGallery({
                     showArcGISBasemaps: true
                 });
-                dojo.connect(agolBasemapsCollection, "onLoad", function () {
+                on(agolBasemapsCollection, "load", function () {
                     /**
                     * onLoad, loop through each basemaps in the basemap gallery and push it into "baseMapArray"
                     */
@@ -294,6 +306,7 @@ define([
                     }
                 }
             }
+            //update basemap array when new workflow is selected
             appGlobals.configData.BaseMapLayers = temBaseMapArray;
         },
 
@@ -310,13 +323,12 @@ define([
                     bmLayerData = [];
                     bmLayerData.push(bmLayers);
                 }
+                //check if basemap is an open street map
                 if (bmLayerData[0].layerType === "OpenStreetMap" || bmLayerData[0].type === "OpenStreetMap") {
                     bmLayerData[0].url = bmLayerData[0].id;
                 }
                 if (this._isUniqueBasemap(baseMapArray, bmLayerData, isWorkFlowBasemap)) {
-                    if (isWorkFlowBasemap) {
-                        appGlobals.shareOptions.selectedBasemapIndex = baseMapArray.length;
-                    } else if (bmLayerData[0].visibility) {
+                    if (isWorkFlowBasemap || bmLayerData[0].visibility) {
                         appGlobals.shareOptions.selectedBasemapIndex = baseMapArray.length;
                     }
                     if (bmLayerData.length === 1) {
@@ -387,7 +399,6 @@ define([
                 }
             }
             return pushBasemap;
-
         },
 
         /**
@@ -449,10 +460,10 @@ define([
                     deferred.resolve();
                 });
                 deferredArray.push(basemapRequest);
-                all(deferredArray).then(function (res) {
-                    basemapDeferred.resolve(baseMapArray);
-                });
             }));
+            all(deferredArray).then(function (res) {
+                basemapDeferred.resolve(baseMapArray);
+            });
         }
     });
 });

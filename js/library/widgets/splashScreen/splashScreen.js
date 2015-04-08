@@ -62,7 +62,7 @@ define([
             * create UI for splashscreen
             * @memberOf widgets/splashScreen/splashScreen
             */
-            this.domNode = domConstruct.create("div", { "class": "esriGovtLoadSpashScreen" }, dojo.body());
+            this.domNode = domConstruct.create("div", { "class": "esriGovtLoadSpashScreen" }, document.body);
             this.domNode.appendChild(this.splashScreenScrollBarOuterContainer);
             domConstruct.create("div", { "class": "esriGovtLoadingIndicator", "id": "splashscreenlodingIndicator" }, this.splashScreenScrollBarOuterContainer);
             holder = domConstruct.create("div", { "class": "holder", "id": "splashscreenUList" }, this.splashScreenScrollBarContainer);

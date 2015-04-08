@@ -74,8 +74,8 @@ define([
             topic.subscribe("updateLegends", lang.hitch(this, function (geometry) {
                 this._updatedLegend(geometry);
             }));
-            this.own(on(window, "orientationchange", lang.hitch(this, this._resetSlideControls)));
-            this.own(on(window, "resize", lang.hitch(this, this._resetSlideControls)));
+            this.own(on(window, "orientationchange", lang.hitch(this, this._resetLegendContainer)));
+            this.own(on(window, "resize", lang.hitch(this, this._resetLegendContainer)));
         },
 
 
@@ -125,7 +125,6 @@ define([
                         }
                     }
                     this._displayHostedLayerRenderer(mapExtent);
-                    this._addlegendListWidth();
                 }));
             }
 
@@ -183,8 +182,9 @@ define([
                     this._addFieldValue(this._layerCollection, mapExtent);
                 }
             }));
-            this._displayWebmapRenderer(mapExtent);
-            this._addlegendListWidth();
+            if (this.webmapUpdatedRenderer) {
+                this._displayWebmapRenderer(mapExtent);
+            }
         },
 
         /**
@@ -198,8 +198,6 @@ define([
             this._resetLegendContainer();
             domConstruct.empty(this.divLegendContent);
             this._addlegendListWidth();
-            domStyle.set(this.divRightArrow, "display", "none");
-            domStyle.set(this.divLeftArrow, "display", "none");
             //display loading text in legend container
             domConstruct.create("span", { "innerHTML": sharedNls.tooltips.loadingText, "class": "esriCTDivLegendLoadingContainer" }, this.divLegendContent);
             if (!geometry) {
@@ -330,8 +328,11 @@ define([
                                     this._executeQueryTask(layer, defQueryArray, queryParams, hasDrawingInfo);
                                 }
                             } else {
-                                //set query string for simple renderer
+                                if (!layerObject.title) {
+                                    layerObject.title = layerObject.name;
+                                }
                                 this.rendererArray.push(layerObject);
+                                //set query string for simple renderer
                                 queryParams.where = currentTime.getTime() + "=" + currentTime.getTime();
                                 this._executeQueryTask(layer, defQueryArray, queryParams, hasDrawingInfo);
                             }
@@ -630,13 +631,13 @@ define([
                     divLegendList = domConstruct.create("div", { "class": "esriCTDivLegendList" }, this.divLegendContent);
                     divLegendImage = domConstruct.create("div", { "class": "esriCTDivLegend" }, divLegendList);
                     if (renderer.symbol.url) {
-                        height = renderer.symbol.height ? renderer.symbol.height < 5 ? 5 : renderer.symbol.height : 15;
-                        width = renderer.symbol.width ? renderer.symbol.width < 5 ? 5 : renderer.symbol.width : 15;
+                        height = renderer.symbol.height ? renderer.symbol.height < 5 ? 5 : renderer.symbol.height : 20;
+                        width = renderer.symbol.width ? renderer.symbol.width < 5 ? 5 : renderer.symbol.width : 20;
                         imageHeightWidth = { width: width + 'px', height: height + 'px' };
                         domConstruct.create("img", { "src": renderer.symbol.url, "style": imageHeightWidth }, divLegendImage);
                     }
                     divLegendLabel = domConstruct.create("div", { "class": "esriCTDivLegendLabel", "innerHTML": layerTitle }, divLegendList);
-                    legendWidth = divLegendLabel.offsetWidth + width + 60;
+                    legendWidth = divLegendLabel.offsetWidth + width + 40;
                     this.legendListWidth.push(legendWidth);
                 }
             }
@@ -647,21 +648,18 @@ define([
         * @memberOf widgets/legends/legends
         */
         _createSymbol: function (symbolType, url, color, width, height, imageData, label) {
-            var divLegendList, bgColor, divLegendLabel, divLegendImage, divSymbol, image, legendWidth;
+            var divLegendList, bgColor, divLegendLabel, divLegendImage, divSymbol, legendWidth, imageHeightWidth;
             divLegendList = domConstruct.create("div", { "class": "esriCTDivLegendList" }, this.divLegendContent);
-            divLegendImage = domConstruct.create("div", { "class": "esriCTDivLegend" }, null);
+            divLegendImage = domConstruct.create("div", { "class": "esriCTDivLegend" }, divLegendList);
             height = height ? height < 5 ? 5 : height : 20;
             width = width ? width < 5 ? 5 : width : 20;
+            imageHeightWidth = { width: width + 'px', height: height + 'px' };
             if (symbolType === "picturemarkersymbol" && url) {
-                image = this._createImage(url, "", false, width, height);
-                divLegendImage.appendChild(image);
-                divLegendList.appendChild(divLegendImage);
+                domConstruct.create("img", { "src": "data:image/gif;base64," + url, "style": imageHeightWidth }, divLegendImage);
             } else if (symbolType === "esriPMS" && url) {
-                image = this._createImage("data:image/gif;base64," + imageData, "", false, width, height);
-                divLegendImage.appendChild(image);
-                divLegendList.appendChild(divLegendImage);
+                domConstruct.create("img", { "src": "data:image/gif;base64," + imageData, "style": imageHeightWidth }, divLegendImage);
             } else {
-                divSymbol = document.createElement("div");
+                divSymbol = domConstruct.create("div", { "style": imageHeightWidth }, null);
                 if (color.r || color.r === 0) {
                     if (color.a || color.a === 0) {
                         bgColor = 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',' + color.a + ')';
@@ -679,14 +677,11 @@ define([
                     }
                 }
                 divSymbol.style.background = bgColor;
-                divSymbol.style.height = height + "px";
-                divSymbol.style.width = width + "px";
                 divLegendImage.appendChild(divSymbol);
-                divLegendList.appendChild(divLegendImage);
             }
             divLegendLabel = domConstruct.create("div", { "class": "esriCTDivLegendLabel", "innerHTML": label }, null);
             divLegendList.appendChild(divLegendLabel);
-            legendWidth = divLegendLabel.offsetWidth + width + 60;
+            legendWidth = divLegendLabel.offsetWidth + width + 40;
             this.legendListWidth.push(legendWidth);
         },
 
@@ -839,7 +834,6 @@ define([
                     }
                 }
             }
-            this._addlegendListWidth();
             return isLegendCreated;
         },
 
@@ -885,8 +879,8 @@ define([
             if (legend) {
                 divLegendList = domConstruct.create("div", { "class": "esriCTDivLegendList" }, this.divLegendContent);
                 divLegendImage = domConstruct.create("div", { "class": "esriCTDivLegend" }, divLegendList);
-                height = height ? height < 5 ? 5 : height : 20;
-                width = width ? width < 5 ? 5 : width : 20;
+                height = legend.height ? legend.height < 5 ? 5 : legend.height : 20;
+                width = legend.width ? legend.width < 5 ? 5 : legend.width : 20;
                 imageHeightWidth = { width: width + 'px', height: height + 'px' };
                 domConstruct.create("img", { "src": "data:image/gif;base64," + legend.imageData, "style": imageHeightWidth }, divLegendImage);
                 divLegendLabel = domConstruct.create("div", { "class": "esriCTDivLegendLabel" }, divLegendList);
@@ -895,28 +889,9 @@ define([
                 } else {
                     domAttr.set(divLegendLabel, "innerHTML", layerName);
                 }
-                width = divLegendLabel.offsetWidth + width + 60;
+                width = divLegendLabel.offsetWidth + width + 40;
                 this.legendListWidth.push(width);
             }
-        },
-
-        /*
-        * displays the picture marker symbol
-        * @memberOf widgets/legends/legends
-        */
-        _createImage: function (imageSrc, title, isCursorPointer, imageWidth, imageHeight) {
-            var imgLocate, imageHeightWidth;
-            imgLocate = domConstruct.create("img");
-            imageHeight = imageHeight ? imageHeight < 5 ? 5 : imageHeight : 20;
-            imageWidth = imageWidth ? imageWidth < 5 ? 5 : imageWidth : 20;
-            imageHeightWidth = { width: imageWidth + 'px', height: imageHeight + 'px' };
-            domAttr.set(imgLocate, "style", imageHeightWidth);
-            if (isCursorPointer) {
-                domStyle.set(imgLocate, "cursor", "pointer");
-            }
-            domAttr.set(imgLocate, "src", imageSrc);
-            domAttr.set(imgLocate, "title", title);
-            return imgLocate;
         }
     });
 });
