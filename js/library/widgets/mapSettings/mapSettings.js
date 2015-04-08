@@ -69,7 +69,6 @@ define([
         logoContainer: null,
         infoWindowPanel: null,
         operationalLayers: [],
-        featureOnMap: true,
         /**
         * initialize map object
         *
@@ -126,8 +125,6 @@ define([
                 this.map.destroy();
                 this.map = null;
             }
-            this.featureOnMap = false;
-            this.hasMapServer = false;
             this.map = esriMap("esriCTParentDivContainer", {});
             /**
             * load esri 'Home Button' widget
@@ -137,11 +134,11 @@ define([
                 var mapDefaultExtent, extent;
                 extent = this._getQueryString('extent');
                 if (extent === "") {
-                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
+                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(extentPoints[0]), "ymin": parseFloat(extentPoints[1]), "xmax": parseFloat(extentPoints[2]), "ymax": parseFloat(extentPoints[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                     this.map.setExtent(mapDefaultExtent);
                 } else {
                     mapDefaultExtent = decodeURIComponent(extent).split(',');
-                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
+                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                     this.map.setExtent(mapDefaultExtent);
                 }
                 this.map.addLayer(graphicsLayer);
@@ -187,47 +184,14 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _activateMapEvents: function () {
-            var updateLegend;
             this.map.on("click", lang.hitch(this, function (evt) {
-                appGlobals.shareOptions.mapClickedPoint = evt.mapPoint;
                 topic.publish("loadingIndicatorHandler");
                 this._showInfoWindowOnMap(evt.mapPoint);
             }));
             this.map.on("extent-change", lang.hitch(this, function () {
                 //set infowindow position on extent change
                 this._onSetMapTipPosition();
-                clearTimeout(updateLegend);
-                //update legend list for current extent
-                updateLegend = setTimeout(lang.hitch(this, this._updateLegendList), 2000);
             }));
-        },
-
-        /**
-        * update legend list
-        * @memberOf widgets/mapSettings/mapSettings
-        */
-        _updateLegendList: function () {
-            var currentExtent;
-            //update legend list for features present in current extent
-            if (appGlobals.workFlowIndex && (this.hasMapServer || lang.trim(appGlobals.configData.Workflows[appGlobals.workFlowIndex].WebMapId) !== "")) {
-                topic.publish("updateLegends", this.map.extent);
-            } else if (this.featureOnMap && this.serviceAreaGraphic) {
-                //update legend for features present in service area graphic
-                currentExtent = this.serviceAreaGraphic._extent.intersects(this.map.extent);
-                if (this.serviceAreaGraphic._extent.contains(this.map.extent)) {
-                    //if service area is larger
-                    topic.publish("updateLegends", this.map.extent);
-                } else if (currentExtent) {
-                    //if service area fits into the current map extent
-                    topic.publish("updateLegends", currentExtent);
-                } else {
-                    //display no legend for map services if service area is not visible in current extent
-                    topic.publish("updateLegends", null);
-                }
-            } else {
-                //display no legend for map services if service area and features are not visible in current extent
-                topic.publish("updateLegends", null);
-            }
         },
 
         /**
@@ -353,7 +317,6 @@ define([
                     }
                 }
                 if (query(".esriCTAddressHolder")[0] && selectedFeaturesGroup.length > 0) {
-                    this.featureOnMap = true;
                     if (query(".esriCTHeaderSearch")[0]) {
                         domClass.replace(query(".esriCTHeaderSearch")[0], "esriCTHeaderSearch-select", "esriCTHeaderSearch");
                     }
@@ -361,7 +324,6 @@ define([
                     domClass.replace(query(".esriCTAddressHolder")[0], "esriCTFullHeight", "esriCTAddressContentHeight");
                 }
                 topic.publish("_createList", selectedFeaturesGroup);
-                this._updateLegendList();
             }));
         },
 
@@ -371,14 +333,12 @@ define([
         */
         _clearSelectedFeature: function () {
             if (appGlobals.workFlowIndex && lang.trim(appGlobals.configData.Workflows[appGlobals.workFlowIndex].WebMapId) === "") {
-                this.featureOnMap = false;
                 array.forEach(this.operationalLayers, lang.hitch(this, function (featureLayer) {
                     if (!featureLayer.layerObject) {
                         featureLayer.clearSelection();
                     }
                 }));
             }
-            this._updateLegendList();
             if (this.infoWindowPanel.isShowing && !appGlobals.sharedInfowindow) {
                 topic.publish("hideInfoWindow");
             }
@@ -410,7 +370,7 @@ define([
                 for (i = 0; i < configOperationalLayers.length; i++) {
                     //check if LoadAsService type is feature or dynamic
                     if (configOperationalLayers[i].LoadAsServiceType.toLowerCase() === "feature") {
-                        deferDynamicArr.push(this._addFeatureLayerOnMap(configOperationalLayers[i].ServiceURL, true));
+                        deferDynamicArr.push(this._addFeatureLayerOnMap(configOperationalLayers[i].ServiceURL, true, null));
                     } else if (configOperationalLayers[i].LoadAsServiceType.toLowerCase() === "dynamic") {
                         this._addServiceLayers(deferDynamicArr, configOperationalLayers[i].ServiceURL);
                     }
@@ -423,7 +383,7 @@ define([
                             if (result[i].layerInfos) {
                                 for (j = 0; j < result[i].layerInfos.length; j++) {
                                     layerURL = result[i].url + result[i].layerInfos[j].id;
-                                    defArray.push(this._addFeatureLayerOnMap(layerURL, result[i].loadOnMap));
+                                    defArray.push(this._addFeatureLayerOnMap(layerURL, result[i].loadOnMap, result[i].serviceTitle));
                                 }
                             } else {
                                 //add feature layer response to deferArray to get all layer in sequence
@@ -456,7 +416,7 @@ define([
                         layerId = result[i].url.split('/');
                         layerId = layerId[layerId.length - 1];
                         //fetch layer name
-                        layerTitle = result[i].name;
+                        layerTitle = result[i].title;
                         //check if search setting is configured for this layer
                         searchSetting = this._getConfigSearchSetting(layerTitle, layerId);
                         if (searchSetting) {
@@ -469,13 +429,12 @@ define([
                             if (!result[i].isMapServerLayer) {
                                 //add layer to global array
                                 this.operationalLayers.push(result[i]);
-                            } else {
-                                this.hasMapServer = true;
                             }
                         }
                         layerDetails = {};
                         layerDetails = this._getConfigInfoData(layerTitle, layerId);
                         layerDetails.layer = result[i];
+                        layerDetails.InfoQueryURL = result[i].url;
                         layerDetails.index = i;
                         //check if layer has attachments
                         if (result[i].hasAttachments) {
@@ -499,7 +458,7 @@ define([
         * add layer on map as feature layer
         * @memberOf widgets/mapSettings/mapSettings
         */
-        _addFeatureLayerOnMap: function (layerUrl, isAddOnMap) {
+        _addFeatureLayerOnMap: function (layerUrl, isAddOnMap, mapServerTitle) {
             var featureLayer, defer = new Deferred();
             //add layer on map as a feature service
             featureLayer = new FeatureLayer(layerUrl, {
@@ -514,9 +473,10 @@ define([
             //get layer data when layer gets loaded
             on(featureLayer, "load", function (evt) {
                 if (!isAddOnMap) {
-                    evt.layer.isMapServerLayer = true;
                     evt.layer.visibleAtMapScale = true;
+                    evt.layer.isMapServerLayer = true;
                 }
+                evt.layer.title = mapServerTitle || evt.layer.name;
                 defer.resolve(evt.layer);
             }, function () {
                 defer.resolve();
@@ -596,14 +556,17 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _addHostedServices: function (layerURL) {
-            var defer, layerObj = {};
+            var defer, featureLayerURL, serviceTitle, layerObj = {};
             defer = new Deferred();
+            featureLayerURL = layerURL.split("/");
+            serviceTitle = featureLayerURL[featureLayerURL.length - 3];
             esri.request({
                 url: layerURL + "?f=json",
                 load: function (data) {
                     layerObj.url = layerURL;
                     layerObj.layerInfos = data.layers;
                     layerObj.loadOnMap = true;
+                    layerObj.serviceTitle = serviceTitle;
                     defer.resolve(layerObj);
                 },
                 error: function () {
@@ -620,12 +583,15 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _createDynamicServiceLayer: function (dynamicLayer, imageParams) {
-            var dynamicMapService, defer = new Deferred();
+            var dynamicMapService, layerURL, serviceTitle, defer = new Deferred();
+            layerURL = dynamicLayer.split("/");
+            serviceTitle = layerURL[layerURL.length - 3];
             dynamicMapService = new ArcGISDynamicMapServiceLayer(dynamicLayer, {
                 imageParameters: imageParams
             });
             this.map.addLayer(dynamicMapService);
             dynamicMapService.on("load", lang.hitch(this, function (evt) {
+                evt.layer.serviceTitle = serviceTitle;
                 defer.resolve(evt.layer);
             }), function () {
                 defer.resolve();
@@ -704,7 +670,7 @@ define([
             }
             this.legendObject = new Legends({
                 map: this.map,
-                isExtentBasedLegend: true
+                isExtentBasedLegend: false
             }, domConstruct.create("div", {}, null));
             return this.legendObject;
         },
@@ -714,7 +680,7 @@ define([
         * @memberOf widgets/mapSettings/mapSettings
         */
         _addLayerLegend: function (opLayers) {
-            var mapServerArray = [], legendObject, i, mapExtent = null;
+            var mapServerArray = [], legendObject, i;
             if (appGlobals.configData.ShowLegend) {
                 if (query(".esriControlsBR")[0]) {
                     domClass.add(query(".esriControlsBR")[0], "esriLogoLegend");
@@ -724,11 +690,8 @@ define([
                         mapServerArray.push({ "url": opLayers[i].layer.url, "title": opLayers[i].layer.name });
                     }
                 }
-                if (this.hasMapServer) {
-                    mapExtent = this.map.extent;
-                }
                 legendObject = this._addLegendBox();
-                legendObject.startup(mapServerArray, null, mapExtent);
+                legendObject.startup(mapServerArray, null, this.map.extent);
                 topic.publish("setMaxLegendLength");
             }
         },
@@ -800,11 +763,11 @@ define([
                 graphicsLayer.id = this.tempGraphicsLayerId;
                 this.map.addLayer(graphicsLayer);
                 this.map.reorderLayer(graphicsLayer, this.map.graphicsLayerIds.length - 1);
-
+                //set default extent for webmap
                 extent = this._getQueryString('extent');
                 if (extent !== "") {
                     mapDefaultExtent = decodeURIComponent(extent).split(',');
-                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid } });
+                    mapDefaultExtent = new GeometryExtent({ "xmin": parseFloat(mapDefaultExtent[0]), "ymin": parseFloat(mapDefaultExtent[1]), "xmax": parseFloat(mapDefaultExtent[2]), "ymax": parseFloat(mapDefaultExtent[3]), "spatialReference": { "wkid": this.map.spatialReference.wkid} });
                     this.map.setExtent(mapDefaultExtent);
                 } else {
                     mapDefaultExtent = this.map.extent;
@@ -930,8 +893,8 @@ define([
             var i, defer, deferArray = [], layerDetails, operationalLayersData = [], mapServerData;
             topic.publish("loadingIndicatorHandler");
             for (i = 0; i < operationalLayers.length; i++) {
-                if (operationalLayers[i].visibility) {
-                    mapServerData = operationalLayers[i].layers || operationalLayers[i].layerObject.layerInfos;
+                if (operationalLayers[i].visibility && operationalLayers[i].layerObject) {
+                    mapServerData = operationalLayers[i].resourceInfo.layers || operationalLayers[i].layerObject.layerInfos;
                     if (mapServerData) {
                         //get layer object of layers
                         this._getDynamicLayerInfo(operationalLayers[i], mapServerData, deferArray);
@@ -1015,12 +978,27 @@ define([
             for (i = 0; i < mapServerData.length; i++) {
                 //check visibility of operational layer
                 if (array.indexOf(operationalLayer.layerObject.visibleLayers, mapServerData[i].id) !== -1) {
-                    operationalLayerObj = mapServerData[i];
-                    operationalLayerObj.title = operationalLayer.title;
+                    operationalLayerObj = this._getLayerObject(operationalLayer, mapServerData[i]);
+                    operationalLayerObj.title = mapServerData[i].name;
                     layerUrl = url + "/" + mapServerData[i].id;
                     deferArray.push(this._loadFeatureLayer(layerUrl, operationalLayerObj));
                 }
             }
+        },
+
+        /**
+        * get layer object info
+        * @memberOf widgets/mapSettings/mapSettings
+        */
+        _getLayerObject: function (operationalLayer, layerData) {
+            var i;
+            for (i = 0; i < operationalLayer.layers.length; i++) {
+                if (operationalLayer.layers[i].id === layerData.id) {
+                    layerData = operationalLayer.layers[i];
+                    break;
+                }
+            }
+            return layerData;
         },
 
         /**
@@ -1032,6 +1010,9 @@ define([
             featureLayer = new FeatureLayer(layerUrl);
             on(featureLayer, "load", lang.hitch(this, function (evt) {
                 layerObjectParam = layerObject;
+                if (!layerObjectParam.title) {
+                    layerObjectParam.title = evt.layer.name;
+                }
                 layerObjectParam.layerObject = evt.layer;
                 layerObjectParam.url = evt.layer.url;
                 layerObject.layerObject.visibleAtMapScale = true;
@@ -1072,6 +1053,7 @@ define([
         _setLayerSearchSetting: function (opLayersData) {
             var configSearchSettings, i, j, layerTitle, urlstr, layerId;
             configSearchSettings = appGlobals.configData.Workflows[appGlobals.workFlowIndex].SearchSettings;
+            this.operationalLayers = [];
             for (i = 0; i < configSearchSettings.length; i++) {
                 for (j = 0; j < opLayersData.length; j++) {
                     //get layer title
@@ -1232,6 +1214,7 @@ define([
         _fetchQueryResults: function (featureArray, mapPoint) {
             var point;
             if (featureArray.length > 0) {
+                appGlobals.shareOptions.mapClickedPoint = mapPoint;
                 this.count = 0;
                 //take feature's geometry if geometry type is point else take map point where map is clicked
                 if (featureArray[0].attr.geometry.type !== "point") {

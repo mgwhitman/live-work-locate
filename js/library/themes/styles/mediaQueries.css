@@ -113,11 +113,6 @@
         font-size: 14px !important;
     }
 
-    .esriCTPopupFeatureCount
-    {
-        padding-top: 0px !important;
-    }
-
     .esriCTDisplayField, .esriCTValueField
     {
         font-size: 14px !important;
@@ -208,11 +203,6 @@
     .esriCTDisplayField, .esriCTValueField
     {
         font-size: 14px !important;
-    }
-
-    .esriCTPopupFeatureCount
-    {
-        padding-top: 0px !important;
     }
 
     .esriCTApplicationHeaderIcon

@@ -18,9 +18,12 @@
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
+    "dojo/_base/lang",
     "dijit/_WidgetBase",
-    "dojo/dom-geometry"
-], function (declare, WidgetBase, domGeom) {
+    "dojo/dom-construct",
+    "dojo/dom-geometry",
+    "dojo/on"
+], function (declare, lang, WidgetBase, domConstruct, domGeom, on) {
 
     //========================================================================================================================//
 
@@ -54,8 +57,8 @@ define([
             this._containerHeight = coords.h;
             this._containerWidth = coords.w;
 
-            this._scrollBarContainer = dojo.create("div", {}, this.domNode);
-            this._scrollBarContent = dojo.create("div", { "class": "scrollbar_content" }, this._scrollBarContainer);
+            this._scrollBarContainer = domConstruct.create("div", {}, this.domNode);
+            this._scrollBarContent = domConstruct.create("div", { "class": "scrollbar_content" }, this._scrollBarContainer);
 
             this._scrollBarContent.style.width = this._containerWidth + "px";
             this._scrollBarContent.style.height = this._containerHeight + "px";
@@ -78,7 +81,7 @@ define([
         * @memberOf widgets/scrollbar/scrollbar
         */
         removeContent: function () {
-            dojo.destroy(this._scrollableContent);
+            domConstruct.destroy(this._scrollableContent);
         },
 
         /**
@@ -86,7 +89,7 @@ define([
         * @memberOf widgets/scrollbar/scrollbar
         */
         resetScrollBar: function (duration) {
-            setTimeout(dojo.hitch(this, function () {
+            setTimeout(lang.hitch(this, function () {
                 this._registerScrollbar();
             }), duration);
         },
@@ -97,7 +100,7 @@ define([
         */
         rePositionScrollBar: function (duration) {
             if (this._scrollableContent) {
-                var coords = dojo.coords(this.domNode);
+                var coords = domGeom.getMarginBox(this.domNode);
                 this._containerHeight = coords.h;
                 this._containerWidth = coords.w;
                 this._scrollBarContent.style.height = (this._containerHeight) + "px";
@@ -117,8 +120,8 @@ define([
         removeScrollBar: function () {
             if (this._scrollBarTrack) {
                 this._currentTop = domGeom.getMarginBox(this._scrollBarHandle).t;
-                dojo.destroy(this._scrollBarTrack);
-                dojo.destroy(this._scrollBarContainer);
+                domConstruct.destroy(this._scrollBarTrack);
+                domConstruct.destroy(this._scrollBarContainer);
             }
         },
 
@@ -127,10 +130,10 @@ define([
         * @memberOf widgets/scrollbar/scrollbar
         */
         createScrollBar: function (duration) {
-            setTimeout(dojo.hitch(this, function () {
-                this._scrollBarTrack = dojo.create("div", { "class": "scrollbar_track" }, this._scrollBarContent);
+            setTimeout(lang.hitch(this, function () {
+                this._scrollBarTrack = domConstruct.create("div", { "class": "scrollbar_track" }, this._scrollBarContent);
                 this._scrollBarTrack.style.height = this._containerHeight + "px";
-                this._scrollBarHandle = dojo.create("div", { "class": "scrollbar_handle esriCTRoundedCorner" }, this._scrollBarTrack);
+                this._scrollBarHandle = domConstruct.create("div", { "class": "scrollbar_handle esriCTRoundedCorner" }, this._scrollBarTrack);
                 this._scrollBarHandle.style.top = this._currentTop + "px";
                 this._registerScrollbar();
             }), duration);
@@ -152,17 +155,18 @@ define([
                 this._yMax = this._scrollBarContent.offsetHeight - this._scrollBarHandle.offsetHeight;
 
                 if (window.addEventListener) {
-                    this._scrollBarContent.addEventListener("DOMMouseScroll", dojo.hitch(this, "_scrollContent"), false);
+                    this._scrollBarContent.addEventListener("DOMMouseScroll", lang.hitch(this, "_scrollContent"), false);
                 }
-                dojo.connect(this._scrollBarContent, "onmousewheel", this, "_scrollContent");
-                this._scrollBarTrack.onclick = dojo.hitch(this, "_setScroll");
-                dojo.connect(this._scrollBarHandle, "onmousedown", this, "_onDragStart");
-                document.onmouseup = dojo.hitch(this, "_onDragEnd");
 
-                dojo.connect(this._scrollBarContainer, "touchstart", this, "_onTouchStart");
-                dojo.connect(this._scrollBarContainer, "touchmove", this, "_onTouchMove");
-                dojo.connect(this._scrollBarContent, "touchstart", this, "_onTouchNoop");
-                dojo.connect(this._scrollBarContent, "touchmove", this, "_onTouchNoop");
+                this._scrollBarContent.onmousewheel = lang.hitch(this, "_scrollContent");
+                this._scrollBarTrack.onclick = lang.hitch(this, "_setScroll");
+                on(this._scrollBarHandle, "mousedown", lang.hitch(this, "_onDragStart"));
+                document.onmouseup = lang.hitch(this, "_onDragEnd");
+
+                this._scrollBarContainer.ontouchstart = lang.hitch(this, "_onTouchStart");
+                this._scrollBarContainer.ontouchmove = lang.hitch(this, "_onTouchMove");
+                this._scrollBarContent.ontouchstart = lang.hitch(this, "_onTouchNoop");
+                this._scrollBarContent.ontouchmove = lang.hitch(this, "_onTouchNoop");
                 this._scrollBarContent.scrollTop = Math.round(this._scrollBarHandle.offsetTop / this._yMax * (this._scrollBarContent.scrollHeight - this._scrollBarContent.offsetHeight));
             }
         },
@@ -196,8 +200,9 @@ define([
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             }
-            evt.preventDefault();
-
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            }
             change = this._touchStartPosition - touch.pageY;
             if (change !== 0) {
                 this._topPosition = this._scrollBarHandle.offsetTop;
@@ -224,7 +229,7 @@ define([
         * @memberOf widgets/scrollbar/scrollbar
         */
         _onTouchEnd: function () {
-            this._scrollingTimer = setTimeout(dojo.hitch(this, function () { clearTimeout(this._scrollingTimer); this._isScrolling = false; }), 100);
+            this._scrollingTimer = setTimeout(lang.hitch(this, function () { clearTimeout(this._scrollingTimer); this._isScrolling = false; }), 100);
         },
 
         /**
@@ -241,10 +246,12 @@ define([
                 if (evt.stopPropagation) {
                     evt.stopPropagation();
                 }
-                dojo.stopEvent(evt);
+                if (evt.preventDefault) {
+                    evt.preventDefault();
+                }
                 this._topPosition = this._scrollBarHandle.offsetTop; // Sliders vertical position at start of slide.
                 if (!evt.offsetY) {
-                    coords = dojo.coords(evt.target);
+                    coords = domGeom.getMarginBox(evt.target);
                     offsetY = evt.layerY - coords.t;
                 } else {
                     offsetY = evt.offsetY;
@@ -276,7 +283,6 @@ define([
         _onDragEnd: function () {
             document.body.onselectstart = null;
             document.onmousemove = null;
-            dojo.disconnect(this._documentMouseMoveHandle);
         },
 
         /**
@@ -290,8 +296,9 @@ define([
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             }
-            dojo.stopEvent(evt);
-
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            }
             this._topPosition = this._scrollBarHandle.offsetTop; // Sliders vertical position at start of slide.
             this._currentYCoordinate = evt.screenY; // Vertical mouse position at start of slide.
             document.body.style.MozUserSelect = "none";
@@ -299,7 +306,7 @@ define([
             document.onselectstart = function () {
                 return false;
             };
-            document.onmousemove = dojo.hitch(this, "_onDocumentMouseMove");
+            document.onmousemove = lang.hitch(this, "_onDocumentMouseMove");
         },
 
         /**
@@ -312,7 +319,9 @@ define([
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             }
-            dojo.stopEvent(evt);
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            }
             var y = this._topPosition + evt.screenY - this._currentYCoordinate;
             if (y > this._yMax) {
                 y = this._yMax;
@@ -336,7 +345,9 @@ define([
             if (evt.stopPropagation) {
                 evt.stopPropagation();
             }
-            dojo.stopEvent(evt);
+            if (evt.preventDefault) {
+                evt.preventDefault();
+            }
             delta = evt.detail ? evt.detail * (-120) : evt.wheelDelta; //delta returns +120 when wheel is scrolled up, -120 when scrolled down
             this._topPosition = this._scrollBarHandle.offsetTop;
 

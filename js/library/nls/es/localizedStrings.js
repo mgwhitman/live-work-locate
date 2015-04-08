@@ -26,18 +26,13 @@ define({
         attachmentText: "@ES@ Attachments:"
     },
     errorMessages: {
-        noSearchSettingAvailable: "@ES@ No search setting is available",
-        fieldNotFound: "@ES@ field not found",
         invalidSearch: "@ES@ No results found",
         falseConfigParams: "@ES@ Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
         invalidLocation: "@ES@ Current Location not found.",
         invalidProjection: "@ES@ Unable to plot current location on the map.",
         widgetNotLoaded: "@ES@ Fail to load widgets.",
         shareLoadingFailed: "@ES@ Unable to shorten URL, Bit.ly failed to load.",
-        shareFailed: "@ES@ Unable to share.",
         noLegend: "@ES@ No Legend Available",
-        invalidSearchSettings: "@ES@ Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
-        invalidBasemapQuery: "@ES@ Invalid BasemapQuery",
         noBasemap: "@ES@ No Basemap Found",
         portalUrlNotFound: "@ES@ Portal URL cannot be empty",
         noWorkflowConfigured: "@ES@ No workflow available"

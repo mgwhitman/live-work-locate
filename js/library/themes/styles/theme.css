@@ -524,7 +524,7 @@ html, body
     margin-bottom: 2px;
     border: #fff solid 0 !important;
     margin-top: 2px;
-    background-color: rgba(102, 102, 102, 0.8);
+    background: rgba(102, 102, 102, 0.8);
     z-index: 999 !important;
 }
 
@@ -741,6 +741,7 @@ html, body
     margin-top: 10px;
     background: #FFF;
     z-index: 1007;
+    max-width: 730px;
 }
 .divSplashInnerContainer
 {
@@ -765,7 +766,7 @@ html, body
     border: none;
     color: #083C88;
     height: 20px !important;
-    width: 600px;
+    max-width: 600px;
     margin: 15px AUTO;
     float: left;
     margin-left: 68px;
@@ -1531,11 +1532,9 @@ html, body
 .esriCTInfoHeaderPanel
 {
     line-height: 30px;
-    width: 50%;
     overflow: hidden;
     white-space: nowrap;
     font-weight: bold;
-    float: left;
     text-overflow: ellipsis;
     margin-left: 5px;
 }
@@ -2089,7 +2088,7 @@ input
     word-break: break-word;
 }
 
-/*scrollbarcontainer*/
+/*scrollbar container*/
 .divInfoScrollContainer
 {
     overflow: hidden;
@@ -2170,7 +2169,7 @@ input
 
 .esriCTCarouselHidden
 {
-    width: 84% !important;
+    padding-right: 35px;
 }
 .spanRouteLength
 {
