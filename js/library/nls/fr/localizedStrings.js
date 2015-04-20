@@ -16,25 +16,23 @@
  | limitations under the License.
  */
 define({
-    showNullValue: "@FR@ N/A",
     titles: {
         webpageDispalyText: "@FR@ Copy/paste HTML into your web page",
         moreInfo: "@FR@ Website",
-        sliderDisplayText: "@FR@ Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
+        sliderDisplayText: "@FR@ Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins ${mode}</span>",
+        driveTimeText: "@FR@ drive",
+        walkTimeText: "@FR@ walk",
+        showDistanceText: "@FR@ Show distance",
+        attachmentText: "@FR@ Attachments:"
     },
     errorMessages: {
-        noSearchSettingAvailable: "@FR@ No search setting is available",
-        fieldNotFound: "@FR@ field not found",
         invalidSearch: "@FR@ No results found",
         falseConfigParams: "@FR@ Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
         invalidLocation: "@FR@ Current Location not found.",
         invalidProjection: "@FR@ Unable to plot current location on the map.",
         widgetNotLoaded: "@FR@ Fail to load widgets.",
         shareLoadingFailed: "@FR@ Unable to shorten URL, Bit.ly failed to load.",
-        shareFailed: "@FR@ Unable to share.",
         noLegend: "@FR@ No Legend Available",
-        invalidSearchSettings: "@FR@ Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
-        invalidBasemapQuery: "@FR@ Invalid BasemapQuery",
         noBasemap: "@FR@ No Basemap Found",
         portalUrlNotFound: "@FR@ Portal URL cannot be empty",
         noWorkflowConfigured: "@FR@ No workflow available"
@@ -54,6 +52,7 @@ define({
         locateAddress: "@FR@ LocateAddress",
         loadingText: "@FR@ Loading...",
         previous: "@FR@ Previous",
-        next: "@FR@ Next"
+        next: "@FR@ Next",
+        infowindowCloseBtn: "@FR@ Close"
     }
 });

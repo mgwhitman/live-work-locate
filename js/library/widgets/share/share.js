@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri,alert */
+﻿/*global define,dojo,dojoConfig,esri,alert,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -102,9 +102,9 @@ define([
             }));
 
             //send request when fb, mail or twitter icon is clicked for sharing
-            on(this.tdFacebook, "click", lang.hitch(this, function () { this._share("facebook"); }));
-            on(this.tdTwitter, "click", lang.hitch(this, function () { this._share("twitter"); }));
-            on(this.tdMail, "click", lang.hitch(this, function () { this._share("email"); }));
+            on(this.divFacebook, "click", lang.hitch(this, function () { this._share("facebook"); }));
+            on(this.divTwitter, "click", lang.hitch(this, function () { this._share("twitter"); }));
+            on(this.divMail, "click", lang.hitch(this, function () { this._share("email"); }));
 
         },
 
@@ -114,25 +114,25 @@ define([
         */
         _showEmbeddingContainer: function () {
             var height;
-            if (domGeom.getMarginBox(this.esriCTDivshareContainer).h > 1) {
-                domClass.add(this.esriCTDivshareContainer, "esriCTShareBorder");
-                domClass.replace(this.esriCTDivshareContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
+            if (domGeom.getMarginBox(this.divShareContainer).h > 1) {
+                domClass.add(this.divShareContainer, "esriCTShareBorder");
+                domClass.replace(this.divShareContainer, "esriCTHideContainerHeight", "esriCTShowContainerHeight");
             } else {
                 height = domGeom.getMarginBox(this.esriCTDivshareCodeContainer).h + domGeom.getMarginBox(this.esriCTDivshareCodeContent).h;
-                domClass.remove(this.esriCTDivshareContainer, "esriCTShareBorder");
-                domClass.replace(this.esriCTDivshareContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
-                domStyle.set(this.esriCTDivshareContainer, "height", height + 'px');
+                domClass.remove(this.divShareContainer, "esriCTShareBorder");
+                domClass.replace(this.divShareContainer, "esriCTShowContainerHeight", "esriCTHideContainerHeight");
+                domStyle.set(this.divShareContainer, "height", height + 'px');
             }
             this._setShareContainerHeight(height);
         },
 
         _setShareContainerHeight: function (embContainerHeight) {
             var contHeight = domStyle.get(this.divAppHolder, "height");
-            if (domClass.contains(this.esriCTDivshareContainer, "esriCTShowContainerHeight")) {
+            if (domClass.contains(this.divShareContainer, "esriCTShowContainerHeight")) {
                 if (embContainerHeight) {
                     contHeight += embContainerHeight;
                 } else {
-                    contHeight += domStyle.get(this.esriCTDivshareContainer, "height");
+                    contHeight += domStyle.get(this.divShareContainer, "height");
                 }
             }
             //adding 2px in height of share container to display border
@@ -170,7 +170,7 @@ define([
 
         /**
         * display sharing panel
-        * @param {array} dojo.configData.MapSharingOptions Sharing option settings specified in configuration file
+        * @param {array} appGlobals.configData.MapSharingOptions Sharing option settings specified in configuration file
         * @memberOf widgets/share/share
         */
         _shareLink: function () {
@@ -178,38 +178,41 @@ define([
             /**
             * get current map extent to be shared
             */
-            if (domGeom.getMarginBox(this.esriCTDivshareContainer).h <= 1) {
-                domClass.add(this.esriCTDivshareContainer, "esriCTShareBorder");
+            if (domGeom.getMarginBox(this.divShareContainer).h <= 1) {
+                domClass.add(this.divShareContainer, "esriCTShareBorder");
             }
             this.esriCTDivshareCodeContent.value = "<iframe width='100%' height='100%' src='" + location.href + "'></iframe> ";
             domAttr.set(this.esriCTDivshareCodeContainer, "innerHTML", sharedNls.titles.webpageDispalyText);
             mapExtent = this._getMapExtent();
             url = esri.urlToObject(window.location.toString());
-            splitUrl = url.path.split("#")[0] + "?app=" + dojo.seletedWorkflow;
+            splitUrl = url.path.split("#")[0] + "?app=" + appGlobals.seletedWorkflow;
             urlStr = encodeURI(splitUrl) + "$extent=" + mapExtent;
-            if (dojo.addressLocation) {
-                locGeom = dojo.addressLocation.geometry.x + "," + dojo.addressLocation.geometry.y;
+            if (appGlobals.shareOptions.addressLocation) {
+                locGeom = appGlobals.shareOptions.addressLocation.geometry.x + "," + appGlobals.shareOptions.addressLocation.geometry.y;
                 urlStr += "$locationPoint=" + locGeom;
-                if (dojo.infoWindowIsShowing) {
-                    if (dojo.mapClickedPoint) {
-                        clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
+                if (appGlobals.shareOptions.infoWindowIsShowing) {
+                    if (appGlobals.shareOptions.mapClickedPoint) {
+                        clickCoords = appGlobals.shareOptions.mapClickedPoint.x + "," + appGlobals.shareOptions.mapClickedPoint.y;
                         urlStr += "$mapClickPoint=" + clickCoords;
                     } else {
-                        urlStr += "$layerID=" + dojo.layerID + "$featureID=" + dojo.featureID;
+                        urlStr += "$layerID=" + appGlobals.shareOptions.layerID + "$featureID=" + appGlobals.shareOptions.featureID;
                     }
                 }
-            } else if (dojo.mapClickedPoint) {
-                clickCoords = dojo.mapClickedPoint.x + "," + dojo.mapClickedPoint.y;
+            } else if (appGlobals.shareOptions.mapClickedPoint) {
+                clickCoords = appGlobals.shareOptions.mapClickedPoint.x + "," + appGlobals.shareOptions.mapClickedPoint.y;
                 urlStr += "$mapClickPoint=" + clickCoords;
             }
-            if (dojo.selectedBasemapIndex !== null) {
-                urlStr += "$selectedBasemapIndex=" + dojo.selectedBasemapIndex;
+            if (appGlobals.shareOptions.searchText) {
+                urlStr += "$searchText=" + appGlobals.shareOptions.searchText;
             }
-            urlStr += "$sliderValue=" + dojo.sliderValue + "$driveType=" + dojo.driveTime;
+            if (appGlobals.shareOptions.selectedBasemapIndex !== null) {
+                urlStr += "$selectedBasemapIndex=" + appGlobals.shareOptions.selectedBasemapIndex;
+            }
+            urlStr += "$sliderValue=" + appGlobals.shareOptions.sliderValue + "$driveType=" + appGlobals.shareOptions.driveTime;
             this.urlStr = urlStr;
 
             // Attempt the shrinking of the URL
-            this.getTinyUrl = commonShare.getTinyLink(urlStr, dojo.configData.MapSharingOptions.TinyURLServiceURL);
+            this.getTinyUrl = commonShare.getTinyLink(urlStr, appGlobals.configData.MapSharingOptions.TinyURLServiceURL);
         },
 
         /**
@@ -229,7 +232,7 @@ define([
             }
 
             // Do the share
-            commonShare.share(this.getTinyUrl, dojo.configData.MapSharingOptions, site);
+            commonShare.share(this.getTinyUrl, appGlobals.configData.MapSharingOptions, site);
         }
 
     });

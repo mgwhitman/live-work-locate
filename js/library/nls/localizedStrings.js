@@ -17,28 +17,26 @@
  */
 define({
     root: {
-        showNullValue: "N/A",
         titles: {
-            webpageDispalyText: "Copy/paste HTML into your web page",
-            moreInfo: "Website",
-            sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins drive</span>"
+            webpageDispalyText: "Copy/paste HTML into your web page",//Shown in share panel to embed application into other html/frame
+            moreInfo: "Website",//Shown as hyper-link text in infoWindow for link attribute
+            sliderDisplayText: "Show results within <span class='esriCTSliderMinutes'> ${defaultMinute} mins ${mode}</span>",//Shown in address panel to display slider status and app mode(drive/walk).
+            driveTimeText: "drive",//Shown above the slider to display drive mode.
+            walkTimeText: "walk", //Shown above the slider to display walk mode.
+            showDistanceText: "Show distance",//Shown in proximity result panel beside the feature info to get the route length from the searched location.
+            attachmentText: "Attachments:"//Shown in indoWindow for the attachments.
         },
         errorMessages: {
-            noSearchSettingAvailable: "No search setting is available",
-            fieldNotFound: "field not found",
-            invalidSearch: "No results found",
-            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",
-            invalidLocation: "Current Location not found.",
-            invalidProjection: "Unable to plot current location on the map.",
-            widgetNotLoaded: "Fail to load widgets.",
-            shareLoadingFailed: "Unable to shorten URL, Bit.ly failed to load.",
-            shareFailed: "Unable to share.",
-            noLegend: "No Legend Available",
-            invalidSearchSettings: "Title and/or QueryLayerId parameters in SearchSettings do not match with configured webmap.",
-            invalidBasemapQuery: "Invalid BasemapQuery",
-            noBasemap: "No Basemap Found",
-            portalUrlNotFound: "Portal URL cannot be empty",
-            noWorkflowConfigured: "No workflow available"
+            invalidSearch: "No results found",//Shown in address panel when no results found for searched address.
+            falseConfigParams: "Required configuration key values are either null or not exactly matching with layer attributes, This message may appear multiple times.",//Shown in alert if required field is not configured for address search.
+            invalidLocation: "Current Location not found.", //Shown in alert message when current location is not found.
+            invalidProjection: "Unable to plot current location on the map.", //Shown in alert message when app fails to project the location on map.
+            widgetNotLoaded: "Fail to load widgets.", //Shown in alert message when app fails to load any widget
+            shareLoadingFailed: "Unable to shorten URL, Bit.ly failed to load.",//Shown in alert message if app fails to create bitly URL
+            noLegend: "No Legend Available",//Shown in legend panel if no legend symbol found for layers.
+            noBasemap: "No Basemap Found",//Shown in alert message if no basemap found for the configured basemap setting
+            portalUrlNotFound: "Portal URL cannot be empty",//Shown in alert message if portal URL is not configured for basemap switcher.
+            noWorkflowConfigured: "No workflow available"//Shown in alert message if no workflow is visible/configured.
         },
         buttons: {
             embedding: "Embedding", //Shown next to icon for sharing the map embedding in website
@@ -47,15 +45,16 @@ define({
             twitter: "Twitter"  // Shown next to icon for sharing the current map extents via a Twitter tweet; works with shareViaTwitter tooltip
         },
         tooltips: {
-            locate: "Locate",
-            share: "Share",
-            help: "Help",
-            clear: "Clear",
-            search: "Search",
-            locateAddress: "LocateAddress",
-            loadingText: "Loading...",
-            previous: "Previous",
-            next: "Next"
+            locate: "Locate", //Command button to locate current address on map.
+            share: "Share", //Command button to open share panel.
+            help: "Help", //Command button to open help page.
+            clear: "Clear", //Command button to clear address string from text box.
+            search: "Search", //Command button to open address panel to search address.
+            locateAddress: "LocateAddress", //Command button to search address for input address string.
+            loadingText: "Loading...",//Shown in legend panel while querying for layer renderer.
+            previous: "Previous",//Command button to slide legend panel to view previous legends.
+            next: "Next", //Command button to slide legend panel to view next legends.
+            infowindowCloseBtn: "Close"//Command button to close info window.
         }
     },
 

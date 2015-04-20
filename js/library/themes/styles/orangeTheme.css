@@ -1,12 +1,11 @@
 ﻿@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (-webkit-min-device-pixel-ratio: 2)
 {
-
-    .esriCTTdHeaderSearch
+    .esriCTHeaderSearch
     {
         background-image: url("../images/img2X/search@2X.png") !important;
     }
 
-    .esriCTTdHeaderSearch-select
+    .esriCTHeaderSearch-select
     {
         background-image: url("../images/img2X/search-select@2X-orange.png") !important;
     }
@@ -54,12 +53,12 @@
 
 @media screen and (max-width: 1024px)
 {
-    .esriCTTdHeaderSearch
+    .esriCTHeaderSearch
     {
         background-image: url("../images/img44x44/search.png") !important;
     }
 
-    .esriCTTdHeaderSearch-select
+    .esriCTHeaderSearch-select
     {
         background-image: url("../images/img44x44/search-select-orange.png") !important;
     }
@@ -82,16 +81,6 @@
     .esriCTImgSocialMediaSelect
     {
         background-image: url("../images/img44x44/imgSocialMedia-select-orange.png") !important;
-    }
-
-    .esriCTRouteImg
-    {
-        background-image: url("../images/img44x44/get-route.png") !important;
-    }
-
-    .esriCTRouteImg-select
-    {
-        background-image: url("../images/img44x44/get-route-select-orange.png") !important;
     }
 
     .facebook
@@ -121,7 +110,7 @@
 }
 
 /*main browser theme*/
-.esriCTTdHeaderSearch
+.esriCTHeaderSearch
 {
     background-image: url("../images/img24x24/search-24.png");
 }
@@ -131,7 +120,7 @@
     background-image: url("../images/img24x24/Help-24.png");
 }
 
-.esriCTTdHeaderSearch-select
+.esriCTHeaderSearch-select
 {
     background-image: url("../images/img24x24/search-select-orange-24.png");
 }
@@ -149,16 +138,6 @@
 .esriCTImgSocialMedia
 {
     background-image: url("../images/img24x24/imgSocialMedia-24.png");
-}
-
-.esriCTRouteImg
-{
-    background-image: url("../images/img24x24/get-route-24.png");
-}
-
-.esriCTRouteImg-select
-{
-    background-image: url("../images/img24x24/get-route-select-orange-24.png");
 }
 
 .facebook
@@ -191,11 +170,6 @@
     background-image: url("../images/search-orange.png") !important;
 }
 
-.simpleDirections .esriStopsReverse
-{
-    background: url("../images/direction-orange.png") !important;
-}
-
 .infoTitleArrow
 {
     background-image: url("../images/right-orange-arrow.png");
@@ -216,30 +190,10 @@
     background: url("../images/orange-arrow.png");
 }
 
-.esriCTRightArrow
+.esriCTLeftArrow, .esriCTRightArrow
 {
-    background-image: url("../images/right-orange_Legend-arrow.png");
-    background-repeat: no-repeat;
-    background-position: center center;
+    background-color: #d15706 !important;
 }
-
-.esriCTLeftArrow
-{
-    background-image: url('../images/left-orange_Legend-arrow.png');
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-
-.esriCTArrow
-{
-    background-image: url("../images/right-orange_Legend-arrow.png") !important;
-}
-
-.esriCTLeftArrow
-{
-    background-image: url("../images/left-orange_Legend-arrow.png") !important;
-}
-
 
 .esriCTApplicationHeader
 {
@@ -276,12 +230,10 @@
     color: #d15706 !important;
 }
 
-.legenboxInner
+.esriCTDivLegendInnerBox
 {
     border: 1px solid #d15706;
 }
-
-
 
 .esriInfoPanelContainer
 {
@@ -289,41 +241,6 @@
 }
 
 .esriCTHeaderLine
-{
-    color: #d15706 !important;
-}
-
-.esriCTRouteToplabel
-{
-    color: #d15706;
-}
-
-.esriCTRouteMapName
-{
-    color: #d15706;
-}
-
-.esriCTRouteMapNum
-{
-    color: #d15706;
-}
-
-.esriCTRouteMapArrow
-{
-    color: #d15706;
-}
-
-.esriCTRouteToplabelBackView
-{
-    color: #d15706;
-}
-
-.esriCTRouteBAck
-{
-    color: #d15706;
-}
-
-.esriCTdivShowReRouteContainer
 {
     color: #d15706 !important;
 }
@@ -441,7 +358,6 @@
 }
 /*share*/
 
-
 /*grouped address*/
 
 .esriCTResultColor
@@ -495,24 +411,17 @@
 }
 /*legends */
 
-.legendbox
+.esriCTDivLegendBoxContent
 {
     background: #FFFFFF;
 }
 
-.legenboxInner
-{
-    border: 1px solid #d15706;
-    border-bottom: none !important;
-}
-
-.legendlbl
+.esriCTDivLegendLabel
 {
     color: #6e6e6e;
 }
 
-
-.legenboxInner div
+.esriCTDivLegendInnerBox div
 {
     color: #6e6e6e;
 }

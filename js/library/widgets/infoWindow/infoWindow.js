@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri,alert */
+﻿/*global define,dojo,dojoConfig,esri,alert,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -63,9 +63,9 @@ define([
                 } else {
                     this.InfoShow = false;
                 }
-                dojo.mapClickedPoint = null;
+                appGlobals.shareOptions.mapClickedPoint  = null;
                 domUtils.hide(this.domNode);
-                dojo.infoWindowIsShowing = false;
+                appGlobals.shareOptions.infoWindowIsShowing = false;
                 topic.publish("clearSelectedFeature");
             })));
 
@@ -79,7 +79,7 @@ define([
                 this._hideInfoWindow();
             }));
             this.own(on(window, "orientationchange", lang.hitch(this, function () {
-                if (dojo.infoWindowIsShowing) {
+                if (appGlobals.shareOptions.infoWindowIsShowing) {
                     domUtils.hide(query(".esriCTinfoWindow")[0]);
                     domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
                     this.isShowing = false;
@@ -110,7 +110,7 @@ define([
                 this.infoContainerScrollbar.removeScrollBar();
             }
 
-            scrollContentHeight = dojo.configData.InfoPopupHeight - 50;
+            scrollContentHeight = appGlobals.configData.InfoPopupHeight - 50;
             domStyle.set(this.divInfoScrollContent, "height", scrollContentHeight + "px");
             this.setLocation(screenPoint);
             this.divInfoDetailsScroll.appendChild(detailsTab);
@@ -143,11 +143,11 @@ define([
         */
         setTitle: function (infoTitle) {
             if (infoTitle.length > 0) {
-                this.esriCTheadderPanel.innerHTML = "";
-                this.esriCTheadderPanel.innerHTML = infoTitle;
-                this.esriCTheadderPanel.title = infoTitle;
+                this.divInfoHeaderPanel.innerHTML = "";
+                this.divInfoHeaderPanel.innerHTML = infoTitle;
+                this.divInfoHeaderPanel.title = infoTitle;
             } else {
-                this.esriCTheadderPanel.innerHTML = dojo.configData.ShowNullValueAs;
+                this.divInfoHeaderPanel.innerHTML = appGlobals.configData.ShowNullValueAs;
             }
         },
 
@@ -161,7 +161,7 @@ define([
             }
             domStyle.set(this.domNode, {
                 left: (location.x - (this.infoWindowWidth / 2)) + "px",
-                bottom: (location.y + 28) + "px"
+                bottom: (location.y + 15) + "px"
             });
             if (!this.InfoShow) {
                 domUtils.show(this.domNode);
@@ -180,11 +180,11 @@ define([
         },
 
         _hideInfoWindow: function () {
-            dojo.infoWindowIsShowing = false;
+            appGlobals.shareOptions.infoWindowIsShowing = false;
             domUtils.hide(query(".esriCTinfoWindow")[0]);
             domStyle.set(query(".esriCTinfoWindow")[0], "visibility", "hidden");
             this.isShowing = false;
-            dojo.mapClickedPoint = null;
+            appGlobals.shareOptions.mapClickedPoint  = null;
         },
 
         /**

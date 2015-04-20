@@ -69,31 +69,6 @@ define([], function () {
             SplashScreenContent: "Please select an app to continue"
         },
 
-        //-------------------------------------------------------------------------------------------------------------------
-        // Header Widget Settings
-        //-------------------------------------------------------------------------------------------------------------------
-        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
-        // Title: Name of the widget, will displayed as title of widget in header panel
-        // WidgetPath: path of the widget respective to the widgets package.
-        // MapInstanceRequired: true if widget is dependent on the map instance.
-
-        AppHeaderWidgets: [{
-            WidgetPath: "widgets/locator/locator",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/geoLocation/geoLocation",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/share/share",
-            MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/help/help",
-            MapInstanceRequired: false
-        }, {
-            WidgetPath: "widgets/exit/exit",
-            MapInstanceRequired: false
-        }],
-
         //ExitButtonTooltip: Specify tooltip text for exit workflow button
         ExitButtonTooltip: "Exit",
         //DriveTimeButtonTooltip : Specify tooltip text for switch to drivetime button in distance slider
@@ -472,6 +447,31 @@ define([], function () {
             FacebookShareURL: "http://www.facebook.com/sharer.php?u=${0}&t=Live%20Work%20Locate",
             TwitterShareURL: "http://mobile.twitter.com/compose/tweet?status=Live%20Work%20Locate ${0}",
             ShareByMailLink: "mailto:%20?subject=Check%20out%20this%20map!&body=${0}"
-        }
+        },
+        //-------------------------------------------------------------------------------------------------------------------
+        // Header Widget Settings
+        //-------------------------------------------------------------------------------------------------------------------
+        // Set widgets settings such as widget title, widgetPath, mapInstanceRequired to be displayed in header panel
+        // Title: Name of the widget, will displayed as title of widget in header panel
+        // WidgetPath: path of the widget respective to the widgets package.
+        // MapInstanceRequired: true if widget is dependent on the map instance.
+
+        AppHeaderWidgets: [{
+            WidgetPath: "widgets/locator/locator",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/geoLocation/geoLocation",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/share/share",
+            MapInstanceRequired: true
+        }, {
+            WidgetPath: "widgets/help/help",
+            MapInstanceRequired: false
+        }, {
+            WidgetPath: "widgets/exit/exit",
+            MapInstanceRequired: false
+        }]
+
     };
 });

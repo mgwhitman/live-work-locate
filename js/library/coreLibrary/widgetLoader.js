@@ -1,4 +1,4 @@
-﻿/*global define,dojo,require,console,alert */
+﻿/*global define,dojo,require,console,alert,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -25,18 +25,18 @@ define([
     "dojo/_base/array",
     "dojo/_base/lang",
     "dojo/Deferred",
-    "dojo/DeferredList",
+    "dojo/promise/all",
     "esri/request",
     "esri/arcgis/utils",
-    "dojo/promise/all",
     "dojo/dom-class",
+    "dojo/on",
     "dojo/query",
     "dojo/topic",
     "dojo/dom-style",
     "dojo/i18n!application/js/library/nls/localizedStrings",
     "esri/dijit/BasemapGallery",
     "dojo/domReady!"
-], function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, DeferredList, esriRequest, esriUtils, all, domClass, query, topic, domStyle, sharedNls, BasemapGallery) {
+], function (declare, _WidgetBase, Map, AppHeader, SplashScreen, array, lang, Deferred, all, esriRequest, esriUtils, domClass, on, query, topic, domStyle, sharedNls, BasemapGallery) {
 
     //========================================================================================================================//
 
@@ -52,12 +52,12 @@ define([
         startup: function () {
             var widgets, deferredArray, basemapDeferred, map, splashScreen, appUrl, workflow, mapInstance;
             widgets = {};
-            dojo.share = false;
+            appGlobals.share = false;
             deferredArray = [];
 
             topic.subscribe("filterRedundantBasemap", lang.hitch(this, function (bmLayers) {
                 this._removeWorkFlowBasemap();
-                this._filterRedundantBasemap(bmLayers, dojo.configData.BaseMapLayers, true);
+                this._filterRedundantBasemap(bmLayers, appGlobals.configData.BaseMapLayers, true);
             }));
             this._setWorkflowConfig();
             basemapDeferred = new Deferred();
@@ -67,7 +67,7 @@ define([
                     alert(sharedNls.errorMessages.noBasemap);
                     return;
                 }
-                dojo.configData.BaseMapLayers = baseMapLayers;
+                appGlobals.configData.BaseMapLayers = baseMapLayers;
                 map = new Map();
 
 
@@ -75,9 +75,9 @@ define([
 
                 /**
                 * create an object with widgets specified in Header Widget Settings of configuration file
-                * @param {array} dojo.configData.AppHeaderWidgets Widgets specified in configuration file
+                * @param {array} appGlobals.configData.AppHeaderWidgets Widgets specified in configuration file
                 */
-                array.forEach(dojo.configData.AppHeaderWidgets, function (widgetConfig, index) {
+                array.forEach(appGlobals.configData.AppHeaderWidgets, function (widgetConfig, index) {
                     var deferred = new Deferred();
                     widgets[widgetConfig.WidgetPath] = null;
                     require([widgetConfig.WidgetPath], function (Widget) {
@@ -88,31 +88,42 @@ define([
                 });
                 all(deferredArray).then(lang.hitch(this, function () {
                     try {
-                        if (dojo.configData.SplashScreen) {
+                        if (appGlobals.configData.SplashScreen) {
+                            //initialize splash screen
                             splashScreen = new SplashScreen();
                             appUrl = window.location.toString();
-                            if (dojo.configData.Workflows.length > 0) {
-                                if (dojo.configData.Workflows.length === 1) {
-                                    location.hash = "?app=" + dojo.configData.Workflows[0].Name;
+                            //check if any workflow is configured
+                            if (appGlobals.configData.Workflows.length > 0) {
+                                if (appGlobals.configData.Workflows.length === 1) {
+                                    //load app with workflow if only one workflow is available
+                                    location.hash = "?app=" + appGlobals.configData.Workflows[0].Name;
                                     splashScreen._hideSplashScreenDialog();
-                                    splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
+                                    splashScreen._loadSelectedWorkflow(appGlobals.configData.Workflows[0].Name, map);
                                 } else {
+                                    //check if workflow is shared in app URL
                                     if (appUrl.split("?app=").length > 1) {
+                                        //check if extent is shared in app URL
                                         if (appUrl.split("$extent=").length > 1) {
-                                            dojo.share = true;
+                                            appGlobals.share = true;
                                             workflow = appUrl.split("?app=")[1].split("$")[0].toUpperCase();
                                         } else {
                                             workflow = appUrl.split("?app=")[1].toUpperCase();
+                                            if (workflow.split("$").length > 1) {
+                                                workflow = workflow.split("$")[0].toUpperCase();
+                                            }
                                         }
                                         splashScreen._hideSplashScreenDialog();
+                                        //display shared workflow
                                         splashScreen._loadSelectedWorkflow(workflow, map);
                                     } else {
-                                        if (dojo.configData.SplashScreen.IsVisible && dojo.configData.Workflows.length > 1) {
+                                        //display splash screen if no workflow is given in app URL
+                                        if (appGlobals.configData.SplashScreen.IsVisible && appGlobals.configData.Workflows.length > 1) {
                                             splashScreen.showSplashScreenDialog(map);
                                         } else {
-                                            location.hash = "?app=" + dojo.configData.Workflows[0].Name;
+                                            //display workflow if only one is available in config
+                                            location.hash = "?app=" + appGlobals.configData.Workflows[0].Name;
                                             splashScreen._hideSplashScreenDialog();
-                                            splashScreen._loadSelectedWorkflow(dojo.configData.Workflows[0].Name, map);
+                                            splashScreen._loadSelectedWorkflow(appGlobals.configData.Workflows[0].Name, map);
                                         }
                                     }
                                 }
@@ -131,6 +142,7 @@ define([
                         this._createApplicationHeader(widgets, map, splashScreen);
 
                     } catch (ex) {
+                        //display error message if app fails to load widgets
                         alert(sharedNls.errorMessages.widgetNotLoaded);
                     }
 
@@ -164,22 +176,24 @@ define([
         */
         _setWorkflowConfig: function () {
             var i, WorkFlows = [];
-            for (i = 0; i < dojo.configData.Workflows.length; i++) {
-                if (dojo.configData.Workflows[i].Visible) {
-                    WorkFlows.push(dojo.configData.Workflows[i]);
+            for (i = 0; i < appGlobals.configData.Workflows.length; i++) {
+                //check if workflow is visibility is set to true in config
+                if (appGlobals.configData.Workflows[i].Visible) {
+                    WorkFlows.push(appGlobals.configData.Workflows[i]);
                 }
             }
-            dojo.configData.Workflows = WorkFlows;
+            //update array to contain visible workflows
+            appGlobals.configData.Workflows = WorkFlows;
         },
 
         _fetchBasemapCollection: function (basemapDeferred) {
-            var dListResult, groupUrl, searchUrl, webmapRequest, groupRequest, deferred, agolBasemapsCollection, thumbnailSrc, baseMapArray = [], deferredArray = [], self = this;
+            var groupUrl, searchUrl, webmapRequest, groupRequest, deferred, agolBasemapsCollection, thumbnailSrc, baseMapArray = [], deferredArray = [], self = this;
             /**
             * If group owner & title are configured, create request to fetch the group id
             */
-            if (dojo.configData.BasemapGroupTitle && dojo.configData.BasemapGroupOwner) {
-                if (lang.trim(dojo.configData.PortalAPIURL) !== "") {
-                    groupUrl = dojo.configData.PortalAPIURL + "community/groups?q=title:\"" + dojo.configData.BasemapGroupTitle + "\" AND owner:" + dojo.configData.BasemapGroupOwner + "&f=json";
+            if (appGlobals.configData.BasemapGroupTitle && appGlobals.configData.BasemapGroupOwner) {
+                if (lang.trim(appGlobals.configData.PortalAPIURL) !== "") {
+                    groupUrl = appGlobals.configData.PortalAPIURL + "community/groups?q=title:\"" + appGlobals.configData.BasemapGroupTitle + "\" AND owner:" + appGlobals.configData.BasemapGroupOwner + "&f=json";
                     groupRequest = esriRequest({
                         url: groupUrl,
                         callbackParamName: "callback"
@@ -192,7 +206,7 @@ define([
                         /**
                         * Create request using group id to fetch all the items from that group
                         */
-                        searchUrl = dojo.configData.PortalAPIURL + 'search?q=group:' + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
+                        searchUrl = appGlobals.configData.PortalAPIURL + 'search?q=group:' + groupInfo.results[0].id + "&sortField=name&sortOrder=desc&num=50&f=json";
                         webmapRequest = esriRequest({
                             url: searchUrl,
                             callbackParamName: "callback"
@@ -206,7 +220,7 @@ define([
                                 * If type is "Map Service", create the object and push it into "baseMapArray"
                                 */
                                 if (info.type === "Map Service") {
-                                    thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + info.id + "/info/" + info.thumbnail;
+                                    thumbnailSrc = (groupInfo.results[index].thumbnail === null) ? appGlobals.configData.NoThumbnail : appGlobals.configData.PortalAPIURL + "content/items/" + info.id + "/info/" + info.thumbnail;
                                     baseMapArray.push({
                                         ThumbnailSource: thumbnailSrc,
                                         Name: info.title,
@@ -225,9 +239,8 @@ define([
                                 }
                             }));
                             if (deferredArray.length > 0) {
-                                dListResult = new DeferredList(deferredArray);
 
-                                dListResult.then(function (res) {
+                                all(deferredArray).then(function (res) {
                                     /**
                                     *If result of webmaps are empty
                                     */
@@ -239,7 +252,7 @@ define([
                                     * Else for each items in the webmap, create the object and push it into "baseMapArray"
                                     */
                                     array.forEach(res, function (data, innerIdx) {
-                                        self._filterRedundantBasemap(data[1], baseMapArray, false);
+                                        self._filterRedundantBasemap(data, baseMapArray, false);
                                     });
                                     basemapDeferred.resolve(baseMapArray);
                                 });
@@ -262,7 +275,7 @@ define([
                 agolBasemapsCollection = new BasemapGallery({
                     showArcGISBasemaps: true
                 });
-                dojo.connect(agolBasemapsCollection, "onLoad", function () {
+                on(agolBasemapsCollection, "load", function () {
                     /**
                     * onLoad, loop through each basemaps in the basemap gallery and push it into "baseMapArray"
                     */
@@ -281,7 +294,7 @@ define([
         * @memberOf coreLibrary/widgetLoader
         */
         _removeWorkFlowBasemap: function () {
-            var i, temBaseMapArray = [], baseMapArray = dojo.configData.BaseMapLayers;
+            var i, temBaseMapArray = [], baseMapArray = appGlobals.configData.BaseMapLayers;
             for (i = 0; i < baseMapArray.length; i++) {
                 if (baseMapArray[i].length) {
                     if (!baseMapArray[i][0].isWorkFlowBasemap) {
@@ -293,7 +306,8 @@ define([
                     }
                 }
             }
-            dojo.configData.BaseMapLayers = temBaseMapArray;
+            //update basemap array when new workflow is selected
+            appGlobals.configData.BaseMapLayers = temBaseMapArray;
         },
 
         /**
@@ -302,26 +316,31 @@ define([
         */
         _filterRedundantBasemap: function (bmLayers, baseMapArray, isWorkFlowBasemap) {
             var i, bmLayerData, multiBasemap = [];
-            bmLayerData = bmLayers.itemData.baseMap.baseMapLayers;
-            if (bmLayerData[0].layerType === "OpenStreetMap") {
-                bmLayerData[0].url = bmLayerData[0].id;
-            }
-            if (this._isUniqueBasemap(baseMapArray, bmLayerData, isWorkFlowBasemap)) {
-                if (isWorkFlowBasemap) {
-                    dojo.selectedBasemapIndex = baseMapArray.length;
-                } else if (bmLayerData[0].visibility) {
-                    dojo.selectedBasemapIndex = baseMapArray.length;
+            if (bmLayers.itemData.baseMap) {
+                if (bmLayers.itemData.baseMap.baseMapLayers) {
+                    bmLayerData = bmLayers.itemData.baseMap.baseMapLayers;
+                } else {
+                    bmLayerData = [];
+                    bmLayerData.push(bmLayers);
                 }
-                if (bmLayerData.length === 1) {
-                    this._setBasemapAttribute(baseMapArray, bmLayerData[0], bmLayers, isWorkFlowBasemap);
-                } else if (bmLayerData.length > 1) {
-                    for (i = 0; i < bmLayerData.length; i++) {
-                        this._setBasemapAttribute(multiBasemap, bmLayerData[i], bmLayers, isWorkFlowBasemap);
+                //check if basemap is an open street map
+                if (bmLayerData[0].layerType === "OpenStreetMap" || bmLayerData[0].type === "OpenStreetMap") {
+                    bmLayerData[0].url = bmLayerData[0].id;
+                }
+                if (this._isUniqueBasemap(baseMapArray, bmLayerData, isWorkFlowBasemap)) {
+                    if (isWorkFlowBasemap || bmLayerData[0].visibility) {
+                        appGlobals.shareOptions.selectedBasemapIndex = baseMapArray.length;
                     }
-                    baseMapArray.push(multiBasemap);
+                    if (bmLayerData.length === 1) {
+                        this._setBasemapAttribute(baseMapArray, bmLayerData[0], bmLayers, isWorkFlowBasemap);
+                    } else if (bmLayerData.length > 1) {
+                        for (i = 0; i < bmLayerData.length; i++) {
+                            this._setBasemapAttribute(multiBasemap, bmLayerData[i], bmLayers, isWorkFlowBasemap);
+                        }
+                        baseMapArray.push(multiBasemap);
+                    }
                 }
             }
-
         },
 
         /**
@@ -352,7 +371,7 @@ define([
                             pushBasemap = false;
                         }
                         if (bmLayerData[0].visibility) {
-                            dojo.selectedBasemapIndex = i;
+                            appGlobals.shareOptions.selectedBasemapIndex = i;
                         }
                         break;
                     }
@@ -365,13 +384,11 @@ define([
                                 }
                             }
                             if (bmLayerData[0].visibility) {
-                                dojo.selectedBasemapIndex = i;
+                                appGlobals.shareOptions.selectedBasemapIndex = i;
                             }
                             break;
                         }
-
                     }
-
                     if (i === baseMapArray.length - 1) {
                         if (count === baseMapArray[i].length) {
                             pushBasemap = false;
@@ -382,7 +399,6 @@ define([
                 }
             }
             return pushBasemap;
-
         },
 
         /**
@@ -390,15 +406,20 @@ define([
         * @memberOf coreLibrary/widgetLoader
         */
         _storeUniqueBasemap: function (bmLayer, baseMapArray) {
-            var thumbnailSrc;
-            if (bmLayer.url) {
-                thumbnailSrc = (bmLayer.thumbnail === null) ? dojo.configData.NoThumbnail : dojo.configData.PortalAPIURL + "content/items/" + bmLayer.id + "/info/" + bmLayer.thumbnail;
+            var thumbnailSrc, layerType;
+            if (bmLayer.url || (bmLayer.layerType === "OpenStreetMap" || bmLayer.type === "OpenStreetMap")) {
+                if (bmLayer.layerType) {
+                    layerType = bmLayer.layerType;
+                } else {
+                    layerType = bmLayer.type;
+                }
+                thumbnailSrc = (bmLayer.thumbnail === null) ? appGlobals.configData.NoThumbnail : appGlobals.configData.PortalAPIURL + "content/items/" + bmLayer.id + "/info/" + bmLayer.thumbnail;
                 baseMapArray.push({
                     ThumbnailSource: thumbnailSrc,
                     Name: bmLayer.title,
                     MapURL: bmLayer.url,
                     isWorkFlowBasemap: bmLayer.isWorkFlowBasemap,
-                    layerType: bmLayer.layerType
+                    layerType: layerType
                 });
             }
         },
@@ -408,7 +429,7 @@ define([
         * @memberOf coreLibrary/widgetLoader
         */
         _fetchBasemapFromGallery: function (agolBasemapsCollection, baseMapArray, basemapDeferred) {
-            var deferred, dListResult, deferredArray = [];
+            var deferred, deferredArray = [];
             array.forEach(agolBasemapsCollection.basemaps, lang.hitch(this, function (basemap) {
                 var basemapRequest, basemapLayersArray = [];
                 basemapRequest = basemap.getLayers();
@@ -439,11 +460,10 @@ define([
                     deferred.resolve();
                 });
                 deferredArray.push(basemapRequest);
-                dListResult = new DeferredList(deferredArray);
-                dListResult.then(function (res) {
-                    basemapDeferred.resolve(baseMapArray);
-                });
             }));
+            all(deferredArray).then(function (res) {
+                basemapDeferred.resolve(baseMapArray);
+            });
         }
     });
 });

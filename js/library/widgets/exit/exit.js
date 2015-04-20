@@ -1,4 +1,4 @@
-﻿/*global define,dojo,dojoConfig,esri,alert */
+﻿/*global define,dojo,dojoConfig,esri,alert,appGlobals */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,indent:4 */
 /*
  | Copyright 2013 Esri
@@ -36,7 +36,7 @@ define([
         * @name widgets/exit/exit
         */
         postCreate: function () {
-            this.domNode = domConstruct.create("div", { "title": dojo.configData.ExitButtonTooltip, "class": "esriCTExitImg" }, null);
+            this.domNode = domConstruct.create("div", { "title": appGlobals.configData.ExitButtonTooltip, "class": "esriCTExitImg" }, null);
             this.own(on(this.domNode, "click", lang.hitch(this, function () {
                 this._exitPage();
             })));
