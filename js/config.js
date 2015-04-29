@@ -174,9 +174,9 @@ define([], function () {
         // LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.
         // Supported service types are 'dynamic' or 'feature'.
         // SearchSettings: Configure search settings for each workflow.
-        // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
+        // Title: The title must match the layer name specified in the ArcGIS Online map.
         // it should be the name of Map/Feature Service.
-        // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
+        // QueryLayerId: This is the layer index for ArcGIS Map/Feature Service and is used for performing queries.  The map layer QueryLayerId setting must match the layer's index number on the map's item details page.
         // SearchDisplayTitle: This text is displayed in search results as the title to group results.
         // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
         // SearchExpression: Configure the query expression to be used for search.
@@ -205,9 +205,9 @@ define([], function () {
             // SEARCH SETTINGS FOR THIS WORKFLOW
             // ------------------------------------------------------------------------------------------------------------------------
 
-            // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
+            // Title: The title must match the layer name specified in the ArcGIS Online map.
             // It should be the name of Map/Feature Service.
-            // QueryLayerId: This is the layer index in the webmap or ArcGIS Map/Feature Service and is used for performing queries.
+            // QueryLayerId: This is the layer index for ArcGIS Map/Feature Service and is used for performing queries.  The map layer QueryLayerId setting must match the layer's index number on the map's item details page.  
             // SearchDisplayTitle: This text is displayed in search results as the title to group results.
             // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
             // SearchExpression: Configure the query expression to be used for search.
