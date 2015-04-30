@@ -165,30 +165,16 @@ define([], function () {
         // Name: Specify the workflow name. Workflow names have to be unique. It is displayed in the application header panel and splashscreen.
         // SplashscreenImage: Set image to be displayed in splashscreen for this workflow
         // ThemeColor: Set theme color
-        // WebMapId: Choose if you want to use WebMap or Map Services for operational layers.
-        // If using WebMap, specify WebMapId within quotes, otherwise leave this empty and configure operational layers
+        // WebMapId: Specify WebMapId within quotes
         // BgColor: Background color of workflow thumbnail in splashscreen
         // FeatureHighlightColor: To highlight selected polygon feature on map, when selected from proximity results
-        // OperationalLayers: Configure operational layers for each workflow. The order of displaying layers is reversed on map. The last configured layer is displayed on top.
-        // ServiceURL: URL of the layer.
-        // LoadAsServiceType: Field to specify if the operational layers should be added as dynamic map service layer or feature layer.
-        // Supported service types are 'dynamic' or 'feature'.
         // SearchSettings: Configure search settings for each workflow.
         // Title: The title must match the layer name specified in the ArcGIS Online map.
-        // it should be the name of Map/Feature Service.
         // QueryLayerId: This is the layer index for ArcGIS Map/Feature Service and is used for performing queries.  The map layer QueryLayerId setting must match the layer's index number on the map's item details page.
         // SearchDisplayTitle: This text is displayed in search results as the title to group results.
         // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
         // SearchExpression: Configure the query expression to be used for search.
-        // InfowindowSettings: Configure info-popup settings. The Title and QueryLayerId fields should be the same as configured in "Title" and "QueryLayerId" fields in SearchSettings.
-        // Title: In case of webmap implementations, it must match layer name specified in webmap and in case of operational layers
-        // it should be the name of Map/Feature Service.
         // QueryLayerId: Layer index used for performing queries.
-        // InfoWindowHeader: Specify field for the info window header
-        // ShowAllFields: When set to true, infowindow will display all fields from layer and InfoWindowData section is ignored
-        // When set to false, only fields configured in InfoWindowData section will be displayed
-        // InfoWindowData: Set the content to be displayed in the info-Popup. Define labels and field values.
-        // These fields should be present in the layer referenced by 'QueryLayerId' specified under section 'SearchSettings'
         // DisplayText: Caption to be displayed instead of field alias names. Set this to empty string ("") if you wish to display field alias names as captions.
         // FieldName: Field used for displaying the value
 
@@ -206,8 +192,7 @@ define([], function () {
             // ------------------------------------------------------------------------------------------------------------------------
 
             // Title: The title must match the layer name specified in the ArcGIS Online map.
-            // It should be the name of Map/Feature Service.
-            // QueryLayerId: This is the layer index for ArcGIS Map/Feature Service and is used for performing queries.  The map layer QueryLayerId setting must match the layer's index number on the map's item details page.  
+            // QueryLayerId: This is the layer index for ArcGIS Map/Feature Service and is used for performing queries.  The map layer QueryLayerId setting must match the layer's index number on the map's item details page.
             // SearchDisplayTitle: This text is displayed in search results as the title to group results.
             // SearchDisplayFields: Attribute that will be displayed in the search box when user performs a search.
             // SearchExpression: Configure the query expression to be used for search.
