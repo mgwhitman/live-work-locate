@@ -182,7 +182,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/live-img.png",
             ThemeColor: "js/library/themes/styles/blueTheme.css",
-            WebMapId: "51bd8650f18842e7bd5aa7bf78abd9d7",
+            WebMapId: "476ce9cabe8e47e3985b07ec0d55a024",
             BgColor: "#007ac2",
             FeatureHighlightColor: "#1C86EE",
 
@@ -198,70 +198,70 @@ define([], function () {
 
             SearchSettings: [{
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Hospitals",
+                Title: "LiveWorkLocate_TryItLive - Hospitals",
                 QueryLayerId: "0",
                 SearchDisplayTitle: "Hospitals",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Railroad Stations",
+                Title: "LiveWorkLocate_TryItLive - Railroad Stations",
                 QueryLayerId: "1",
                 SearchDisplayTitle: "Railroad Stations",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Colleges",
+                Title: "LiveWorkLocate_TryItLive - Colleges",
                 QueryLayerId: "2",
                 SearchDisplayTitle: "Colleges",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Park and Recreation Areas",
+                Title: "LiveWorkLocate_TryItLive - Park and Recreation Areas",
                 QueryLayerId: "3",
                 SearchDisplayTitle: "Park and Recreation Areas",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Golf Courses",
+                Title: "LiveWorkLocate_TryItLive - Golf Courses",
                 QueryLayerId: "4",
                 SearchDisplayTitle: "Golf Courses",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Churches",
+                Title: "LiveWorkLocate_TryItLive - Churches",
                 QueryLayerId: "5",
                 SearchDisplayTitle: "Churches",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Schools",
+                Title: "LiveWorkLocate_TryItLive - Schools",
                 QueryLayerId: "6",
                 SearchDisplayTitle: "Schools",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Museums",
+                Title: "LiveWorkLocate_TryItLive - Museums",
                 QueryLayerId: "7",
                 SearchDisplayTitle: "Museums",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Libraries",
+                Title: "LiveWorkLocate_TryItLive - Libraries",
                 QueryLayerId: "8",
                 SearchDisplayTitle: "Libraries",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Post Offices",
+                Title: "LiveWorkLocate_TryItLive - Post Offices",
                 QueryLayerId: "9",
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
@@ -273,40 +273,40 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/work-img.png",
             ThemeColor: "js/library/themes/styles/greenTheme.css",
-            WebMapId: "6c031b081b2b4c5996c514831d0c79b3",
+            WebMapId: "09b10df3109441f080f4a914ffa33ff9",
             BgColor: "#028D6A",
             FeatureHighlightColor: "#1C86EE",
             SearchSettings: [{
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Railroad Stations",
+                Title: "LiveWorkLocate_TryItLive - Railroad Stations",
                 QueryLayerId: "1",
                 SearchDisplayTitle: "Railroad Stations",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Colleges",
+                Title: "LiveWorkLocate_TryItLive - Colleges",
                 QueryLayerId: "2",
                 SearchDisplayTitle: "Colleges",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Post Offices",
+                Title: "LiveWorkLocate_TryItLive - Post Offices",
                 QueryLayerId: "9",
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Corporate Headquarters",
+                Title: "LiveWorkLocate_TryItLive - Corporate Headquarters",
                 QueryLayerId: "10",
                 SearchDisplayTitle: "Corporate Headquarters",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Retail Centers",
+                Title: "LiveWorkLocate_TryItLive - Retail Centers",
                 QueryLayerId: "11",
                 SearchDisplayTitle: "Retail Centers",
                 SearchDisplayFields: "${NAME}",
@@ -318,7 +318,7 @@ define([], function () {
             Visible: true,
             SplashscreenImage: "js/library/themes/images/locate-img.png",
             ThemeColor: "js/library/themes/styles/orangeTheme.css",
-            WebMapId: "3cc363d86ca0498197e6ab0c6a6391f6",
+            WebMapId: "1ff32aa303cf4b2a89e51dbf17245144",
             BgColor: "#5C2E6F",
             FeatureHighlightColor: "#1C86EE",
 
@@ -331,28 +331,28 @@ define([], function () {
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Colleges",
+                Title: "LiveWorkLocate_TryItLive - Colleges",
                 QueryLayerId: "2",
                 SearchDisplayTitle: "Colleges",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Post Offices",
+                Title: "LiveWorkLocate_TryItLive - Post Offices",
                 QueryLayerId: "9",
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Corporate Headquarters",
+                Title: "LiveWorkLocate_TryItLive - Corporate Headquarters",
                 QueryLayerId: "10",
                 SearchDisplayTitle: "Corporate Headquarters",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
-                Title: "LiveWorkLocateTryItLive - Retail Centers",
+                Title: "LiveWorkLocate_TryItLive - Retail Centers",
                 QueryLayerId: "11",
                 SearchDisplayTitle: "Retail Centers",
                 SearchDisplayFields: "${NAME}",
