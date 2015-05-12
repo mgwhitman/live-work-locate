@@ -278,6 +278,20 @@ define([], function () {
             FeatureHighlightColor: "#1C86EE",
             SearchSettings: [{
                 UnifiedSearch: "true",
+                Title: "LiveWorkLocate_TryItLive - Corporate Headquarters",
+                QueryLayerId: "10",
+                SearchDisplayTitle: "Corporate Headquarters",
+                SearchDisplayFields: "${NAME}",
+                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
+            }, {
+                UnifiedSearch: "true",
+                Title: "LiveWorkLocate_TryItLive - Retail Centers",
+                QueryLayerId: "11",
+                SearchDisplayTitle: "Retail Centers",
+                SearchDisplayFields: "${NAME}",
+                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
+            }, {
+                UnifiedSearch: "true",
                 Title: "LiveWorkLocate_TryItLive - Railroad Stations",
                 QueryLayerId: "1",
                 SearchDisplayTitle: "Railroad Stations",
@@ -297,7 +311,18 @@ define([], function () {
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
+            }]
+
+        }, {
+            Name: "LOCATE",
+            Visible: true,
+            SplashscreenImage: "js/library/themes/images/locate-img.png",
+            ThemeColor: "js/library/themes/styles/orangeTheme.css",
+            WebMapId: "1ff32aa303cf4b2a89e51dbf17245144",
+            BgColor: "#5C2E6F",
+            FeatureHighlightColor: "#1C86EE",
+
+            SearchSettings: [{
                 UnifiedSearch: "true",
                 Title: "LiveWorkLocate_TryItLive - Corporate Headquarters",
                 QueryLayerId: "10",
@@ -311,18 +336,7 @@ define([], function () {
                 SearchDisplayTitle: "Retail Centers",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }]
-
-        }, {
-            Name: "LOCATE",
-            Visible: true,
-            SplashscreenImage: "js/library/themes/images/locate-img.png",
-            ThemeColor: "js/library/themes/styles/orangeTheme.css",
-            WebMapId: "1ff32aa303cf4b2a89e51dbf17245144",
-            BgColor: "#5C2E6F",
-            FeatureHighlightColor: "#1C86EE",
-
-            SearchSettings: [{
+            }, {
                 UnifiedSearch: "true",
                 Title: "LiveWorkLocateTryItLive - Railroad Stations",
                 QueryLayerId: "1",
@@ -341,20 +355,6 @@ define([], function () {
                 Title: "LiveWorkLocate_TryItLive - Post Offices",
                 QueryLayerId: "9",
                 SearchDisplayTitle: "Post Offices",
-                SearchDisplayFields: "${NAME}",
-                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "true",
-                Title: "LiveWorkLocate_TryItLive - Corporate Headquarters",
-                QueryLayerId: "10",
-                SearchDisplayTitle: "Corporate Headquarters",
-                SearchDisplayFields: "${NAME}",
-                SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "true",
-                Title: "LiveWorkLocate_TryItLive - Retail Centers",
-                QueryLayerId: "11",
-                SearchDisplayTitle: "Retail Centers",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
             }, {
