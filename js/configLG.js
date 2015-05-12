@@ -357,13 +357,6 @@ define([], function () {
                 SearchDisplayTitle: "Post Offices",
                 SearchDisplayFields: "${NAME}",
                 SearchExpression: "UPPER(NAME) LIKE UPPER('${0}%')"
-            }, {
-                UnifiedSearch: "false",
-                Title: "Tapestry_Households - ZIP Code",
-                QueryLayerId: "2",
-                SearchDisplayTitle: "ZIP Code",
-                SearchDisplayFields: "${ID}",
-                SearchExpression: "UPPER(ID) LIKE UPPER('${0}%')"
             }]
         }],
 
