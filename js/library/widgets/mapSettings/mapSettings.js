@@ -267,7 +267,7 @@ define([
             array.forEach(this.operationalLayers, lang.hitch(this, function (featureResult) {
                 var queryFeature, featureLayer, deferred;
                 queryFeature = new Query();
-                featureLayer = featureResult;
+                featureLayer = featureResult.layer;
                 queryFeature.geometry = bufferGeometry.geometry;
                 queryFeature.maxAllowableOffset = 500;
                 queryFeature.outSpatialReference = this.map.spatialReference;
@@ -334,8 +334,8 @@ define([
         _clearSelectedFeature: function () {
             if (appGlobals.workFlowIndex && lang.trim(appGlobals.configData.Workflows[appGlobals.workFlowIndex].WebMapId) === "") {
                 array.forEach(this.operationalLayers, lang.hitch(this, function (featureLayer) {
-                    if (!featureLayer.layerObject) {
-                        featureLayer.clearSelection();
+                    if (!featureLayer.layer.layerObject) {
+                        featureLayer.layer.clearSelection();
                     }
                 }));
             }
@@ -422,13 +422,16 @@ define([
                         if (searchSetting) {
                             //set QueryUrl for layer's respective search Configuration
                             searchSetting.QueryURL = result[i].url;
-                            result[i].searchSettingIndex = mapSearchSettings.length;
+                            
                             searchSetting.index = i;
                             searchSetting.objectIDField = result[i].objectIdField;
                             mapSearchSettings.push(searchSetting);
                             if (!result[i].isMapServerLayer) {
                                 //add layer to global array
-                                this.operationalLayers.push(result[i]);
+                                this.operationalLayers.push({
+                                    layer: result[i],
+                                    searchSettingIndex: mapSearchSettings.length
+                                });
                             }
                         }
                         layerDetails = {};
@@ -1065,11 +1068,14 @@ define([
                     if (configSearchSettings[i].Title === layerTitle && configSearchSettings[i].QueryLayerId === layerId) {
                         //set QueryURL for layer if its's search configuration is available
                         configSearchSettings[i].QueryURL = opLayersData[j].layer.url;
-                        opLayersData[j].layer.searchSettingIndex = i;
+                        
                         configSearchSettings[i].index = j;
                         configSearchSettings[i].objectIDField = opLayersData[j].layer.layerObject.objectIdField;
                         if (!opLayersData[j].layer.isMapServerLayer) {
-                            this.operationalLayers.push(opLayersData[j].layer);
+                            this.operationalLayers.push({
+                                layer: opLayersData[j].layer,
+                                searchSettingIndex: i
+                            });
                         }
                     }
                 }
