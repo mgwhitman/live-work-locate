@@ -219,7 +219,7 @@ define([], function () {
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(CITY) LIKE UPPER('${0}%') OR UPPER(ORGNAME) LIKE UPPER('${0}')"
             }, {
                 UnifiedSearch: "true",
-                Title: "Arts AndCultural Centers",
+                Title: "Arts And Cultural Centers",
                 QueryLayerId: "1",
                 SearchDisplayTitle: "Arts And Cultural Centers",
                 SearchDisplayFields: "${SITENAME}, ${CITY}, Phone: ${PHONE}",
