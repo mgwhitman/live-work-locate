@@ -1,10 +1,12 @@
 live-work-locate
 ==============
 
-The Live, Work, Locate application is a configurable JavaScript application that allows interested parties to determine whether or not they want to live, work or locate a business within a community.
+The Live, Work, Locate applications is a configuration of ArcGIS and a JavaScript application that allows potential citizens and businesses to explore quality of life indicators and business characteristics that help them determine if they would like to live, work, or locate a business in the community. It is a single application that can be deployed by government agencies and accessed by citizens and businesses 
 
+* Try the [Live Work Locate (State Government) application](http://links.esri.com/stategovernment/tryit/LiveWorkLocate/)
+* Try the [Live Work Locate (Local Government) application](http://links.esri.com/localgovernment/tryit/LiveWorkLocate/)
 
-![Image of Live Work Locate application](live-work-locate.png "Live, Work,Locate application")
+[![Image of Live Work Locate application](live-work-locate.png "Live, Work,Locate application")](http://links.esri.com/stategovernment/tryit/LiveWorkLocate/)
 
 ## Features
 
@@ -12,36 +14,27 @@ The Live, Work, Locate application is a configurable JavaScript application that
 * Review ammenities at a given place, determine travel time to ammenitied,  and get directions
 * Share information via social media
 
-## Instructions
-
-### Esri Sample Services
-
-Esri's sample services can be used with this repository to extend the application.
-
-
-### General Help
-[New to Github? Get started here.](http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html)
-
 ## Requirements
 
-### Esri Sample Services
+**Start now using Esri-supplied sample services**
 
-* Microsoft ASP.NET Framework 4.0 available from the [Microsoft website](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
+You can start using the application now by setting it up on a web server running Microsoft Internet Information Services (IIS) and using sample services supplied by Esri.
+You'll need to convert to an application in IIS and use the ASP .NET 4.0. application pool.
 
-### Your Services
+**Start now using your own services**
 
-* ArcGIS for Desktop 10.2 - Standard or Advanced - [About](http://www.esri.com/software/arcgis/arcgis-for-desktop)
-* ArcGIS for Server 10.2 - Standard or Advanced - [About](http://www.esri.com/software/arcgis/arcgisserver)
-* Microsoft ASP.NET Framework 4.0 available from the [Microsoft website](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
+For more information on requirements and publication steps, see [Live Work Locate for State Government](http://links.esri.com/stategovernment/help/10.2/liveworklocate) help or [Live Work Locate for Local Government](http://links.esri.com/localgovernment/help/liveworklocate) help
 
 ## Resources
 
-Learn more about Esri's [ArcGIS for State Government maps and apps](http://solutions.arcgis.com/state-government/).
+Show me a list of other [State and Local Government GitHub repositories](http://esri.github.io/#Government).
 
 Show me a list of other [Government GitHub repositories](http://esri.github.io/#Government).
 
+Additional [information and sample data](http://links.esri.com/stategovernment/help/10.2/liveworklocate)
+are available for the application.
 
-This application uses the 3.8 version of
+This application uses the 3.11 version of
 [Esri's ArcGIS API for JavaScript](http://help.arcgis.com/en/webapi/javascript/arcgis/);
 see the site for concepts, samples, and a reference for using the API to create mapping web sites.
 
