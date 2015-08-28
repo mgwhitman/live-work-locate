@@ -38,6 +38,14 @@ This application uses the 3.11 version of
 [Esri's ArcGIS API for JavaScript](http://help.arcgis.com/en/webapi/javascript/arcgis/);
 see the site for concepts, samples, and a reference for using the API to create mapping web sites.
 
+##Selecting Your Configuration
+
+The live-work-locate repo contains 2 application configurations: Live Work Locate for State Government, and Live Work Locate for Local Government.
+
+To get the Live Work Locate for State Government use the configuration name config.js to
+To get the Live Work Locate for Local Government configuration rename configLG.js to config.js
+
+
 ## Issues
 
 Find a bug or want to request a new feature?  Please let us know by submitting an issue.
