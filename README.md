@@ -11,7 +11,7 @@ The Live, Work, Locate applications is a configuration of ArcGIS and a JavaScrip
 ## Features
 
 * Search for a place by name, by current location, by address, or by activity
-* Review ammenities at a given place, determine travel time to ammenitied,  and get directions
+* Review ammenities at a given place, determine travel time to ammenities, and get directions
 * Share information via social media
 
 ## Requirements
@@ -19,7 +19,7 @@ The Live, Work, Locate applications is a configuration of ArcGIS and a JavaScrip
 **Start now using Esri-supplied sample services**
 
 You can start using the application now by setting it up on a web server running Microsoft Internet Information Services (IIS) and using sample services supplied by Esri.
-You'll need to convert to an application in IIS and use the ASP .NET 4.0. application pool.
+You'll need to convert to an application in IIS and use the ASP .NET 4.0 or 4.5. application pool.
 
 **Start now using your own services**
 
