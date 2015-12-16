@@ -404,14 +404,14 @@ define([], function () {
                 Title: "County and Demographic Info",
                 QueryLayerId: "10",
                 SearchDisplayTitle: "Bachelors Degree Attainment",
-                SearchDisplayFields: "${SITENAME} / ${BACHATTRATE}",
+                SearchDisplayFields: "${SITENAME} / ${BATCHATTRATE}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
                 Title: "County and Demographic Info",
                 QueryLayerId: "10",
                 SearchDisplayTitle: "High School Attainment",
-                SearchDisplayFields: "${sitename} / ${HSATTAINMENT}",
+                SearchDisplayFields: "${SITENAME} / ${HSATTAINMENT}",
                 SearchExpression: "UPPER(SITENAME) LIKE UPPER('${0}%') OR UPPER(COUNTY) LIKE UPPER('${0}%')"
             }, {
                 UnifiedSearch: "true",
