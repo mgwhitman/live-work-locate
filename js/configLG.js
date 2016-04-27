@@ -432,14 +432,17 @@ define([], function () {
         // Title: Name of the widget, will displayed as title of widget in header panel
         // WidgetPath: path of the widget respective to the widgets package.
         // MapInstanceRequired: true if widget is dependent on the map instance.
+        // The geolocation button has been hidden from the user interface by commenting out the widgetpath for geolocation below. You can enable geolocation by uncommenting the widgetpath for geolocation. The geolocation button, however, will only work on browsers supporting geolocation over HTTP connections.  If a browser requires a HTTPS connection to support geolocation and the button is enabled, the button will not work, but the application will work correctly otherwise.
 
         AppHeaderWidgets: [{
             WidgetPath: "widgets/locator/locator",
             MapInstanceRequired: true
-        }, {
-            WidgetPath: "widgets/geoLocation/geoLocation",
-            MapInstanceRequired: true
-        }, {
+        }, 
+        //{
+        //    WidgetPath: "widgets/geoLocation/geoLocation",
+        //    MapInstanceRequired: true
+        //},
+        {
             WidgetPath: "widgets/share/share",
             MapInstanceRequired: true
         }, {
